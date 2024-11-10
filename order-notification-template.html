@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,minimum-scale=1">
+		<title>Order Details</title>
+	</head>
+	<body style="background-color:#f3f4f7;font-family:system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';box-sizing:border-box;font-size:16px;">
+		<div style="background-color:#fff;margin:30px;box-sizing:border-box;font-size:16px;">
+			<h1 style="padding:40px;box-sizing:border-box;font-size:24px;font-weight:500;color:#ffffff;background-color:#344053;margin:0;">Order #%order_id%</h1>
+			<p style="padding:40px 40px 20px 40px;margin:0;box-sizing:border-box;font-size:16px;">The details for the order are below.</p>
+			<div style="box-sizing:border-box;padding:0 40px;">
+				<table style="border-collapse:collapse;width:100%;">
+					<thead style="border-bottom:1px solid #eee;">
+						<tr>
+							<td style="padding:25px 0;font-weight:500;font-size:14px;">Product</td>
+							<td style="font-weight:500;font-size:14px;">Price</td>
+							<td style="font-weight:500;font-size:14px;">Quantity</td>
+							<td style="text-align:right;font-weight:500;font-size:14px;">Total</td>
+						</tr>
+					</thead>
+					<tbody>
+						%products_template%
+					</tbody>
+				</table>
+				<p style="text-align:right;margin:0;box-sizing:border-box;font-size:18px;padding:20px 0;">
+					Subtotal <span style="padding-left:25px;">%subtotal%</span> <small>(Includes shipping)</small>
+				</p>
+			</div>
+			<h2 style="padding:20px 40px;margin:0;color:#394453;box-sizing:border-box;font-weight:500;">Customer Details</h2>
+			<p style="padding:20px 40px 60px 40px;margin:0;box-sizing:border-box;font-size:16px;">
+				%first_name% %last_name%<br>
+				%address_street%<br>
+				%address_city%<br>
+				%address_state%<br>
+				%address_zip%<br>
+				%address_country%
+			</p>
+		</div>
+	</body>
+</html>

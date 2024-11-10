@@ -1,0 +1,2405 @@
+* {
+  box-sizing: border-box;
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  position: relative;
+  min-height: 100%;
+  color: #555555;
+  background-color: #f3f4f7;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5 {
+  color: #4a5361;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-left: 260px;
+  z-index: 999;
+  width: 100%;
+  height: 55px;
+  background-color: #fff;
+  box-shadow: 0px 0px 8px 1px rgba(45, 54, 68, 0.12);
+}
+header .responsive-toggle {
+  position: relative;
+  display: inline-flex;
+  height: 100%;
+  width: 16px;
+  text-decoration: none;
+  margin-left: 20px;
+}
+header .responsive-toggle::before, header .responsive-toggle::after {
+  content: "";
+  position: absolute;
+  top: 23px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #afb2b9;
+}
+header .responsive-toggle::after {
+  top: 31px;
+}
+header .responsive-toggle:hover::before, header .responsive-toggle:hover::after, header .responsive-toggle:active::before, header .responsive-toggle:active::after {
+  background-color: #606c7e;
+}
+header .space-between {
+  flex: 1;
+}
+header .dropdown {
+  display: inline-flex;
+  color: #4a5361;
+  height: 100%;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  padding: 0 25px;
+}
+header .dropdown i {
+  font-size: 18px;
+}
+header .dropdown:hover, header .dropdown:active {
+  color: #606c7e;
+}
+header .dropdown .profile-img {
+  position: relative;
+  padding: 0;
+}
+header .dropdown .profile-img span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+header .dropdown .profile-img span, header .dropdown .profile-img img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+header .dropdown .profile-img i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+}
+header .dropdown .profile-img i.online {
+  background-color: #4ab46d;
+}
+header .dropdown .list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 150px;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+  box-shadow: 0px 2px 2px 1px rgba(45, 54, 68, 0.05);
+}
+header .dropdown .list a, header .dropdown .list div {
+  display: block;
+  text-decoration: none;
+  color: #4a5361;
+  padding: 10px 15px;
+  font-size: 14px;
+}
+header .dropdown .list a:hover, header .dropdown .list a:active, header .dropdown .list div:hover, header .dropdown .list div:active {
+  background-color: #fbfbfb;
+}
+header .dropdown .list a:hover .list, header .dropdown .list a:active .list, header .dropdown .list div:hover .list, header .dropdown .list div:active .list {
+  display: flex;
+  flex-flow: column;
+  top: -1px;
+  right: 100%;
+}
+header .dropdown:hover > .list, header .dropdown:active > .list {
+  display: flex;
+  flex-flow: column;
+}
+
+aside {
+  position: fixed;
+  z-index: 999999;
+  height: 100%;
+  width: 260px;
+  display: flex;
+  flex-flow: column;
+  background-color: #242a36;
+  overflow-y: auto;
+}
+aside h1 {
+  display: inline-flex;
+  width: 100%;
+  height: 55px;
+  min-height: 55px;
+  color: #fff;
+  padding: 0;
+  margin: 0;
+  font-weight: 500;
+  font-size: 16px;
+  align-items: center;
+  padding: 0 15px;
+}
+aside h1 span {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+aside h1 .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border-bottom-right-radius: 0;
+  padding: 0;
+  margin: 10px 10px 10px 0;
+  background-color: #3671c9;
+  font-size: 14px;
+}
+aside h1 .icon svg {
+  fill: #fff;
+}
+aside > a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #868c9c;
+  padding: 15px 20px;
+}
+aside > a .icon {
+  display: inline-flex;
+  align-items: center;
+  width: 30px;
+}
+aside > a .icon svg {
+  fill: #868c9c;
+}
+aside > a .txt {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+aside > a:hover, aside > a.selected {
+  background-color: #343d4e;
+  color: #fff;
+  border-left: 3px solid #3671c9;
+  padding: 15px 17px;
+}
+aside > a:hover .note, aside > a.selected .note {
+  background-color: #282f3c;
+}
+aside > a:hover svg, aside > a.selected svg {
+  fill: #fff;
+}
+aside > a.selected + .sub {
+  display: flex;
+}
+aside > a .note {
+  background-color: #1e232d;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-left: 10px;
+}
+aside .sub {
+  display: none;
+  flex-flow: column;
+  background-color: #181c24;
+  padding: 13px 0;
+}
+aside .sub a {
+  font-size: 14px;
+  color: #868c9c;
+  text-decoration: none;
+  padding: 4px 20px;
+}
+aside .sub a span {
+  display: inline-block;
+  width: 40px;
+  font-size: 12px;
+  color: inherit;
+}
+aside .sub a span.square {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin: 0 20px 1px 3px;
+  background-color: #868c9c;
+}
+aside .sub a:hover, aside .sub a.selected {
+  color: #fff;
+}
+aside .sub a:hover span.square, aside .sub a.selected span.square {
+  background-color: #fff;
+}
+aside .footer {
+  display: flex;
+  flex-flow: column;
+  margin-top: auto;
+  padding: 15px;
+  border-top: 1px solid #202530;
+  background-color: #222833;
+  font-size: 14px;
+  color: #5b616f;
+}
+aside .footer a {
+  text-decoration: none;
+  font-size: 13px;
+  color: #727a8b;
+  padding-bottom: 4px;
+}
+aside .footer a:hover {
+  color: #808797;
+}
+aside.closed {
+  display: none;
+}
+aside.minimal {
+  width: 60px;
+}
+aside.minimal h1 {
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  margin: 5px 0 10px 10px;
+}
+aside.minimal h1 .title {
+  display: none;
+}
+aside.minimal h1 .icon {
+  width: 35px;
+  height: 35px;
+  font-size: 16px;
+  margin: 0;
+}
+aside.minimal > a {
+  height: 55px;
+  justify-content: center;
+  padding: 15px 0;
+  margin: 2px 5px;
+  border-radius: 5px;
+}
+aside.minimal > a .icon {
+  width: 100%;
+  justify-content: center;
+}
+aside.minimal > a .txt, aside.minimal > a .note {
+  display: none;
+}
+aside.minimal > a:hover, aside.minimal > a.selected {
+  padding: 15px 0;
+}
+aside.minimal > a.selected + .sub {
+  display: none;
+}
+aside.minimal .footer {
+  display: none;
+}
+aside.minimal + main {
+  padding-left: 90px;
+}
+aside.minimal + main header {
+  padding-left: 60px;
+}
+
+main {
+  padding: 30px;
+  padding-left: 290px;
+  padding-top: 85px;
+}
+main h2 {
+  font-size: 20px;
+  padding-bottom: 5px;
+  font-weight: 600;
+}
+main h2 span {
+  font-size: 16px;
+  margin-left: 5px;
+  font-weight: 600;
+  color: #959faf;
+}
+main .content-title {
+  display: flex;
+}
+main .content-title h2 {
+  flex: 1;
+}
+main .content-title .btn {
+  height: 36px;
+}
+main .content-title .title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding-bottom: 5px;
+}
+main .content-title .title .icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2fc090;
+  color: #fff;
+  width: 52px;
+  height: 42px;
+  border-radius: 15px;
+  border-bottom-right-radius: 0;
+  margin-right: 15px;
+}
+main .content-title .title .icon.alt {
+  background-color: #a0a6b8;
+}
+main .content-title .title .icon svg {
+  fill: #fff;
+}
+main .content-title .title h2 {
+  padding: 0 0 3px 0;
+}
+main .content-title .title p {
+  margin: 0;
+  font-size: 14px;
+  color: #a7aec4;
+  font-weight: 500;
+}
+main .msg {
+  display: flex;
+  align-items: center;
+  margin: 15px 0 0 0;
+  padding: 15px;
+  font-weight: 500;
+  box-shadow: 0px 0px 2px 0px rgba(45, 54, 68, 0.1);
+}
+main .msg p {
+  margin: 0;
+  padding: 0 15px;
+  font-size: 14px;
+  flex: 1;
+}
+main .msg .close {
+  justify-content: flex-end;
+  cursor: pointer;
+}
+main .msg .close:hover {
+  opacity: 0.8;
+}
+main .msg.success {
+  background-color: #C3F3D7;
+  border-left: 4px solid #51a775;
+  color: #51a775;
+}
+main .msg.success svg {
+  fill: #51a775;
+}
+main .msg.error {
+  background-color: #f3c3c3;
+  border-left: 4px solid #a75151;
+  color: #a75151;
+}
+main .msg.error svg {
+  fill: #a75151;
+}
+main .filter-list {
+  display: flex;
+  flex-flow: wrap;
+}
+main .filter-list .filter {
+  display: inline-flex;
+  align-items: center;
+  background-color: #dee0e9;
+  border-radius: 50px;
+  padding: 3px 12px;
+  margin: 20px 10px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555f6f;
+}
+main .filter-list .filter a {
+  text-decoration: none;
+  margin-right: 10px;
+}
+main .filter-list .filter a svg {
+  fill: #959faf;
+}
+main .filter-list .filter a:hover svg {
+  fill: #555f6f;
+}
+main .content-header {
+  display: flex;
+  justify-content: space-between;
+}
+main .content-header form {
+  display: flex;
+  justify-content: space-between;
+}
+main .content-header form .search input, main .content-header form > select {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  height: 40px;
+  width: 220px;
+  border-bottom: 1px solid #d4d8e3;
+  padding-right: 25px;
+  margin-left: 10px;
+}
+main .content-header form .search input:hover, main .content-header form .search input:active, main .content-header form > select:hover, main .content-header form > select:active {
+  border-bottom: 1px solid #b6bcce;
+}
+main .content-header form .search input::placeholder, main .content-header form > select::placeholder {
+  color: #a7aec4;
+}
+main .content-header form > select {
+  width: 150px;
+}
+main .content-header form > a {
+  text-decoration: none;
+  display: inline-flex;
+  color: #5e6a8d;
+  justify-self: center;
+  align-items: center;
+  padding: 0 5px;
+}
+main .content-header form > a:hover {
+  color: #4a536e;
+}
+main .content-header .search label {
+  position: relative;
+}
+main .content-header .search svg {
+  position: absolute;
+  right: 4px;
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  fill: #b6bcce;
+}
+main .content-header .filters {
+  display: flex;
+  position: relative;
+  margin-right: 5px;
+  margin-bottom: 3px;
+  align-items: center;
+}
+main .content-header .filters a {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: 600;
+  color: #4a5361;
+  white-space: nowrap;
+  padding: 7px 10px;
+  border-radius: 5px;
+}
+main .content-header .filters a svg {
+  fill: #4a5361;
+  margin-right: 5px;
+}
+main .content-header .filters a:hover {
+  background-color: #e7e9ef;
+  color: #343a44;
+}
+main .content-header .filters .list {
+  display: none;
+  z-index: 999999;
+  top: calc(100% + 5px);
+  width: 180px;
+  flex-flow: column;
+  position: absolute;
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0px 0px 5px 1px rgba(45, 54, 68, 0.12);
+}
+main .content-header .filters .list label {
+  display: block;
+  padding-bottom: 5px;
+  font-size: 14px;
+}
+main .content-header .filters .list input {
+  margin-right: 10px;
+}
+main .content-header .filters .list select {
+  width: 100%;
+  margin-bottom: 8px;
+  font-size: 14px;
+  padding: 3px;
+  border-radius: 5px;
+  border: 1px solid #e4e6ed;
+}
+main .content-header .filters .list button {
+  background: #3d7dca;
+  border: 0;
+  color: #FFFFFF;
+  padding: 5px 0;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 5px 0 5px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 0px 0px 6px 1px rgba(45, 54, 68, 0.03);
+}
+main .content-header .filters .list button:hover {
+  background: #3575c3;
+}
+main .content-block {
+  background-color: #fff;
+  margin-top: 25px;
+  padding: 15px;
+  box-shadow: 0px 0px 6px 1px rgba(45, 54, 68, 0.05);
+  overflow: hidden;
+}
+main .content-block .block-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-bottom: 1px solid #f9fafb;
+  margin-bottom: 20px;
+  padding: 0 15px 15px 15px;
+  margin-left: -15px;
+  margin-right: -15px;
+  font-size: 14px;
+  font-weight: 500;
+}
+main .content-block .block-header .icon {
+  display: inline-flex;
+  overflow: hidden;
+  height: 25px;
+  width: 25px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  background-color: #d5e7fa;
+}
+main .content-block .block-header .icon svg {
+  fill: #6e94ba;
+}
+main .content-block.cover {
+  height: calc(100vh - 200px);
+}
+main .content-block-wrapper {
+  display: flex;
+  width: 100%;
+  padding-top: 25px;
+}
+main .content-block-wrapper .content-block {
+  width: 100%;
+  margin: 0 10px;
+}
+main .content-block-wrapper .content-block:first-child {
+  margin-left: 0;
+}
+main .content-block-wrapper .content-block:last-child {
+  margin-right: 0;
+}
+main .tabs {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background-color: #e4e6ed;
+  margin-top: 25px;
+  box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.03);
+  z-index: 100;
+}
+main .tabs a {
+  display: flex;
+  text-decoration: none;
+  padding: 12px 15px;
+  border: 0;
+  color: #6b788c;
+  font-weight: 500;
+  font-size: 14px;
+}
+main .tabs a:hover {
+  background-color: #dee0e9;
+}
+main .tabs a.active {
+  color: #4a5361;
+  background-color: #fff;
+}
+main .tabs ~ .content-block {
+  margin-top: 0;
+  box-shadow: 0px 6px 5px 1px rgba(0, 0, 0, 0.03);
+}
+main .tab-content {
+  display: none;
+}
+main .tab-content.active {
+  display: block;
+}
+main .dashboard {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 40px;
+}
+main .dashboard .stat {
+  width: 24%;
+  padding: 0;
+  display: flex;
+  flex-flow: wrap;
+  border-left: 4px solid #2d8eee;
+}
+main .dashboard .stat > .icon {
+  display: inline-flex;
+  justify-content: center;
+  padding: 15px;
+  margin: 30px 25px 0 0;
+  align-items: center;
+  font-size: 18px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: #d6eaff;
+  color: #8eb3d8;
+}
+main .dashboard .stat > .icon svg {
+  fill: #8eb3d8;
+}
+main .dashboard .stat .data {
+  padding: 7px;
+  flex: 1;
+}
+main .dashboard .stat .data h3 {
+  color: #9298a0;
+  color: #2d8eee;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 15px 15px 0 15px;
+}
+main .dashboard .stat .data h3 span {
+  font-size: 12px;
+  font-weight: 500;
+  color: #97a0ba;
+  background-color: #eaecf1;
+  padding: 2px 5px;
+  border-radius: 5px;
+  margin-left: 5px;
+  white-space: nowrap;
+}
+main .dashboard .stat .data p {
+  margin: 0;
+  padding: 10px 15px 15px 15px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #6b788c;
+}
+main .dashboard .stat .footer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-top: 1px solid #f0f1f5;
+  background-color: #fcfcfd;
+  color: #929294;
+  font-size: 14px;
+  padding: 10px;
+}
+main .dashboard .stat .footer svg {
+  fill: #929294;
+  margin-right: 5px;
+}
+main .dashboard .stat.green {
+  border-left: 4px solid #1ecc8c;
+}
+main .dashboard .stat.green .data h3 {
+  color: #1ecc8c;
+}
+main .dashboard .stat.green > .icon {
+  background-color: #d5f7e3;
+}
+main .dashboard .stat.green > .icon svg {
+  fill: #60c99d;
+}
+main .dashboard .stat.cyan {
+  border-left: 4px solid #1eccc3;
+}
+main .dashboard .stat.cyan .data h3 {
+  color: #1eccc3;
+}
+main .dashboard .stat.cyan > .icon {
+  background-color: #d1f1f0;
+}
+main .dashboard .stat.cyan > .icon svg {
+  fill: #68c7c5;
+}
+main .dashboard .stat.red {
+  border-left: 4px solid #e98484;
+}
+main .dashboard .stat.red .data h3 {
+  color: #e98484;
+}
+main .dashboard .stat.red > .icon {
+  background-color: #f7e2e2;
+}
+main .dashboard .stat.red > .icon svg {
+  fill: #df8787;
+}
+main .form {
+  display: flex;
+  flex-flow: column;
+  width: 500px;
+  padding: 20px;
+}
+main .form input[type=text], main .form input[type=password], main .form input[type=datetime-local], main .form input[type=email], main .form input[type=number], main .form input[type=file], main .form textarea, main .form select {
+  width: 100%;
+  padding: 15px 5px;
+  margin-bottom: 25px;
+  border: 0;
+  border-bottom: 1px solid #e4e6ed;
+}
+main .form input[type=text]:hover, main .form input[type=text]:active, main .form input[type=password]:hover, main .form input[type=password]:active, main .form input[type=datetime-local]:hover, main .form input[type=datetime-local]:active, main .form input[type=email]:hover, main .form input[type=email]:active, main .form input[type=number]:hover, main .form input[type=number]:active, main .form input[type=file]:hover, main .form input[type=file]:active, main .form textarea:hover, main .form textarea:active, main .form select:hover, main .form select:active {
+  border-bottom: 1px solid #b6bcce;
+}
+main .form input[type=text]::placeholder, main .form input[type=password]::placeholder, main .form input[type=datetime-local]::placeholder, main .form input[type=email]::placeholder, main .form input[type=number]::placeholder, main .form input[type=file]::placeholder, main .form textarea::placeholder, main .form select::placeholder {
+  color: #959595;
+}
+main .form textarea {
+  height: 200px;
+}
+main .form textarea.code-editor {
+  margin: 15px 0;
+  height: 400px;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 15px;
+  border-radius: 5px;
+  white-space: nowrap;
+  overflow: auto;
+  tab-size: 4;
+  border: 1px solid #f0f1f5;
+}
+main .form input[type=checkbox] {
+  width: auto;
+  margin: 15px 0 25px 2px;
+  transform: scale(1.2);
+}
+main .form label {
+  position: relative;
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  color: #6e7581;
+}
+main .form label .required {
+  font-size: 14px;
+  font-style: normal;
+  color: #e26060;
+}
+main .form label input[type=text] {
+  padding-right: 30px;
+}
+main .form label i {
+  position: absolute;
+  right: 4px;
+  top: 20px;
+  bottom: 0;
+  font-size: 14px;
+  margin-top: auto;
+  margin-bottom: auto;
+  color: #b6bcce;
+}
+main .form button {
+  background-color: #e4e6ed;
+  color: #5e6a8d;
+  border: 0;
+  padding: 5px;
+  width: 100%;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+main .form button:hover {
+  background-color: #dbdee7;
+}
+main .form .comment {
+  font-size: 14px;
+  color: #888888;
+  padding: 10px 0 5px;
+  margin: 0;
+}
+main .form .hidden {
+  display: none;
+}
+main .form .source ul {
+  margin: 0;
+  padding: 0 15px 15px 20px;
+  font-size: 14px;
+  color: #6f6f6f;
+}
+main .form .source ul li {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+main .form .source ul li strong {
+  display: inline-block;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 0 0 5px 0;
+  color: #555555;
+}
+main .form .source ul li em {
+  font-size: 14px;
+}
+main .form .multiselect {
+  position: relative;
+  display: flex;
+  flex-flow: wrap;
+  border-bottom: 1px solid #e4e6ed;
+  padding-bottom: 10px;
+  margin: 10px 0 25px 0;
+}
+main .form .multiselect > .item {
+  display: inline-flex;
+  border: 1px solid #e4e6ed;
+  padding: 0 8px;
+  height: 35px;
+  margin: 0 5px 5px 0;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
+}
+main .form .multiselect > .item .remove {
+  font-style: normal;
+  cursor: pointer;
+  font-size: 19px;
+  margin-right: 3px;
+  margin-top: -4px;
+  color: #b6bcce;
+}
+main .form .multiselect > .item .remove:hover {
+  color: #97a0ba;
+}
+main .form .multiselect input {
+  height: 40px;
+  width: 80px;
+  flex-grow: 1;
+  padding: 15px 5px;
+  margin: 0;
+  outline: 0;
+  border: 0;
+}
+main .form .multiselect input:hover {
+  border: 0;
+}
+main .form .multiselect .list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  flex-flow: column;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  max-height: 100px;
+  overflow-y: auto;
+  z-index: 1000000000;
+}
+main .form .multiselect .list span {
+  display: flex;
+  padding: 5px 7px;
+  cursor: pointer;
+  color: #000;
+}
+main .form .multiselect .list span:hover {
+  background-color: #fcfcfd;
+}
+main .form .multiselect:hover, main .form .multiselect:active {
+  border-bottom: 1px solid #b6bcce;
+}
+main .form.size-md {
+  max-width: 800px;
+  width: 100%;
+}
+main .form.size-full {
+  max-width: 100%;
+  width: 100%;
+}
+main .top-nav {
+  display: flex;
+  flex-flow: wrap;
+  padding-top: 20px;
+}
+main .error {
+  padding: 15px;
+  margin: 0;
+}
+main .pagination {
+  display: flex;
+  align-items: center;
+  padding: 25px 0;
+}
+main .pagination a {
+  display: inline-flex;
+  text-decoration: none;
+  background-color: #7688a0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  border-radius: 4px;
+  padding: 7px 10px;
+  box-shadow: 0px 0px 6px 1px rgba(45, 54, 68, 0.1);
+}
+main .pagination a:hover {
+  background-color: #6d809a;
+}
+main .pagination a:first-child {
+  margin-right: 12px;
+}
+main .pagination a:last-child {
+  margin-left: 12px;
+}
+main .pagination span {
+  font-weight: 600;
+}
+main .media-page .media {
+  display: flex;
+  flex-flow: wrap;
+  padding: 15px;
+}
+main .media-page .media .image {
+  position: relative;
+  text-decoration: none;
+  border: 1px solid #eaecf1;
+  padding: 10px;
+  width: 150px;
+  height: 135px;
+  margin: 0 15px 50px 0;
+}
+main .media-page .media .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all ease 0.3s;
+}
+main .media-page .media .image::after {
+  content: attr(data-title);
+  display: block;
+  position: absolute;
+  color: #6e7581;
+  font-size: 14px;
+  font-weight: 500;
+  top: calc(100% + 5px);
+  left: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+main .media-page .media .image:hover {
+  border: 1px solid #d4d8e3;
+}
+main .media-page .media .image:hover img {
+  transform: scale(1.05);
+}
+main .media-page .media .image:hover .title {
+  color: #5c6471;
+}
+main .order-details .order-detail {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  word-break: break-all;
+}
+main .order-details .order-detail h3 {
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+main .order-details .order-detail p {
+  padding: 0;
+  margin: 0;
+}
+main .order-table {
+  margin: 0;
+}
+main .order-table .item-list-end {
+  border-bottom: 1px solid #f9fafb;
+}
+main .order-table .subtotal {
+  padding-top: 20px;
+}
+main .order-table .subtotal, main .order-table .shipping, main .order-table .total {
+  text-align: right;
+  font-weight: 500;
+  font-size: 14px;
+}
+main .order-table .num {
+  text-align: right;
+}
+main .manage-order-table input, main .manage-order-table select {
+  border: 0;
+  padding: 5px 0;
+  height: 40px;
+  background: transparent;
+  width: 90%;
+  border-bottom: 1px solid #e4e6ed;
+}
+main .manage-order-table .add-item {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: normal;
+  color: #7a7a7c;
+  font-size: 14px;
+  padding: 15px 0;
+}
+main .manage-order-table .add-item svg {
+  fill: #7a7a7c;
+  margin-right: 3px;
+}
+main .manage-order-table .add-item:hover {
+  color: #616263;
+}
+main .manage-order-table .add-item:hover svg {
+  fill: #616263;
+}
+main .manage-order-table .delete-item {
+  cursor: pointer;
+  fill: #5e6a8d;
+}
+main .manage-order-table .delete-item:hover {
+  fill: #be4949;
+}
+
+.table {
+  overflow-x: auto;
+  padding: 0 10px;
+}
+.table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table table thead td {
+  color: #9298a0;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 15px 0;
+}
+.table table thead td a {
+  font-weight: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+.table table thead td svg {
+  fill: #9298a0;
+  margin-left: 5px;
+}
+.table table thead td:has(svg) {
+  color: #4a5361;
+  border-bottom: 1px solid #cfcfd2;
+}
+.table table thead td:has(svg) svg {
+  fill: #4a5361;
+}
+.table table thead tr {
+  border-bottom: 1px solid #f1f2f5;
+}
+.table table tbody tr:first-child td {
+  padding-top: 10px;
+}
+.table table tbody td {
+  padding: 8px 0;
+}
+.table table tbody td .green, .table table tbody td .red, .table table tbody td .grey, .table table tbody td .orange, .table table tbody td .blue {
+  display: inline-flex;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 15px;
+  text-transform: capitalize;
+  white-space: nowrap;
+  background-color: #e8ebec;
+  color: #8e9499;
+}
+.table table tbody td .green.small, .table table tbody td .red.small, .table table tbody td .grey.small, .table table tbody td .orange.small, .table table tbody td .blue.small {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+.table table tbody td .green {
+  background-color: #b8f7d5;
+  color: #34aa6b;
+}
+.table table tbody td .blue {
+  background-color: #d8e9ff;
+  color: #5f92da;
+}
+.table table tbody td .red {
+  background-color: #f7caca;
+  color: #b64343;
+}
+.table table tbody td .orange {
+  background-color: #f8eac2;
+  color: #dea200;
+}
+.table table tbody td .rrp {
+  color: #e26060;
+}
+.table table tbody td .images {
+  max-width: 180px;
+}
+.table table tbody td .images img {
+  margin-right: 1px;
+}
+.table table tbody td.no-results {
+  text-align: center;
+  color: #aaabad;
+  line-height: 30px;
+}
+.table table tbody td.actions {
+  padding: 0;
+}
+.table table tbody td.actions .table-dropdown {
+  display: inline-flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.table table tbody td.actions .table-dropdown > svg {
+  fill: #c5cad8;
+}
+.table table tbody td.actions .table-dropdown:hover, .table table tbody td.actions .table-dropdown:active {
+  background-color: #f6f7f9;
+}
+.table table tbody td.actions .table-dropdown:hover > svg, .table table tbody td.actions .table-dropdown:active > svg {
+  fill: #97a0ba;
+}
+.table table tbody .img {
+  width: 40px;
+  padding: 5px 10px 5px 0;
+}
+.table table tbody .img .profile-img {
+  position: relative;
+  padding: 0;
+}
+.table table tbody .img .profile-img span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+}
+.table table tbody .img .profile-img span, .table table tbody .img .profile-img img {
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+}
+.table table tbody .img .profile-img i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+}
+.table table tbody .img .profile-img i.online {
+  background-color: #4ab46d;
+}
+.table table tbody .img .profile-img i.offline {
+  background-color: #c2c5c9;
+}
+.table table tbody .alt {
+  font-size: 14px;
+  color: #959595;
+}
+
+.product-media-tab, .product-options-tab, .product-downloads-tab {
+  max-width: 800px;
+}
+.product-media-tab .product-media, .product-media-tab .product-option, .product-media-tab .product-download, .product-options-tab .product-media, .product-options-tab .product-option, .product-options-tab .product-download, .product-downloads-tab .product-media, .product-downloads-tab .product-option, .product-downloads-tab .product-download {
+  display: flex;
+  border-right: 4px solid #e8ebee;
+  margin-bottom: 15px;
+}
+.product-media-tab .product-media:first-child, .product-media-tab .product-option:first-child, .product-media-tab .product-download:first-child, .product-options-tab .product-media:first-child, .product-options-tab .product-option:first-child, .product-options-tab .product-download:first-child, .product-downloads-tab .product-media:first-child, .product-downloads-tab .product-option:first-child, .product-downloads-tab .product-download:first-child {
+  border-right: 4px solid #72a0d4;
+}
+.product-media-tab .product-media:first-child .move-up, .product-media-tab .product-option:first-child .move-up, .product-media-tab .product-download:first-child .move-up, .product-options-tab .product-media:first-child .move-up, .product-options-tab .product-option:first-child .move-up, .product-options-tab .product-download:first-child .move-up, .product-downloads-tab .product-media:first-child .move-up, .product-downloads-tab .product-option:first-child .move-up, .product-downloads-tab .product-download:first-child .move-up {
+  display: none;
+}
+.product-media-tab .product-media:last-child .move-down, .product-media-tab .product-option:last-child .move-down, .product-media-tab .product-download:last-child .move-down, .product-options-tab .product-media:last-child .move-down, .product-options-tab .product-option:last-child .move-down, .product-options-tab .product-download:last-child .move-down, .product-downloads-tab .product-media:last-child .move-down, .product-downloads-tab .product-option:last-child .move-down, .product-downloads-tab .product-download:last-child .move-down {
+  display: none;
+}
+.product-media-tab .product-media .media-index, .product-media-tab .product-media .option-index, .product-media-tab .product-media .download-index, .product-media-tab .product-option .media-index, .product-media-tab .product-option .option-index, .product-media-tab .product-option .download-index, .product-media-tab .product-download .media-index, .product-media-tab .product-download .option-index, .product-media-tab .product-download .download-index, .product-options-tab .product-media .media-index, .product-options-tab .product-media .option-index, .product-options-tab .product-media .download-index, .product-options-tab .product-option .media-index, .product-options-tab .product-option .option-index, .product-options-tab .product-option .download-index, .product-options-tab .product-download .media-index, .product-options-tab .product-download .option-index, .product-options-tab .product-download .download-index, .product-downloads-tab .product-media .media-index, .product-downloads-tab .product-media .option-index, .product-downloads-tab .product-media .download-index, .product-downloads-tab .product-option .media-index, .product-downloads-tab .product-option .option-index, .product-downloads-tab .product-option .download-index, .product-downloads-tab .product-download .media-index, .product-downloads-tab .product-download .option-index, .product-downloads-tab .product-download .download-index {
+  display: flex;
+  color: #bcc0c4;
+  font-weight: 500;
+  align-items: center;
+  padding-right: 15px;
+  font-weight: 14px;
+  width: 30px;
+}
+.product-media-tab .product-media .media-img, .product-media-tab .product-option .media-img, .product-media-tab .product-download .media-img, .product-options-tab .product-media .media-img, .product-options-tab .product-option .media-img, .product-options-tab .product-download .media-img, .product-downloads-tab .product-media .media-img, .product-downloads-tab .product-option .media-img, .product-downloads-tab .product-download .media-img {
+  text-decoration: none;
+  display: flex;
+  height: 70px;
+  width: 100px;
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+.product-media-tab .product-media .media-img img, .product-media-tab .product-option .media-img img, .product-media-tab .product-download .media-img img, .product-options-tab .product-media .media-img img, .product-options-tab .product-option .media-img img, .product-options-tab .product-download .media-img img, .product-downloads-tab .product-media .media-img img, .product-downloads-tab .product-option .media-img img, .product-downloads-tab .product-download .media-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.product-media-tab .product-media .media-text, .product-media-tab .product-media .option-text, .product-media-tab .product-media .download-text, .product-media-tab .product-option .media-text, .product-media-tab .product-option .option-text, .product-media-tab .product-option .download-text, .product-media-tab .product-download .media-text, .product-media-tab .product-download .option-text, .product-media-tab .product-download .download-text, .product-options-tab .product-media .media-text, .product-options-tab .product-media .option-text, .product-options-tab .product-media .download-text, .product-options-tab .product-option .media-text, .product-options-tab .product-option .option-text, .product-options-tab .product-option .download-text, .product-options-tab .product-download .media-text, .product-options-tab .product-download .option-text, .product-options-tab .product-download .download-text, .product-downloads-tab .product-media .media-text, .product-downloads-tab .product-media .option-text, .product-downloads-tab .product-media .download-text, .product-downloads-tab .product-option .media-text, .product-downloads-tab .product-option .option-text, .product-downloads-tab .product-option .download-text, .product-downloads-tab .product-download .media-text, .product-downloads-tab .product-download .option-text, .product-downloads-tab .product-download .download-text {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  flex: 1;
+  padding-left: 15px;
+}
+.product-media-tab .product-media .media-text h3, .product-media-tab .product-media .option-text h3, .product-media-tab .product-media .download-text h3, .product-media-tab .product-option .media-text h3, .product-media-tab .product-option .option-text h3, .product-media-tab .product-option .download-text h3, .product-media-tab .product-download .media-text h3, .product-media-tab .product-download .option-text h3, .product-media-tab .product-download .download-text h3, .product-options-tab .product-media .media-text h3, .product-options-tab .product-media .option-text h3, .product-options-tab .product-media .download-text h3, .product-options-tab .product-option .media-text h3, .product-options-tab .product-option .option-text h3, .product-options-tab .product-option .download-text h3, .product-options-tab .product-download .media-text h3, .product-options-tab .product-download .option-text h3, .product-options-tab .product-download .download-text h3, .product-downloads-tab .product-media .media-text h3, .product-downloads-tab .product-media .option-text h3, .product-downloads-tab .product-media .download-text h3, .product-downloads-tab .product-option .media-text h3, .product-downloads-tab .product-option .option-text h3, .product-downloads-tab .product-option .download-text h3, .product-downloads-tab .product-download .media-text h3, .product-downloads-tab .product-download .option-text h3, .product-downloads-tab .product-download .download-text h3 {
+  font-weight: 500;
+}
+.product-media-tab .product-media .media-text p, .product-media-tab .product-media .option-text p, .product-media-tab .product-media .download-text p, .product-media-tab .product-option .media-text p, .product-media-tab .product-option .option-text p, .product-media-tab .product-option .download-text p, .product-media-tab .product-download .media-text p, .product-media-tab .product-download .option-text p, .product-media-tab .product-download .download-text p, .product-options-tab .product-media .media-text p, .product-options-tab .product-media .option-text p, .product-options-tab .product-media .download-text p, .product-options-tab .product-option .media-text p, .product-options-tab .product-option .option-text p, .product-options-tab .product-option .download-text p, .product-options-tab .product-download .media-text p, .product-options-tab .product-download .option-text p, .product-options-tab .product-download .download-text p, .product-downloads-tab .product-media .media-text p, .product-downloads-tab .product-media .option-text p, .product-downloads-tab .product-media .download-text p, .product-downloads-tab .product-option .media-text p, .product-downloads-tab .product-option .option-text p, .product-downloads-tab .product-option .download-text p, .product-downloads-tab .product-download .media-text p, .product-downloads-tab .product-download .option-text p, .product-downloads-tab .product-download .download-text p {
+  margin: 0;
+  color: #8892b0;
+  font-size: 14px;
+}
+.product-media-tab .product-media .media-position, .product-media-tab .product-media .option-position, .product-media-tab .product-media .download-position, .product-media-tab .product-option .media-position, .product-media-tab .product-option .option-position, .product-media-tab .product-option .download-position, .product-media-tab .product-download .media-position, .product-media-tab .product-download .option-position, .product-media-tab .product-download .download-position, .product-options-tab .product-media .media-position, .product-options-tab .product-media .option-position, .product-options-tab .product-media .download-position, .product-options-tab .product-option .media-position, .product-options-tab .product-option .option-position, .product-options-tab .product-option .download-position, .product-options-tab .product-download .media-position, .product-options-tab .product-download .option-position, .product-options-tab .product-download .download-position, .product-downloads-tab .product-media .media-position, .product-downloads-tab .product-media .option-position, .product-downloads-tab .product-media .download-position, .product-downloads-tab .product-option .media-position, .product-downloads-tab .product-option .option-position, .product-downloads-tab .product-option .download-position, .product-downloads-tab .product-download .media-position, .product-downloads-tab .product-download .option-position, .product-downloads-tab .product-download .download-position {
+  display: flex;
+  width: 100px;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 20px;
+}
+.product-media-tab .product-media .media-position a, .product-media-tab .product-media .option-position a, .product-media-tab .product-media .download-position a, .product-media-tab .product-option .media-position a, .product-media-tab .product-option .option-position a, .product-media-tab .product-option .download-position a, .product-media-tab .product-download .media-position a, .product-media-tab .product-download .option-position a, .product-media-tab .product-download .download-position a, .product-options-tab .product-media .media-position a, .product-options-tab .product-media .option-position a, .product-options-tab .product-media .download-position a, .product-options-tab .product-option .media-position a, .product-options-tab .product-option .option-position a, .product-options-tab .product-option .download-position a, .product-options-tab .product-download .media-position a, .product-options-tab .product-download .option-position a, .product-options-tab .product-download .download-position a, .product-downloads-tab .product-media .media-position a, .product-downloads-tab .product-media .option-position a, .product-downloads-tab .product-media .download-position a, .product-downloads-tab .product-option .media-position a, .product-downloads-tab .product-option .option-position a, .product-downloads-tab .product-option .download-position a, .product-downloads-tab .product-download .media-position a, .product-downloads-tab .product-download .option-position a, .product-downloads-tab .product-download .download-position a {
+  text-decoration: none;
+  font-size: 20px;
+  padding-left: 15px;
+}
+.product-media-tab .product-media .media-position a svg, .product-media-tab .product-media .option-position a svg, .product-media-tab .product-media .download-position a svg, .product-media-tab .product-option .media-position a svg, .product-media-tab .product-option .option-position a svg, .product-media-tab .product-option .download-position a svg, .product-media-tab .product-download .media-position a svg, .product-media-tab .product-download .option-position a svg, .product-media-tab .product-download .download-position a svg, .product-options-tab .product-media .media-position a svg, .product-options-tab .product-media .option-position a svg, .product-options-tab .product-media .download-position a svg, .product-options-tab .product-option .media-position a svg, .product-options-tab .product-option .option-position a svg, .product-options-tab .product-option .download-position a svg, .product-options-tab .product-download .media-position a svg, .product-options-tab .product-download .option-position a svg, .product-options-tab .product-download .download-position a svg, .product-downloads-tab .product-media .media-position a svg, .product-downloads-tab .product-media .option-position a svg, .product-downloads-tab .product-media .download-position a svg, .product-downloads-tab .product-option .media-position a svg, .product-downloads-tab .product-option .option-position a svg, .product-downloads-tab .product-option .download-position a svg, .product-downloads-tab .product-download .media-position a svg, .product-downloads-tab .product-download .option-position a svg, .product-downloads-tab .product-download .download-position a svg {
+  fill: #cbcfd4;
+}
+.product-media-tab .product-media .media-position a:hover svg, .product-media-tab .product-media .option-position a:hover svg, .product-media-tab .product-media .download-position a:hover svg, .product-media-tab .product-option .media-position a:hover svg, .product-media-tab .product-option .option-position a:hover svg, .product-media-tab .product-option .download-position a:hover svg, .product-media-tab .product-download .media-position a:hover svg, .product-media-tab .product-download .option-position a:hover svg, .product-media-tab .product-download .download-position a:hover svg, .product-options-tab .product-media .media-position a:hover svg, .product-options-tab .product-media .option-position a:hover svg, .product-options-tab .product-media .download-position a:hover svg, .product-options-tab .product-option .media-position a:hover svg, .product-options-tab .product-option .option-position a:hover svg, .product-options-tab .product-option .download-position a:hover svg, .product-options-tab .product-download .media-position a:hover svg, .product-options-tab .product-download .option-position a:hover svg, .product-options-tab .product-download .download-position a:hover svg, .product-downloads-tab .product-media .media-position a:hover svg, .product-downloads-tab .product-media .option-position a:hover svg, .product-downloads-tab .product-media .download-position a:hover svg, .product-downloads-tab .product-option .media-position a:hover svg, .product-downloads-tab .product-option .option-position a:hover svg, .product-downloads-tab .product-option .download-position a:hover svg, .product-downloads-tab .product-download .media-position a:hover svg, .product-downloads-tab .product-download .option-position a:hover svg, .product-downloads-tab .product-download .download-position a:hover svg {
+  fill: #afb5bd;
+}
+.product-media-tab .product-media .media-position a.media-delete, .product-media-tab .product-media .media-position a.option-delete, .product-media-tab .product-media .media-position a.download-delete, .product-media-tab .product-media .option-position a.media-delete, .product-media-tab .product-media .option-position a.option-delete, .product-media-tab .product-media .option-position a.download-delete, .product-media-tab .product-media .download-position a.media-delete, .product-media-tab .product-media .download-position a.option-delete, .product-media-tab .product-media .download-position a.download-delete, .product-media-tab .product-option .media-position a.media-delete, .product-media-tab .product-option .media-position a.option-delete, .product-media-tab .product-option .media-position a.download-delete, .product-media-tab .product-option .option-position a.media-delete, .product-media-tab .product-option .option-position a.option-delete, .product-media-tab .product-option .option-position a.download-delete, .product-media-tab .product-option .download-position a.media-delete, .product-media-tab .product-option .download-position a.option-delete, .product-media-tab .product-option .download-position a.download-delete, .product-media-tab .product-download .media-position a.media-delete, .product-media-tab .product-download .media-position a.option-delete, .product-media-tab .product-download .media-position a.download-delete, .product-media-tab .product-download .option-position a.media-delete, .product-media-tab .product-download .option-position a.option-delete, .product-media-tab .product-download .option-position a.download-delete, .product-media-tab .product-download .download-position a.media-delete, .product-media-tab .product-download .download-position a.option-delete, .product-media-tab .product-download .download-position a.download-delete, .product-options-tab .product-media .media-position a.media-delete, .product-options-tab .product-media .media-position a.option-delete, .product-options-tab .product-media .media-position a.download-delete, .product-options-tab .product-media .option-position a.media-delete, .product-options-tab .product-media .option-position a.option-delete, .product-options-tab .product-media .option-position a.download-delete, .product-options-tab .product-media .download-position a.media-delete, .product-options-tab .product-media .download-position a.option-delete, .product-options-tab .product-media .download-position a.download-delete, .product-options-tab .product-option .media-position a.media-delete, .product-options-tab .product-option .media-position a.option-delete, .product-options-tab .product-option .media-position a.download-delete, .product-options-tab .product-option .option-position a.media-delete, .product-options-tab .product-option .option-position a.option-delete, .product-options-tab .product-option .option-position a.download-delete, .product-options-tab .product-option .download-position a.media-delete, .product-options-tab .product-option .download-position a.option-delete, .product-options-tab .product-option .download-position a.download-delete, .product-options-tab .product-download .media-position a.media-delete, .product-options-tab .product-download .media-position a.option-delete, .product-options-tab .product-download .media-position a.download-delete, .product-options-tab .product-download .option-position a.media-delete, .product-options-tab .product-download .option-position a.option-delete, .product-options-tab .product-download .option-position a.download-delete, .product-options-tab .product-download .download-position a.media-delete, .product-options-tab .product-download .download-position a.option-delete, .product-options-tab .product-download .download-position a.download-delete, .product-downloads-tab .product-media .media-position a.media-delete, .product-downloads-tab .product-media .media-position a.option-delete, .product-downloads-tab .product-media .media-position a.download-delete, .product-downloads-tab .product-media .option-position a.media-delete, .product-downloads-tab .product-media .option-position a.option-delete, .product-downloads-tab .product-media .option-position a.download-delete, .product-downloads-tab .product-media .download-position a.media-delete, .product-downloads-tab .product-media .download-position a.option-delete, .product-downloads-tab .product-media .download-position a.download-delete, .product-downloads-tab .product-option .media-position a.media-delete, .product-downloads-tab .product-option .media-position a.option-delete, .product-downloads-tab .product-option .media-position a.download-delete, .product-downloads-tab .product-option .option-position a.media-delete, .product-downloads-tab .product-option .option-position a.option-delete, .product-downloads-tab .product-option .option-position a.download-delete, .product-downloads-tab .product-option .download-position a.media-delete, .product-downloads-tab .product-option .download-position a.option-delete, .product-downloads-tab .product-option .download-position a.download-delete, .product-downloads-tab .product-download .media-position a.media-delete, .product-downloads-tab .product-download .media-position a.option-delete, .product-downloads-tab .product-download .media-position a.download-delete, .product-downloads-tab .product-download .option-position a.media-delete, .product-downloads-tab .product-download .option-position a.option-delete, .product-downloads-tab .product-download .option-position a.download-delete, .product-downloads-tab .product-download .download-position a.media-delete, .product-downloads-tab .product-download .download-position a.option-delete, .product-downloads-tab .product-download .download-position a.download-delete {
+  padding-right: 5px;
+}
+.product-media-tab .product-media .media-position a.media-delete svg, .product-media-tab .product-media .media-position a.option-delete svg, .product-media-tab .product-media .media-position a.download-delete svg, .product-media-tab .product-media .option-position a.media-delete svg, .product-media-tab .product-media .option-position a.option-delete svg, .product-media-tab .product-media .option-position a.download-delete svg, .product-media-tab .product-media .download-position a.media-delete svg, .product-media-tab .product-media .download-position a.option-delete svg, .product-media-tab .product-media .download-position a.download-delete svg, .product-media-tab .product-option .media-position a.media-delete svg, .product-media-tab .product-option .media-position a.option-delete svg, .product-media-tab .product-option .media-position a.download-delete svg, .product-media-tab .product-option .option-position a.media-delete svg, .product-media-tab .product-option .option-position a.option-delete svg, .product-media-tab .product-option .option-position a.download-delete svg, .product-media-tab .product-option .download-position a.media-delete svg, .product-media-tab .product-option .download-position a.option-delete svg, .product-media-tab .product-option .download-position a.download-delete svg, .product-media-tab .product-download .media-position a.media-delete svg, .product-media-tab .product-download .media-position a.option-delete svg, .product-media-tab .product-download .media-position a.download-delete svg, .product-media-tab .product-download .option-position a.media-delete svg, .product-media-tab .product-download .option-position a.option-delete svg, .product-media-tab .product-download .option-position a.download-delete svg, .product-media-tab .product-download .download-position a.media-delete svg, .product-media-tab .product-download .download-position a.option-delete svg, .product-media-tab .product-download .download-position a.download-delete svg, .product-options-tab .product-media .media-position a.media-delete svg, .product-options-tab .product-media .media-position a.option-delete svg, .product-options-tab .product-media .media-position a.download-delete svg, .product-options-tab .product-media .option-position a.media-delete svg, .product-options-tab .product-media .option-position a.option-delete svg, .product-options-tab .product-media .option-position a.download-delete svg, .product-options-tab .product-media .download-position a.media-delete svg, .product-options-tab .product-media .download-position a.option-delete svg, .product-options-tab .product-media .download-position a.download-delete svg, .product-options-tab .product-option .media-position a.media-delete svg, .product-options-tab .product-option .media-position a.option-delete svg, .product-options-tab .product-option .media-position a.download-delete svg, .product-options-tab .product-option .option-position a.media-delete svg, .product-options-tab .product-option .option-position a.option-delete svg, .product-options-tab .product-option .option-position a.download-delete svg, .product-options-tab .product-option .download-position a.media-delete svg, .product-options-tab .product-option .download-position a.option-delete svg, .product-options-tab .product-option .download-position a.download-delete svg, .product-options-tab .product-download .media-position a.media-delete svg, .product-options-tab .product-download .media-position a.option-delete svg, .product-options-tab .product-download .media-position a.download-delete svg, .product-options-tab .product-download .option-position a.media-delete svg, .product-options-tab .product-download .option-position a.option-delete svg, .product-options-tab .product-download .option-position a.download-delete svg, .product-options-tab .product-download .download-position a.media-delete svg, .product-options-tab .product-download .download-position a.option-delete svg, .product-options-tab .product-download .download-position a.download-delete svg, .product-downloads-tab .product-media .media-position a.media-delete svg, .product-downloads-tab .product-media .media-position a.option-delete svg, .product-downloads-tab .product-media .media-position a.download-delete svg, .product-downloads-tab .product-media .option-position a.media-delete svg, .product-downloads-tab .product-media .option-position a.option-delete svg, .product-downloads-tab .product-media .option-position a.download-delete svg, .product-downloads-tab .product-media .download-position a.media-delete svg, .product-downloads-tab .product-media .download-position a.option-delete svg, .product-downloads-tab .product-media .download-position a.download-delete svg, .product-downloads-tab .product-option .media-position a.media-delete svg, .product-downloads-tab .product-option .media-position a.option-delete svg, .product-downloads-tab .product-option .media-position a.download-delete svg, .product-downloads-tab .product-option .option-position a.media-delete svg, .product-downloads-tab .product-option .option-position a.option-delete svg, .product-downloads-tab .product-option .option-position a.download-delete svg, .product-downloads-tab .product-option .download-position a.media-delete svg, .product-downloads-tab .product-option .download-position a.option-delete svg, .product-downloads-tab .product-option .download-position a.download-delete svg, .product-downloads-tab .product-download .media-position a.media-delete svg, .product-downloads-tab .product-download .media-position a.option-delete svg, .product-downloads-tab .product-download .media-position a.download-delete svg, .product-downloads-tab .product-download .option-position a.media-delete svg, .product-downloads-tab .product-download .option-position a.option-delete svg, .product-downloads-tab .product-download .option-position a.download-delete svg, .product-downloads-tab .product-download .download-position a.media-delete svg, .product-downloads-tab .product-download .download-position a.option-delete svg, .product-downloads-tab .product-download .download-position a.download-delete svg {
+  fill: #e1e4e6;
+}
+.product-media-tab .product-media .media-position a.media-delete:hover svg, .product-media-tab .product-media .media-position a.option-delete:hover svg, .product-media-tab .product-media .media-position a.download-delete:hover svg, .product-media-tab .product-media .option-position a.media-delete:hover svg, .product-media-tab .product-media .option-position a.option-delete:hover svg, .product-media-tab .product-media .option-position a.download-delete:hover svg, .product-media-tab .product-media .download-position a.media-delete:hover svg, .product-media-tab .product-media .download-position a.option-delete:hover svg, .product-media-tab .product-media .download-position a.download-delete:hover svg, .product-media-tab .product-option .media-position a.media-delete:hover svg, .product-media-tab .product-option .media-position a.option-delete:hover svg, .product-media-tab .product-option .media-position a.download-delete:hover svg, .product-media-tab .product-option .option-position a.media-delete:hover svg, .product-media-tab .product-option .option-position a.option-delete:hover svg, .product-media-tab .product-option .option-position a.download-delete:hover svg, .product-media-tab .product-option .download-position a.media-delete:hover svg, .product-media-tab .product-option .download-position a.option-delete:hover svg, .product-media-tab .product-option .download-position a.download-delete:hover svg, .product-media-tab .product-download .media-position a.media-delete:hover svg, .product-media-tab .product-download .media-position a.option-delete:hover svg, .product-media-tab .product-download .media-position a.download-delete:hover svg, .product-media-tab .product-download .option-position a.media-delete:hover svg, .product-media-tab .product-download .option-position a.option-delete:hover svg, .product-media-tab .product-download .option-position a.download-delete:hover svg, .product-media-tab .product-download .download-position a.media-delete:hover svg, .product-media-tab .product-download .download-position a.option-delete:hover svg, .product-media-tab .product-download .download-position a.download-delete:hover svg, .product-options-tab .product-media .media-position a.media-delete:hover svg, .product-options-tab .product-media .media-position a.option-delete:hover svg, .product-options-tab .product-media .media-position a.download-delete:hover svg, .product-options-tab .product-media .option-position a.media-delete:hover svg, .product-options-tab .product-media .option-position a.option-delete:hover svg, .product-options-tab .product-media .option-position a.download-delete:hover svg, .product-options-tab .product-media .download-position a.media-delete:hover svg, .product-options-tab .product-media .download-position a.option-delete:hover svg, .product-options-tab .product-media .download-position a.download-delete:hover svg, .product-options-tab .product-option .media-position a.media-delete:hover svg, .product-options-tab .product-option .media-position a.option-delete:hover svg, .product-options-tab .product-option .media-position a.download-delete:hover svg, .product-options-tab .product-option .option-position a.media-delete:hover svg, .product-options-tab .product-option .option-position a.option-delete:hover svg, .product-options-tab .product-option .option-position a.download-delete:hover svg, .product-options-tab .product-option .download-position a.media-delete:hover svg, .product-options-tab .product-option .download-position a.option-delete:hover svg, .product-options-tab .product-option .download-position a.download-delete:hover svg, .product-options-tab .product-download .media-position a.media-delete:hover svg, .product-options-tab .product-download .media-position a.option-delete:hover svg, .product-options-tab .product-download .media-position a.download-delete:hover svg, .product-options-tab .product-download .option-position a.media-delete:hover svg, .product-options-tab .product-download .option-position a.option-delete:hover svg, .product-options-tab .product-download .option-position a.download-delete:hover svg, .product-options-tab .product-download .download-position a.media-delete:hover svg, .product-options-tab .product-download .download-position a.option-delete:hover svg, .product-options-tab .product-download .download-position a.download-delete:hover svg, .product-downloads-tab .product-media .media-position a.media-delete:hover svg, .product-downloads-tab .product-media .media-position a.option-delete:hover svg, .product-downloads-tab .product-media .media-position a.download-delete:hover svg, .product-downloads-tab .product-media .option-position a.media-delete:hover svg, .product-downloads-tab .product-media .option-position a.option-delete:hover svg, .product-downloads-tab .product-media .option-position a.download-delete:hover svg, .product-downloads-tab .product-media .download-position a.media-delete:hover svg, .product-downloads-tab .product-media .download-position a.option-delete:hover svg, .product-downloads-tab .product-media .download-position a.download-delete:hover svg, .product-downloads-tab .product-option .media-position a.media-delete:hover svg, .product-downloads-tab .product-option .media-position a.option-delete:hover svg, .product-downloads-tab .product-option .media-position a.download-delete:hover svg, .product-downloads-tab .product-option .option-position a.media-delete:hover svg, .product-downloads-tab .product-option .option-position a.option-delete:hover svg, .product-downloads-tab .product-option .option-position a.download-delete:hover svg, .product-downloads-tab .product-option .download-position a.media-delete:hover svg, .product-downloads-tab .product-option .download-position a.option-delete:hover svg, .product-downloads-tab .product-option .download-position a.download-delete:hover svg, .product-downloads-tab .product-download .media-position a.media-delete:hover svg, .product-downloads-tab .product-download .media-position a.option-delete:hover svg, .product-downloads-tab .product-download .media-position a.download-delete:hover svg, .product-downloads-tab .product-download .option-position a.media-delete:hover svg, .product-downloads-tab .product-download .option-position a.option-delete:hover svg, .product-downloads-tab .product-download .option-position a.download-delete:hover svg, .product-downloads-tab .product-download .download-position a.media-delete:hover svg, .product-downloads-tab .product-download .download-position a.option-delete:hover svg, .product-downloads-tab .product-download .download-position a.download-delete:hover svg {
+  fill: #be4949;
+}
+.product-media-tab .product-media .media-position a.option-edit, .product-media-tab .product-media .option-position a.option-edit, .product-media-tab .product-media .download-position a.option-edit, .product-media-tab .product-option .media-position a.option-edit, .product-media-tab .product-option .option-position a.option-edit, .product-media-tab .product-option .download-position a.option-edit, .product-media-tab .product-download .media-position a.option-edit, .product-media-tab .product-download .option-position a.option-edit, .product-media-tab .product-download .download-position a.option-edit, .product-options-tab .product-media .media-position a.option-edit, .product-options-tab .product-media .option-position a.option-edit, .product-options-tab .product-media .download-position a.option-edit, .product-options-tab .product-option .media-position a.option-edit, .product-options-tab .product-option .option-position a.option-edit, .product-options-tab .product-option .download-position a.option-edit, .product-options-tab .product-download .media-position a.option-edit, .product-options-tab .product-download .option-position a.option-edit, .product-options-tab .product-download .download-position a.option-edit, .product-downloads-tab .product-media .media-position a.option-edit, .product-downloads-tab .product-media .option-position a.option-edit, .product-downloads-tab .product-media .download-position a.option-edit, .product-downloads-tab .product-option .media-position a.option-edit, .product-downloads-tab .product-option .option-position a.option-edit, .product-downloads-tab .product-option .download-position a.option-edit, .product-downloads-tab .product-download .media-position a.option-edit, .product-downloads-tab .product-download .option-position a.option-edit, .product-downloads-tab .product-download .download-position a.option-edit {
+  font-size: 14px;
+  padding-right: 5px;
+}
+.product-media-tab .product-media .media-position a.option-edit svg, .product-media-tab .product-media .option-position a.option-edit svg, .product-media-tab .product-media .download-position a.option-edit svg, .product-media-tab .product-option .media-position a.option-edit svg, .product-media-tab .product-option .option-position a.option-edit svg, .product-media-tab .product-option .download-position a.option-edit svg, .product-media-tab .product-download .media-position a.option-edit svg, .product-media-tab .product-download .option-position a.option-edit svg, .product-media-tab .product-download .download-position a.option-edit svg, .product-options-tab .product-media .media-position a.option-edit svg, .product-options-tab .product-media .option-position a.option-edit svg, .product-options-tab .product-media .download-position a.option-edit svg, .product-options-tab .product-option .media-position a.option-edit svg, .product-options-tab .product-option .option-position a.option-edit svg, .product-options-tab .product-option .download-position a.option-edit svg, .product-options-tab .product-download .media-position a.option-edit svg, .product-options-tab .product-download .option-position a.option-edit svg, .product-options-tab .product-download .download-position a.option-edit svg, .product-downloads-tab .product-media .media-position a.option-edit svg, .product-downloads-tab .product-media .option-position a.option-edit svg, .product-downloads-tab .product-media .download-position a.option-edit svg, .product-downloads-tab .product-option .media-position a.option-edit svg, .product-downloads-tab .product-option .option-position a.option-edit svg, .product-downloads-tab .product-option .download-position a.option-edit svg, .product-downloads-tab .product-download .media-position a.option-edit svg, .product-downloads-tab .product-download .option-position a.option-edit svg, .product-downloads-tab .product-download .download-position a.option-edit svg {
+  fill: #e1e4e6;
+}
+.product-media-tab .product-media .media-position a.option-edit:hover svg, .product-media-tab .product-media .option-position a.option-edit:hover svg, .product-media-tab .product-media .download-position a.option-edit:hover svg, .product-media-tab .product-option .media-position a.option-edit:hover svg, .product-media-tab .product-option .option-position a.option-edit:hover svg, .product-media-tab .product-option .download-position a.option-edit:hover svg, .product-media-tab .product-download .media-position a.option-edit:hover svg, .product-media-tab .product-download .option-position a.option-edit:hover svg, .product-media-tab .product-download .download-position a.option-edit:hover svg, .product-options-tab .product-media .media-position a.option-edit:hover svg, .product-options-tab .product-media .option-position a.option-edit:hover svg, .product-options-tab .product-media .download-position a.option-edit:hover svg, .product-options-tab .product-option .media-position a.option-edit:hover svg, .product-options-tab .product-option .option-position a.option-edit:hover svg, .product-options-tab .product-option .download-position a.option-edit:hover svg, .product-options-tab .product-download .media-position a.option-edit:hover svg, .product-options-tab .product-download .option-position a.option-edit:hover svg, .product-options-tab .product-download .download-position a.option-edit:hover svg, .product-downloads-tab .product-media .media-position a.option-edit:hover svg, .product-downloads-tab .product-media .option-position a.option-edit:hover svg, .product-downloads-tab .product-media .download-position a.option-edit:hover svg, .product-downloads-tab .product-option .media-position a.option-edit:hover svg, .product-downloads-tab .product-option .option-position a.option-edit:hover svg, .product-downloads-tab .product-option .download-position a.option-edit:hover svg, .product-downloads-tab .product-download .media-position a.option-edit:hover svg, .product-downloads-tab .product-download .option-position a.option-edit:hover svg, .product-downloads-tab .product-download .download-position a.option-edit:hover svg {
+  fill: #4ab46d;
+}
+
+.table-dropdown-items {
+  display: none;
+  flex-flow: column;
+  position: absolute;
+  z-index: 99999;
+  top: 100%;
+  right: 0;
+  width: 150px;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px 1px rgba(45, 54, 68, 0.15);
+}
+.table-dropdown-items a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #4a5361;
+  padding: 12px 15px;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid #f6f7f9;
+}
+.table-dropdown-items a .icon {
+  width: 20px;
+}
+.table-dropdown-items a .icon svg {
+  fill: #4a5361;
+}
+.table-dropdown-items a.red {
+  color: #dd4d4d;
+}
+.table-dropdown-items a.red .icon svg {
+  fill: #dd4d4d;
+}
+.table-dropdown-items a.green {
+  color: #34aa6b;
+}
+.table-dropdown-items a.green .icon svg {
+  fill: #34aa6b;
+}
+.table-dropdown-items a:hover, .table-dropdown-items a:active {
+  background-color: #fbfbfb;
+}
+.table-dropdown-items a:last-child {
+  border-bottom: 0;
+}
+.table-dropdown-items.show {
+  display: flex;
+}
+
+.link1, .link2 {
+  text-decoration: none;
+  border-bottom: 1px dotted #afb6c0;
+  color: #2d81e2;
+  margin: 0 5px 0 0;
+}
+.link1:hover, .link2:hover {
+  color: #075dbe;
+}
+
+.link2 {
+  color: #ba0000;
+  border-bottom: 1px dotted #c0afb0;
+}
+.link2:hover {
+  color: #600000;
+}
+
+.title1 {
+  color: #6a6e75;
+  border-bottom: 1px solid #f9fafb;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  font-weight: 500;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  appearance: none;
+  cursor: pointer;
+  border: 0;
+  background: #3d7dca;
+  color: #FFFFFF;
+  padding: 0 14px;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+  height: 38px;
+  box-shadow: 0px 0px 6px 1px rgba(45, 54, 68, 0.1);
+}
+.btn:hover {
+  background: #3575c3;
+}
+.btn.green {
+  background: #4ab46d;
+}
+.btn.green:hover {
+  background: #46a966;
+}
+.btn.red {
+  background: #be4949;
+}
+.btn.red:hover {
+  background: #b74141;
+}
+.btn.alt {
+  color: #75797e;
+  border: 1px solid #d4dbde;
+  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.03);
+  background: #f1f3f4;
+}
+.btn.alt:hover {
+  background: #eef1f2;
+}
+.btn.disabled {
+  background: #b1b3b4;
+}
+.btn.disabled:hover {
+  background: #a9abad;
+}
+.btn.small {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+.btn .icon-left {
+  margin-right: 7px;
+  fill: #fff;
+}
+.btn .icon-right {
+  margin-left: 7px;
+  fill: #fff;
+}
+
+.dialog {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  z-index: 999999;
+  align-items: center;
+  justify-content: center;
+}
+.dialog .content {
+  transform: scale(0.5);
+  background-color: #fff;
+  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.03);
+  width: 400px;
+}
+.dialog .content .heading {
+  display: flex;
+  padding: 20px;
+  font-weight: 600;
+  justify-content: space-between;
+  border-bottom: 1px solid #ebeced;
+  align-items: center;
+}
+.dialog .content .heading span {
+  font-size: 24px;
+  line-height: 24px;
+  padding-bottom: 4px;
+  cursor: pointer;
+  color: #959faf;
+}
+.dialog .content .heading span:hover {
+  color: #606c7e;
+}
+.dialog .content .footer {
+  border-top: 1px solid #ebeced;
+  background-color: #fbfbfb;
+}
+.dialog.large .content {
+  width: 900px;
+}
+.dialog.medium .content {
+  width: 600px;
+}
+.dialog.open {
+  display: flex;
+}
+.dialog.open .content {
+  transform: scale(1);
+  transition: all 0.2s ease;
+}
+
+.media-library-modal .media {
+  display: flex;
+}
+.media-library-modal .media .list {
+  display: flex;
+  flex-flow: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  width: 75%;
+  height: 460px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 10px;
+}
+.media-library-modal .media .list > a {
+  position: relative;
+  display: flex;
+  height: 100px;
+  width: 23.4%;
+  border: 1px solid #ddd;
+  padding: 5px;
+  margin: 5px;
+}
+.media-library-modal .media .list > a img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.media-library-modal .media .list > a.selected {
+  border: 2px solid #237fe8;
+}
+.media-library-modal .media .list > a.selected::before {
+  position: absolute;
+  content: "";
+  background: url('data:image/svg+xml,<svg width="12" height="12" fill="%23ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" /></svg>') no-repeat center center;
+  display: inline-block;
+  vertical-align: middle;
+  bottom: 0;
+  right: 0;
+  background-color: #237fe8;
+  font-size: 12px;
+  padding: 4px 4px 1px 4px;
+  width: 8px;
+  height: 8px;
+}
+.media-library-modal .media .list .list-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 5px 5px 10px 5px;
+}
+.media-library-modal .media .list .list-header input {
+  border: 0;
+  padding: 5px 0;
+  border-bottom: 1px solid #e4e6ed;
+}
+.media-library-modal .media .details {
+  width: 25%;
+  padding: 15px;
+  background-color: #fbfcfd;
+  border-left: 1px solid #ebeced;
+  height: 460px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.media-library-modal .media .details h3 {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  word-break: break-all;
+}
+.media-library-modal .media .details label {
+  display: block;
+  margin: 0;
+  padding: 15px 0 0 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+.media-library-modal .media .details img {
+  max-width: 100%;
+  max-height: 100px;
+  padding-top: 10px;
+}
+.media-library-modal .media .details input {
+  border: 0;
+  padding: 5px 0;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  border-bottom: 1px solid #e4e6ed;
+}
+.media-library-modal .media .details .media-links {
+  padding-top: 15px;
+}
+.media-library-modal .media .details .media-links .save-media {
+  display: none;
+}
+.media-library-modal .media .details .media-links a {
+  font-size: 14px;
+}
+.media-library-modal .media .list::-webkit-scrollbar, .media-library-modal .media .details::-webkit-scrollbar {
+  width: 6px;
+  background: #fff;
+}
+.media-library-modal .media .list::-webkit-scrollbar-thumb, .media-library-modal .media .details::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
+}
+
+.options-modal .body {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 20px;
+}
+.options-modal .body input[type=text], .options-modal .body input[type=number], .options-modal .body input[type=datetime-local], .options-modal .body select {
+  border: 0;
+  padding: 10px 0;
+  height: 40px;
+  background: transparent;
+  width: 100%;
+  border-bottom: 1px solid #e4e6ed;
+}
+.options-modal .body select {
+  padding: 0;
+}
+.options-modal .body .option-header {
+  display: flex;
+  width: 70%;
+}
+.options-modal .body .option-header input {
+  margin-right: 10px;
+}
+.options-modal .body .option-header label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+}
+.options-modal .body .option-content {
+  display: none;
+  flex-flow: column;
+}
+.options-modal .body .table {
+  width: 100%;
+  padding: 0;
+}
+.options-modal .body .table .input-group {
+  display: flex;
+}
+.options-modal .body .table tbody td input {
+  font-size: 14px;
+}
+.options-modal .body .table tbody td {
+  padding-right: 10px;
+}
+.options-modal .body .table tbody td .modifier {
+  width: 45px;
+}
+.options-modal .body .table tbody td .modifier ~ input {
+  padding-left: 5px;
+}
+.options-modal .body .add-option-value-btn {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: normal;
+  color: #7a7a7c;
+  font-size: 14px;
+  padding: 15px 0;
+}
+.options-modal .body .add-option-value-btn svg {
+  fill: #7a7a7c;
+  margin-right: 3px;
+}
+.options-modal .body .add-option-value-btn:hover {
+  color: #616263;
+}
+.options-modal .body .add-option-value-btn:hover svg {
+  fill: #616263;
+}
+.options-modal .body .remove-option-value {
+  cursor: pointer;
+  fill: #5e6a8d;
+}
+.options-modal .body .remove-option-value:hover {
+  fill: #be4949;
+}
+
+.downloads-modal .body {
+  padding: 20px;
+}
+.downloads-modal .body input {
+  border: 0;
+  padding: 10px 0;
+  height: 40px;
+  font-size: 14px;
+  background: transparent;
+  width: 100%;
+  border-bottom: 1px solid #e4e6ed;
+}
+.downloads-modal .body label {
+  font-weight: 500;
+}
+
+.edit-media-modal .body {
+  padding: 20px;
+}
+.edit-media-modal .body label {
+  display: block;
+  margin: 0;
+  padding: 15px 0 0 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+.edit-media-modal .body img {
+  max-width: 100%;
+  max-height: 100px;
+  padding-top: 10px;
+}
+.edit-media-modal .body input {
+  border: 0;
+  padding: 5px 0;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  border-bottom: 1px solid #e4e6ed;
+}
+
+.loader,
+.loader::after {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.loader {
+  position: relative;
+  margin: 60px auto;
+  border-top: 2px solid rgba(154, 158, 162, 0.2);
+  border-right: 2px solid rgba(154, 158, 162, 0.2);
+  border-bottom: 2px solid rgba(154, 158, 162, 0.2);
+  border-left: 2px solid #9a9ea2;
+  transform: translateZ(0);
+  animation: loader 1.1s infinite linear;
+}
+
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.pad-1 {
+  padding: 5px;
+}
+
+.mar-1 {
+  margin: 5px;
+}
+
+.pad-2 {
+  padding: 10px;
+}
+
+.mar-2 {
+  margin: 10px;
+}
+
+.pad-3 {
+  padding: 15px;
+}
+
+.mar-3 {
+  margin: 15px;
+}
+
+.pad-4 {
+  padding: 20px;
+}
+
+.mar-4 {
+  margin: 20px;
+}
+
+.pad-5 {
+  padding: 25px;
+}
+
+.mar-5 {
+  margin: 25px;
+}
+
+.pad-bot-1 {
+  padding-bottom: 5px;
+}
+
+.pad-top-1 {
+  padding-top: 5px;
+}
+
+.pad-left-1 {
+  padding-left: 5px;
+}
+
+.pad-right-1 {
+  padding-right: 5px;
+}
+
+.pad-x-1 {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.pad-y-1 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.mar-bot-1 {
+  margin-bottom: 5px;
+}
+
+.mar-top-1 {
+  margin-top: 5px;
+}
+
+.mar-left-1 {
+  margin-left: 5px;
+}
+
+.mar-right-1 {
+  margin-right: 5px;
+}
+
+.mar-x-1 {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.mar-y-1 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.pad-bot-2 {
+  padding-bottom: 10px;
+}
+
+.pad-top-2 {
+  padding-top: 10px;
+}
+
+.pad-left-2 {
+  padding-left: 10px;
+}
+
+.pad-right-2 {
+  padding-right: 10px;
+}
+
+.pad-x-2 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.pad-y-2 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.mar-bot-2 {
+  margin-bottom: 10px;
+}
+
+.mar-top-2 {
+  margin-top: 10px;
+}
+
+.mar-left-2 {
+  margin-left: 10px;
+}
+
+.mar-right-2 {
+  margin-right: 10px;
+}
+
+.mar-x-2 {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.mar-y-2 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.pad-bot-3 {
+  padding-bottom: 15px;
+}
+
+.pad-top-3 {
+  padding-top: 15px;
+}
+
+.pad-left-3 {
+  padding-left: 15px;
+}
+
+.pad-right-3 {
+  padding-right: 15px;
+}
+
+.pad-x-3 {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.pad-y-3 {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.mar-bot-3 {
+  margin-bottom: 15px;
+}
+
+.mar-top-3 {
+  margin-top: 15px;
+}
+
+.mar-left-3 {
+  margin-left: 15px;
+}
+
+.mar-right-3 {
+  margin-right: 15px;
+}
+
+.mar-x-3 {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.mar-y-3 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.pad-bot-4 {
+  padding-bottom: 20px;
+}
+
+.pad-top-4 {
+  padding-top: 20px;
+}
+
+.pad-left-4 {
+  padding-left: 20px;
+}
+
+.pad-right-4 {
+  padding-right: 20px;
+}
+
+.pad-x-4 {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.pad-y-4 {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.mar-bot-4 {
+  margin-bottom: 20px;
+}
+
+.mar-top-4 {
+  margin-top: 20px;
+}
+
+.mar-left-4 {
+  margin-left: 20px;
+}
+
+.mar-right-4 {
+  margin-right: 20px;
+}
+
+.mar-x-4 {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.mar-y-4 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pad-bot-5 {
+  padding-bottom: 25px;
+}
+
+.pad-top-5 {
+  padding-top: 25px;
+}
+
+.pad-left-5 {
+  padding-left: 25px;
+}
+
+.pad-right-5 {
+  padding-right: 25px;
+}
+
+.pad-x-5 {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.pad-y-5 {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.mar-bot-5 {
+  margin-bottom: 25px;
+}
+
+.mar-top-5 {
+  margin-top: 25px;
+}
+
+.mar-left-5 {
+  margin-left: 25px;
+}
+
+.mar-right-5 {
+  margin-right: 25px;
+}
+
+.mar-x-5 {
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.mar-y-5 {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+@media screen and (max-width: 1000px) {
+  header {
+    padding-left: 0;
+  }
+  .responsive-hidden {
+    display: none !important;
+  }
+  .responsive-width-100 {
+    width: 100% !important;
+    flex: auto !important;
+    flex-basis: 100% !important;
+  }
+  .responsive-flex-column {
+    flex-flow: column;
+  }
+  .responsive-flex-wrap {
+    flex-flow: wrap;
+  }
+  .responsive-flex {
+    display: flex;
+  }
+  aside.minimal + main {
+    padding-left: 70px;
+  }
+  main {
+    padding: 70px 7px 20px 7px;
+  }
+  main .content-header {
+    max-width: 100%;
+  }
+  main .content-header form {
+    padding-top: 10px;
+  }
+  main .content-header form .search input, main .content-header form > select {
+    padding-right: 25px;
+    margin-left: 0;
+  }
+  main .content-block {
+    padding: 5px;
+  }
+  main .content-block .block-header {
+    padding-top: 10px;
+  }
+  main .dashboard {
+    flex-flow: column;
+  }
+  main .dashboard .stat {
+    width: 100%;
+  }
+  .responsive-pad-1 {
+    padding: 5px;
+  }
+  .responsive-mar-1 {
+    margin: 5px;
+  }
+  .responsive-pad-2 {
+    padding: 10px;
+  }
+  .responsive-mar-2 {
+    margin: 10px;
+  }
+  .responsive-pad-3 {
+    padding: 15px;
+  }
+  .responsive-mar-3 {
+    margin: 15px;
+  }
+  .responsive-pad-4 {
+    padding: 20px;
+  }
+  .responsive-mar-4 {
+    margin: 20px;
+  }
+  .responsive-pad-5 {
+    padding: 25px;
+  }
+  .responsive-mar-5 {
+    margin: 25px;
+  }
+  .responsive-pad-bot-1 {
+    padding-bottom: 5px;
+  }
+  .responsive-pad-top-1 {
+    padding-top: 5px;
+  }
+  .responsive-pad-left-1 {
+    padding-left: 5px;
+  }
+  .responsive-pad-right-1 {
+    padding-right: 5px;
+  }
+  .responsive-pad-x-1 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .responsive-pad-y-1 {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .responsive-mar-bot-1 {
+    margin-bottom: 5px;
+  }
+  .responsive-mar-top-1 {
+    margin-top: 5px;
+  }
+  .responsive-mar-left-1 {
+    margin-left: 5px;
+  }
+  .responsive-mar-right-1 {
+    margin-right: 5px;
+  }
+  .responsive-mar-x-1 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .responsive-mar-y-1 {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .responsive-pad-bot-2 {
+    padding-bottom: 10px;
+  }
+  .responsive-pad-top-2 {
+    padding-top: 10px;
+  }
+  .responsive-pad-left-2 {
+    padding-left: 10px;
+  }
+  .responsive-pad-right-2 {
+    padding-right: 10px;
+  }
+  .responsive-pad-x-2 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .responsive-pad-y-2 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .responsive-mar-bot-2 {
+    margin-bottom: 10px;
+  }
+  .responsive-mar-top-2 {
+    margin-top: 10px;
+  }
+  .responsive-mar-left-2 {
+    margin-left: 10px;
+  }
+  .responsive-mar-right-2 {
+    margin-right: 10px;
+  }
+  .responsive-mar-x-2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .responsive-mar-y-2 {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .responsive-pad-bot-3 {
+    padding-bottom: 15px;
+  }
+  .responsive-pad-top-3 {
+    padding-top: 15px;
+  }
+  .responsive-pad-left-3 {
+    padding-left: 15px;
+  }
+  .responsive-pad-right-3 {
+    padding-right: 15px;
+  }
+  .responsive-pad-x-3 {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .responsive-pad-y-3 {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .responsive-mar-bot-3 {
+    margin-bottom: 15px;
+  }
+  .responsive-mar-top-3 {
+    margin-top: 15px;
+  }
+  .responsive-mar-left-3 {
+    margin-left: 15px;
+  }
+  .responsive-mar-right-3 {
+    margin-right: 15px;
+  }
+  .responsive-mar-x-3 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  .responsive-mar-y-3 {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .responsive-pad-bot-4 {
+    padding-bottom: 20px;
+  }
+  .responsive-pad-top-4 {
+    padding-top: 20px;
+  }
+  .responsive-pad-left-4 {
+    padding-left: 20px;
+  }
+  .responsive-pad-right-4 {
+    padding-right: 20px;
+  }
+  .responsive-pad-x-4 {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .responsive-pad-y-4 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .responsive-mar-bot-4 {
+    margin-bottom: 20px;
+  }
+  .responsive-mar-top-4 {
+    margin-top: 20px;
+  }
+  .responsive-mar-left-4 {
+    margin-left: 20px;
+  }
+  .responsive-mar-right-4 {
+    margin-right: 20px;
+  }
+  .responsive-mar-x-4 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .responsive-mar-y-4 {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .responsive-pad-bot-5 {
+    padding-bottom: 25px;
+  }
+  .responsive-pad-top-5 {
+    padding-top: 25px;
+  }
+  .responsive-pad-left-5 {
+    padding-left: 25px;
+  }
+  .responsive-pad-right-5 {
+    padding-right: 25px;
+  }
+  .responsive-pad-x-5 {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  .responsive-pad-y-5 {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+  .responsive-mar-bot-5 {
+    margin-bottom: 25px;
+  }
+  .responsive-mar-top-5 {
+    margin-top: 25px;
+  }
+  .responsive-mar-left-5 {
+    margin-left: 25px;
+  }
+  .responsive-mar-right-5 {
+    margin-right: 25px;
+  }
+  .responsive-mar-x-5 {
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+  .responsive-mar-y-5 {
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+  .media-library-modal {
+    padding: 10px;
+  }
+  .media-library-modal .media {
+    flex-flow: column;
+  }
+  .media-library-modal .media .list {
+    width: 100%;
+    height: 220px;
+  }
+  .media-library-modal .media .list > a {
+    width: 29%;
+  }
+  .media-library-modal .media .list .list-header input {
+    max-width: 150px;
+    width: auto;
+  }
+  .media-library-modal .media .details {
+    width: 100%;
+    height: 110px;
+  }
+  .options-modal {
+    padding: 10px;
+  }
+  .options-modal .body {
+    max-height: 260px;
+  }
+  .options-modal .body .option-header {
+    width: 100%;
+  }
+  .options-modal .body .table thead td {
+    font-size: 12px;
+  }
+  .options-modal .body .table tbody td input {
+    font-size: 12px;
+  }
+  .options-modal .body .table tbody td {
+    padding-right: 5px;
+  }
+  .options-modal .body .table tbody td .modifier {
+    width: 45px;
+  }
+  .options-modal .body .table tbody td .modifier ~ input {
+    padding-left: 0;
+  }
+  .downloads-modal {
+    padding: 10px;
+  }
+  .content-block-wrapper {
+    flex-flow: column;
+  }
+  .content-block-wrapper .content-block {
+    margin: 15px 0 0 0 !important;
+  }
+}

@@ -11,7 +11,7 @@ html {
 body {
   position: relative;
   min-height: 100%;
-  color: #555555;
+  color: #515355;
   background-color: #f3f4f7;
   margin: 0;
 }
@@ -40,7 +40,7 @@ header .responsive-toggle {
   height: 100%;
   width: 16px;
   text-decoration: none;
-  margin-left: 20px;
+  margin: 0 5px 0 20px;
 }
 header .responsive-toggle::before, header .responsive-toggle::after {
   content: "";
@@ -56,6 +56,29 @@ header .responsive-toggle::after {
 }
 header .responsive-toggle:hover::before, header .responsive-toggle:hover::after, header .responsive-toggle:active::before, header .responsive-toggle:active::after {
   background-color: #606c7e;
+}
+header .shortcut-link {
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #fff;
+  box-shadow: 0px 0px 6px 1px rgba(45, 54, 68, 0.1);
+  padding: 0 10px 0 5px;
+  margin-left: 15px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: #818791;
+  height: 28px;
+}
+header .shortcut-link:hover {
+  background-color: #747a85;
+}
+header .shortcut-link svg {
+  fill: #e6e7e9;
+  margin-right: 4px;
 }
 header .space-between {
   flex: 1;
@@ -106,33 +129,57 @@ header .dropdown .profile-img i.online {
 }
 header .dropdown .list {
   display: none;
+  flex-flow: column;
   position: absolute;
   top: 100%;
-  right: 0;
+  right: 10px;
+  box-shadow: 0px 2px 2px 1px rgba(45, 54, 68, 0.05);
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  overflow: hidden;
+  z-index: 99999;
   width: 150px;
   background-color: #fff;
-  border-top: 1px solid #eee;
-  box-shadow: 0px 2px 2px 1px rgba(45, 54, 68, 0.05);
+  border-top: 1px solid #f6f7f9;
 }
-header .dropdown .list a, header .dropdown .list div {
-  display: block;
+header .dropdown .list a {
+  display: flex;
+  align-items: center;
   text-decoration: none;
   color: #4a5361;
-  padding: 10px 15px;
+  padding: 12px 15px;
   font-size: 14px;
+  line-height: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid #f6f7f9;
 }
-header .dropdown .list a:hover, header .dropdown .list a:active, header .dropdown .list div:hover, header .dropdown .list div:active {
+header .dropdown .list a .icon {
+  width: 20px;
+}
+header .dropdown .list a .icon svg {
+  fill: #4a5361;
+}
+header .dropdown .list a.red {
+  color: #dd4d4d;
+}
+header .dropdown .list a.red .icon svg {
+  fill: #dd4d4d;
+}
+header .dropdown .list a.green {
+  color: #34aa6b;
+}
+header .dropdown .list a.green .icon svg {
+  fill: #34aa6b;
+}
+header .dropdown .list a:hover, header .dropdown .list a:active {
   background-color: #fbfbfb;
 }
-header .dropdown .list a:hover .list, header .dropdown .list a:active .list, header .dropdown .list div:hover .list, header .dropdown .list div:active .list {
-  display: flex;
-  flex-flow: column;
-  top: -1px;
-  right: 100%;
+header .dropdown .list a:last-child {
+  border-bottom: 0;
 }
 header .dropdown:hover > .list, header .dropdown:active > .list {
   display: flex;
-  flex-flow: column;
 }
 
 aside {
@@ -209,7 +256,7 @@ aside > a:hover, aside > a.selected {
   padding: 15px 17px;
 }
 aside > a:hover .note, aside > a.selected .note {
-  background-color: #282f3c;
+  margin-right: 3px;
 }
 aside > a:hover svg, aside > a.selected svg {
   fill: #fff;
@@ -218,23 +265,26 @@ aside > a.selected + .sub {
   display: flex;
 }
 aside > a .note {
-  background-color: #1e232d;
+  color: #fff;
+  background-color: #3671c9;
   padding: 1px 5px;
   border-radius: 4px;
   font-size: 12px;
-  margin-left: 10px;
+  margin-left: auto;
 }
 aside .sub {
   display: none;
   flex-flow: column;
-  background-color: #181c24;
+  background-color: #1c202a;
   padding: 13px 0;
 }
 aside .sub a {
   font-size: 14px;
   color: #868c9c;
+  border-radius: 5px;
   text-decoration: none;
-  padding: 4px 20px;
+  padding: 8px 15px;
+  margin: 0 10px;
 }
 aside .sub a span {
   display: inline-block;
@@ -246,11 +296,12 @@ aside .sub a span.square {
   display: inline-block;
   width: 7px;
   height: 7px;
-  margin: 0 20px 1px 3px;
-  background-color: #868c9c;
+  margin: 0 16px 1px 3px;
+  background-color: #181c24;
 }
 aside .sub a:hover, aside .sub a.selected {
   color: #fff;
+  background-color: #262c39;
 }
 aside .sub a:hover span.square, aside .sub a.selected span.square {
   background-color: #fff;
@@ -260,15 +311,16 @@ aside .footer {
   flex-flow: column;
   margin-top: auto;
   padding: 15px;
-  border-top: 1px solid #202530;
-  background-color: #222833;
+  margin: auto 15px 15px 15px;
+  border: 2px solid #2c3442;
+  border-radius: 15px;
   font-size: 14px;
-  color: #5b616f;
+  color: #626978;
 }
 aside .footer a {
   text-decoration: none;
   font-size: 13px;
-  color: #727a8b;
+  color: #7d8495;
   padding-bottom: 4px;
 }
 aside .footer a:hover {
@@ -342,11 +394,71 @@ main h2 span {
   font-weight: 600;
   color: #959faf;
 }
+main h2 a {
+  text-decoration: none;
+  font-size: 20px;
+  color: #9298a0;
+}
+main h2 a svg {
+  margin: 0 3px -3px 0;
+  fill: #9298a0;
+}
+main h2 a:hover {
+  color: #6e7581;
+}
 main .content-title {
   display: flex;
+  flex-flow: wrap;
+  gap: 15px;
 }
 main .content-title h2 {
+  white-space: nowrap;
   flex: 1;
+}
+main .content-title h2 svg {
+  margin-left: 7px;
+  fill: #b6bcce;
+}
+main .content-title h2 svg:hover {
+  fill: #a7aec4;
+}
+main .content-title h2.normal {
+  white-space: normal;
+}
+main .content-title h2 > .green, main .content-title h2 > .red, main .content-title h2 > .grey, main .content-title h2 > .orange, main .content-title h2 > .blue {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  margin-left: 10px;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  text-transform: capitalize;
+  white-space: nowrap;
+  background-color: #e8ebec;
+  color: #8e9499;
+}
+main .content-title h2 > .green.small, main .content-title h2 > .red.small, main .content-title h2 > .grey.small, main .content-title h2 > .orange.small, main .content-title h2 > .blue.small {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+main .content-title h2 > .green {
+  background-color: #b8f7d5;
+  color: #34aa6b;
+}
+main .content-title h2 > .blue {
+  background-color: #d8e9ff;
+  color: #5f92da;
+}
+main .content-title h2 > .red {
+  background-color: #f7caca;
+  color: #b64343;
+}
+main .content-title h2 > .orange {
+  background-color: #f8eac2;
+  color: #dea200;
 }
 main .content-title .btn {
   height: 36px;
@@ -525,7 +637,7 @@ main .content-header .filters .list {
   display: none;
   z-index: 999999;
   top: calc(100% + 5px);
-  width: 180px;
+  width: 220px;
   flex-flow: column;
   position: absolute;
   background-color: #fff;
@@ -536,15 +648,17 @@ main .content-header .filters .list label {
   display: block;
   padding-bottom: 5px;
   font-size: 14px;
+  color: #6b788c;
+  font-weight: 500;
 }
 main .content-header .filters .list input {
   margin-right: 10px;
 }
-main .content-header .filters .list select {
+main .content-header .filters .list select, main .content-header .filters .list input[type=text], main .content-header .filters .list input[type=number], main .content-header .filters .list input[type=date], main .content-header .filters .list input[type=datetime-local], main .content-header .filters .list input[type=time], main .content-header .filters .list input[type=email], main .content-header .filters .list input[type=password] {
   width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   font-size: 14px;
-  padding: 3px;
+  padding: 6px 8px;
   border-radius: 5px;
   border: 1px solid #e4e6ed;
 }
@@ -552,7 +666,7 @@ main .content-header .filters .list button {
   background: #3d7dca;
   border: 0;
   color: #FFFFFF;
-  padding: 5px 0;
+  padding: 7px 0;
   font-size: 12px;
   font-weight: 600;
   margin: 5px 0 5px 0;
@@ -572,6 +686,7 @@ main .content-block {
 }
 main .content-block .block-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   position: relative;
   border-bottom: 1px solid #f9fafb;
@@ -579,8 +694,7 @@ main .content-block .block-header {
   padding: 0 15px 15px 15px;
   margin-left: -15px;
   margin-right: -15px;
-  font-size: 14px;
-  font-weight: 500;
+  gap: 15px;
 }
 main .content-block .block-header .icon {
   display: inline-flex;
@@ -591,13 +705,47 @@ main .content-block .block-header .icon {
   align-items: center;
   border-radius: 50%;
   margin-right: 10px;
-  background-color: #d5e7fa;
+  background-color: #d6eaff;
 }
 main .content-block .block-header .icon svg {
   fill: #6e94ba;
 }
+main .content-block .block-header .content-left {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+main .content-block .block-header .content-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+main .content-block .block-header .content-right .date-range {
+  display: flex;
+  align-items: center;
+}
+main .content-block .block-header .content-right .date-range span {
+  margin: 0 10px;
+  font-size: 14px;
+  color: #97a0ba;
+}
+main .content-block .block-header .content-right .date-range input {
+  border: 0;
+  border-radius: 5px;
+  padding: 4px 7px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #a7aec4;
+  background-color: #f3f4f7;
+  width: 120px;
+}
 main .content-block.cover {
   height: calc(100vh - 200px);
+}
+main .content-block.no-pad {
+  padding: 0;
 }
 main .content-block-wrapper {
   display: flex;
@@ -652,7 +800,7 @@ main .tab-content.active {
 main .dashboard {
   display: flex;
   justify-content: space-between;
-  padding-bottom: 40px;
+  padding-bottom: 30px;
 }
 main .dashboard .stat {
   width: 24%;
@@ -755,186 +903,78 @@ main .dashboard .stat.red > .icon {
 main .dashboard .stat.red > .icon svg {
   fill: #df8787;
 }
-main .form {
+main .campaign-stats {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 40px;
+}
+main .campaign-stats .stat {
+  width: 19%;
+  padding: 20px;
+  display: flex;
+  flex-flow: wrap;
+}
+main .campaign-stats .stat .ratio {
+  --ratio: 0;
+  display: flex;
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  position: relative;
+  clip-path: circle(50%);
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+}
+main .campaign-stats .stat .ratio::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: conic-gradient(#eaedf0 0 calc(var(--ratio) * 360deg), #337dc7 calc(var(--ratio) * 360deg) 360deg);
+  z-index: -2;
+}
+main .campaign-stats .stat .ratio.red::before {
+  background-image: conic-gradient(#eaedf0 0 calc(var(--ratio) * 360deg), #c75252 calc(var(--ratio) * 360deg) 360deg);
+}
+main .campaign-stats .stat .ratio::after {
+  content: "";
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  top: 10%;
+  left: 10%;
+  background-color: white;
+  border-radius: 50%;
+  z-index: -1;
+}
+main .campaign-stats .stat .ratio span {
+  display: flex;
+}
+main .campaign-stats .stat .ratio .percentage {
+  font-size: 18px;
+  font-weight: 500;
+  color: #808790;
+}
+main .campaign-stats .stat .data {
   display: flex;
   flex-flow: column;
-  width: 500px;
-  padding: 20px;
+  justify-content: center;
+  padding-left: 20px;
 }
-main .form input[type=text], main .form input[type=password], main .form input[type=datetime-local], main .form input[type=email], main .form input[type=number], main .form input[type=file], main .form textarea, main .form select {
-  width: 100%;
-  padding: 15px 5px;
-  margin-bottom: 25px;
-  border: 0;
-  border-bottom: 1px solid #e4e6ed;
-}
-main .form input[type=text]:hover, main .form input[type=text]:active, main .form input[type=password]:hover, main .form input[type=password]:active, main .form input[type=datetime-local]:hover, main .form input[type=datetime-local]:active, main .form input[type=email]:hover, main .form input[type=email]:active, main .form input[type=number]:hover, main .form input[type=number]:active, main .form input[type=file]:hover, main .form input[type=file]:active, main .form textarea:hover, main .form textarea:active, main .form select:hover, main .form select:active {
-  border-bottom: 1px solid #b6bcce;
-}
-main .form input[type=text]::placeholder, main .form input[type=password]::placeholder, main .form input[type=datetime-local]::placeholder, main .form input[type=email]::placeholder, main .form input[type=number]::placeholder, main .form input[type=file]::placeholder, main .form textarea::placeholder, main .form select::placeholder {
-  color: #959595;
-}
-main .form textarea {
-  height: 200px;
-}
-main .form textarea.code-editor {
-  margin: 15px 0;
-  height: 400px;
-  font-family: monospace;
-  font-size: 14px;
-  padding: 15px;
-  border-radius: 5px;
-  white-space: nowrap;
-  overflow: auto;
-  tab-size: 4;
-  border: 1px solid #f0f1f5;
-}
-main .form input[type=checkbox] {
-  width: auto;
-  margin: 15px 0 25px 2px;
-  transform: scale(1.2);
-}
-main .form label {
-  position: relative;
-  display: block;
+main .campaign-stats .stat .data .title {
   font-weight: 500;
   font-size: 14px;
   color: #6e7581;
 }
-main .form label .required {
-  font-size: 14px;
-  font-style: normal;
-  color: #e26060;
+main .campaign-stats .stat .data .val {
+  font-size: 20px;
 }
-main .form label input[type=text] {
-  padding-right: 30px;
-}
-main .form label i {
-  position: absolute;
-  right: 4px;
-  top: 20px;
-  bottom: 0;
-  font-size: 14px;
-  margin-top: auto;
-  margin-bottom: auto;
-  color: #b6bcce;
-}
-main .form button {
-  background-color: #e4e6ed;
-  color: #5e6a8d;
-  border: 0;
-  padding: 5px;
-  width: 100%;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-}
-main .form button:hover {
-  background-color: #dbdee7;
-}
-main .form .comment {
-  font-size: 14px;
-  color: #888888;
-  padding: 10px 0 5px;
-  margin: 0;
-}
-main .form .hidden {
-  display: none;
-}
-main .form .source ul {
-  margin: 0;
-  padding: 0 15px 15px 20px;
-  font-size: 14px;
-  color: #6f6f6f;
-}
-main .form .source ul li {
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-main .form .source ul li strong {
-  display: inline-block;
-  font-weight: 500;
-  font-size: 14px;
-  padding: 0 0 5px 0;
-  color: #555555;
-}
-main .form .source ul li em {
-  font-size: 14px;
-}
-main .form .multiselect {
-  position: relative;
-  display: flex;
-  flex-flow: wrap;
-  border-bottom: 1px solid #e4e6ed;
-  padding-bottom: 10px;
-  margin: 10px 0 25px 0;
-}
-main .form .multiselect > .item {
-  display: inline-flex;
-  border: 1px solid #e4e6ed;
-  padding: 0 8px;
-  height: 35px;
-  margin: 0 5px 5px 0;
-  font-size: 14px;
-  justify-content: center;
-  align-items: center;
-}
-main .form .multiselect > .item .remove {
-  font-style: normal;
-  cursor: pointer;
-  font-size: 19px;
-  margin-right: 3px;
-  margin-top: -4px;
-  color: #b6bcce;
-}
-main .form .multiselect > .item .remove:hover {
-  color: #97a0ba;
-}
-main .form .multiselect input {
-  height: 40px;
-  width: 80px;
-  flex-grow: 1;
-  padding: 15px 5px;
-  margin: 0;
-  outline: 0;
-  border: 0;
-}
-main .form .multiselect input:hover {
-  border: 0;
-}
-main .form .multiselect .list {
-  display: none;
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  flex-flow: column;
-  background-color: #fff;
-  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
-  max-height: 100px;
-  overflow-y: auto;
-  z-index: 1000000000;
-}
-main .form .multiselect .list span {
-  display: flex;
-  padding: 5px 7px;
-  cursor: pointer;
-  color: #000;
-}
-main .form .multiselect .list span:hover {
-  background-color: #fcfcfd;
-}
-main .form .multiselect:hover, main .form .multiselect:active {
-  border-bottom: 1px solid #b6bcce;
-}
-main .form.size-md {
-  max-width: 800px;
-  width: 100%;
-}
-main .form.size-full {
-  max-width: 100%;
-  width: 100%;
+main .campaign-stats .stat .data .val span {
+  font-size: 16px;
+  color: #9298a0;
 }
 main .top-nav {
   display: flex;
@@ -953,16 +993,16 @@ main .pagination {
 main .pagination a {
   display: inline-flex;
   text-decoration: none;
-  background-color: #7688a0;
+  background-color: #888f99;
   font-size: 14px;
   font-weight: 600;
   color: #fff;
   border-radius: 4px;
-  padding: 7px 10px;
+  padding: 7px 12px;
   box-shadow: 0px 0px 6px 1px rgba(45, 54, 68, 0.1);
 }
 main .pagination a:hover {
-  background-color: #6d809a;
+  background-color: #808792;
 }
 main .pagination a:first-child {
   margin-right: 12px;
@@ -973,12 +1013,457 @@ main .pagination a:last-child {
 main .pagination span {
   font-weight: 600;
 }
-main .media-page .media {
+
+.form {
+  display: flex;
+  flex-flow: column;
+  width: 500px;
+  padding: 20px;
+}
+.form input[type=text], .form input[type=password], .form input[type=datetime-local], .form input[type=email], .form input[type=number], .form input[type=file], .form textarea, .form select {
+  width: 100%;
+  padding: 15px 5px;
+  margin-bottom: 25px;
+  border: 0;
+  border-bottom: 1px solid #e4e6ed;
+}
+.form input[type=text]:hover, .form input[type=text]:active, .form input[type=password]:hover, .form input[type=password]:active, .form input[type=datetime-local]:hover, .form input[type=datetime-local]:active, .form input[type=email]:hover, .form input[type=email]:active, .form input[type=number]:hover, .form input[type=number]:active, .form input[type=file]:hover, .form input[type=file]:active, .form textarea:hover, .form textarea:active, .form select:hover, .form select:active {
+  border-bottom: 1px solid #b6bcce;
+}
+.form input[type=text]::placeholder, .form input[type=password]::placeholder, .form input[type=datetime-local]::placeholder, .form input[type=email]::placeholder, .form input[type=number]::placeholder, .form input[type=file]::placeholder, .form textarea::placeholder, .form select::placeholder {
+  color: #909395;
+}
+.form textarea {
+  height: 200px;
+  min-height: 100px;
+}
+.form textarea.code-editor {
+  margin: 15px 0;
+  height: 400px;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 15px;
+  border-radius: 5px;
+  white-space: nowrap;
+  overflow: auto;
+  tab-size: 4;
+  border: 1px solid #f0f1f5;
+}
+.form input[type=checkbox] {
+  width: auto;
+  margin: 15px 0 25px 2px;
+  transform: scale(1.2);
+}
+.form label {
+  position: relative;
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  color: #6e7581;
+}
+.form label .required {
+  font-size: 14px;
+  font-style: normal;
+  color: #e26060;
+}
+.form label input[type=text] {
+  padding-right: 30px;
+}
+.form label i {
+  position: absolute;
+  right: 4px;
+  top: 20px;
+  bottom: 0;
+  font-size: 14px;
+  margin-top: auto;
+  margin-bottom: auto;
+  color: #b6bcce;
+}
+.form label.checkbox {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+.form label.checkbox input[type=checkbox] {
+  margin: 0 10px 0 0;
+}
+.form button {
+  background-color: #e4e6ed;
+  color: #5e6a8d;
+  border: 0;
+  padding: 5px;
+  width: 100%;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.form button:hover {
+  background-color: #dbdee7;
+}
+.form .comment {
+  font-size: 14px;
+  color: #838689;
+  padding: 10px 0 5px;
+  margin: 0;
+}
+.form .hidden {
+  display: none;
+}
+.form .source ul {
+  margin: 0;
+  padding: 0 15px 15px 20px;
+  font-size: 14px;
+  color: #6a6d6f;
+}
+.form .source ul li {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+.form .source ul li strong {
+  display: inline-block;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 0 0 5px 0;
+  color: #515355;
+}
+.form .source ul li em {
+  font-size: 14px;
+}
+.form .multiselect {
+  position: relative;
+  display: flex;
+  flex-flow: wrap;
+  border-bottom: 1px solid #e4e6ed;
+  padding-bottom: 10px;
+  margin: 10px 0 25px 0;
+}
+.form .multiselect > .item {
+  display: inline-flex;
+  border: 1px solid #e4e6ed;
+  padding: 0 8px;
+  height: 35px;
+  margin: 0 5px 5px 0;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
+}
+.form .multiselect > .item .remove {
+  font-style: normal;
+  cursor: pointer;
+  font-size: 19px;
+  margin-right: 3px;
+  margin-top: -4px;
+  color: #b6bcce;
+}
+.form .multiselect > .item .remove:hover {
+  color: #97a0ba;
+}
+.form .multiselect input {
+  height: 40px;
+  width: 80px;
+  flex-grow: 1;
+  padding: 15px 5px;
+  margin: 0;
+  outline: 0;
+  border: 0;
+}
+.form .multiselect input:hover {
+  border: 0;
+}
+.form .multiselect .list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  flex-flow: column;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  max-height: 100px;
+  overflow-y: auto;
+  z-index: 1000000000;
+}
+.form .multiselect .list span {
+  display: flex;
+  padding: 5px 7px;
+  cursor: pointer;
+  color: #000;
+}
+.form .multiselect .list span:hover {
+  background-color: #fcfcfd;
+}
+.form .multiselect:hover, .form .multiselect:active {
+  border-bottom: 1px solid #b6bcce;
+}
+.form .multi-checkbox {
+  padding: 15px 0 25px 0;
+}
+.form .multi-checkbox .con {
+  max-height: 200px;
+  overflow-y: auto;
+}
+.form .multi-checkbox .item {
+  display: flex;
+  padding-bottom: 0;
+  align-items: center;
+}
+.form .multi-checkbox .item input[type=checkbox] {
+  margin: 0 5px;
+  padding: 0;
+}
+.form .multi-checkbox .item input[type=text] {
+  border-left: 1px solid #ececec;
+  border-bottom: 0;
+  margin: 0 0 0 15px;
+  padding: 8px 15px;
+  font-size: 14px;
+}
+.form .multi-checkbox .item label {
+  border-left: 1px solid #ececec;
+  margin: 0 15px;
+  padding: 5px 15px;
+  font-weight: normal;
+  font-size: 14px;
+}
+.form .multi-checkbox .item.check-all {
+  border-bottom: 1px solid #ececec;
+}
+.form .multi-checkbox .item.check-all input[type=checkbox] {
+  opacity: 0.7;
+}
+.form .multi-checkbox .item.check-all input[type=checkbox]:checked {
+  opacity: 1;
+}
+.form .attachments {
+  margin-bottom: 25px;
+}
+.form .attachments label {
+  display: inline-flex;
+  cursor: pointer;
+  user-select: none;
+  width: 100%;
+  align-items: center;
+  padding: 10px 15px;
+  margin: 15px 0 0 0;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #838689;
+  border: 1px solid #e4e6ed;
+}
+.form .attachments label:hover {
+  border: 1px solid #b6bcce;
+}
+.form .attachments label span {
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #909395;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  width: 300px;
+}
+.form .attachments label svg {
+  min-width: 16px;
+  min-height: 16px;
+  fill: #b7b9bb;
+}
+.form .attachments .attachment-wrapper {
+  display: flex;
+  align-items: center;
+}
+.form .attachments .attachment-wrapper .remove {
+  display: none;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 500;
+  color: #b6bcce;
+  margin: 7px 0 0 10px;
+}
+.form .attachments .attachment-wrapper .remove:hover {
+  color: #97a0ba;
+}
+.form .attachments input {
+  display: none;
+}
+.form .add-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: 500;
+  color: #2579da;
+  font-size: 14px;
+  padding: 15px 0;
+}
+.form .add-link svg {
+  fill: #2579da;
+  margin-right: 3px;
+}
+.form .add-link:hover {
+  color: #1e61ae;
+}
+.form .add-link:hover svg {
+  fill: #1e61ae;
+}
+.form .add-link {
+  padding: 0 0 20px 0;
+}
+.form .group {
+  display: flex;
+  flex-flow: wrap;
+  gap: 15px;
+}
+.form .group .item {
+  flex: 1;
+}
+.form .switch {
+  position: relative;
+  display: inline-block;
+  height: 19px;
+  margin: 12px 0 25px 2px;
+}
+.form .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  transform: scale(1);
+}
+.form .switch .slider {
+  position: absolute;
+  cursor: pointer;
+  width: 40px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e7e9ef;
+  transition: 0.4s;
+}
+.form .switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+}
+.form .switch .txt {
+  font-size: inherit;
+  font-weight: inherit;
+  margin-left: 45px;
+}
+.form .switch input:checked + .slider {
+  background-color: #23c98c;
+}
+.form .switch input:checked + .slider:before {
+  transform: translateX(19px);
+}
+.form .switch .slider.round {
+  border-radius: 20px;
+}
+.form .switch .slider.round:before {
+  border-radius: 50%;
+}
+.form .rules {
+  padding: 10px 0;
+}
+.form .rules .rule {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+  gap: 10px;
+}
+.form .rules .rule select, .form .rules .rule input {
+  height: 40px;
+  margin: 0;
+  padding: 0;
+}
+.form .rules .rule .delete-rule {
+  text-decoration: none;
+}
+.form .rules .rule .delete-rule svg {
+  fill: #b6bcce;
+}
+.form .rules .rule .delete-rule:hover svg {
+  fill: #97a0ba;
+}
+.form .subscription-info {
+  margin-top: 5px;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  background-color: #f5f5f8;
+  align-items: center;
+}
+.form .subscription-info p {
+  font-weight: 500;
+  font-size: 14px;
+  color: #798598;
+}
+.form .subscription-info svg {
+  fill: #b6bcce;
+  margin: 0 15px;
+}
+.form.size-md {
+  max-width: 800px;
+  width: 100%;
+}
+.form.size-full {
+  max-width: 100%;
+  width: 100%;
+}
+
+.top-nav {
+  display: flex;
+  flex-flow: wrap;
+  padding-top: 20px;
+}
+
+.error {
+  padding: 15px;
+  margin: 0;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  padding: 25px 0;
+}
+.pagination a {
+  display: inline-flex;
+  text-decoration: none;
+  background-color: #7688a0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  border-radius: 4px;
+  padding: 7px 10px;
+  box-shadow: 0px 0px 6px 1px rgba(45, 54, 68, 0.1);
+}
+.pagination a:hover {
+  background-color: #6d809a;
+}
+.pagination a:first-child {
+  margin-right: 12px;
+}
+.pagination a:last-child {
+  margin-left: 12px;
+}
+.pagination span {
+  font-weight: 600;
+}
+
+.media-page .media {
   display: flex;
   flex-flow: wrap;
   padding: 15px;
 }
-main .media-page .media .image {
+.media-page .media .image {
   position: relative;
   text-decoration: none;
   border: 1px solid #eaecf1;
@@ -987,13 +1472,13 @@ main .media-page .media .image {
   height: 135px;
   margin: 0 15px 50px 0;
 }
-main .media-page .media .image img {
+.media-page .media .image img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   transition: all ease 0.3s;
 }
-main .media-page .media .image::after {
+.media-page .media .image::after {
   content: attr(data-title);
   display: block;
   position: absolute;
@@ -1007,49 +1492,69 @@ main .media-page .media .image::after {
   white-space: nowrap;
   width: 100%;
 }
-main .media-page .media .image:hover {
+.media-page .media .image:hover {
   border: 1px solid #d4d8e3;
 }
-main .media-page .media .image:hover img {
+.media-page .media .image:hover img {
   transform: scale(1.05);
 }
-main .media-page .media .image:hover .title {
+.media-page .media .image:hover .title {
   color: #5c6471;
 }
-main .order-details .order-detail {
+
+.order-details .group {
+  display: flex;
+  flex-flow: wrap;
+  gap: 30px;
+}
+.order-details .group .item {
+  flex: 1;
+}
+.order-details .order-detail {
   display: flex;
   justify-content: space-between;
   padding-bottom: 15px;
-  word-break: break-all;
+  word-break: break-word;
 }
-main .order-details .order-detail h3 {
+.order-details .order-detail h3 {
   padding: 0;
   margin: 0;
   font-size: 14px;
   font-weight: 500;
 }
-main .order-details .order-detail p {
+.order-details .order-detail p {
   padding: 0;
   margin: 0;
 }
-main .order-table {
-  margin: 0;
+.order-details .order-detail.alt {
+  justify-content: flex-start;
 }
-main .order-table .item-list-end {
-  border-bottom: 1px solid #f9fafb;
+.order-details .order-detail.alt h3 {
+  min-width: 100px;
 }
-main .order-table .subtotal {
+
+.order-table {
+  margin: 0 0 20px 0;
+}
+.order-table .subtotal {
   padding-top: 20px;
 }
-main .order-table .subtotal, main .order-table .shipping, main .order-table .total {
+.order-table .subtotal, .order-table .shipping, .order-table .total, .order-table .tax {
   text-align: right;
   font-weight: 500;
   font-size: 14px;
+  padding: 10px 0;
 }
-main .order-table .num {
+.order-table .num {
   text-align: right;
+  padding: 10px 30px;
+  width: 200px;
 }
-main .manage-order-table input, main .manage-order-table select {
+
+.manage-order-table {
+  padding-bottom: 10px;
+}
+.manage-order-table input, .manage-order-table select {
   border: 0;
   padding: 5px 0;
   height: 40px;
@@ -1057,36 +1562,28 @@ main .manage-order-table input, main .manage-order-table select {
   width: 90%;
   border-bottom: 1px solid #e4e6ed;
 }
-main .manage-order-table .add-item {
+.manage-order-table .add-item {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  font-weight: normal;
-  color: #7a7a7c;
+  font-weight: 500;
+  color: #2579da;
   font-size: 14px;
-  padding: 15px 0;
+  padding: 15px 30px;
 }
-main .manage-order-table .add-item svg {
-  fill: #7a7a7c;
-  margin-right: 3px;
+.manage-order-table .add-item:hover {
+  color: #1e61ae;
 }
-main .manage-order-table .add-item:hover {
-  color: #616263;
-}
-main .manage-order-table .add-item:hover svg {
-  fill: #616263;
-}
-main .manage-order-table .delete-item {
+.manage-order-table .delete-item {
   cursor: pointer;
   fill: #5e6a8d;
 }
-main .manage-order-table .delete-item:hover {
-  fill: #be4949;
+.manage-order-table .delete-item:hover {
+  fill: #c45353;
 }
 
 .table {
   overflow-x: auto;
-  padding: 0 10px;
 }
 .table table {
   width: 100%;
@@ -1096,36 +1593,52 @@ main .manage-order-table .delete-item:hover {
   color: #9298a0;
   font-weight: 600;
   font-size: 14px;
-  padding: 15px 0;
+  padding: 18px 8px;
 }
 .table table thead td a {
+  display: block;
   font-weight: inherit;
   font-size: inherit;
   color: inherit;
   text-decoration: none;
 }
 .table table thead td svg {
-  fill: #9298a0;
+  fill: #4a5361;
   margin-left: 5px;
 }
 .table table thead td:has(svg) {
   color: #4a5361;
   border-bottom: 1px solid #cfcfd2;
 }
-.table table thead td:has(svg) svg {
-  fill: #4a5361;
+.table table thead td:has(a:hover) {
+  color: #4a5361;
+  border-bottom: 1px solid #cfcfd2;
+}
+.table table thead td:first-child {
+  padding-left: 30px;
+}
+.table table thead td:last-child {
+  padding-right: 30px;
+}
+.table table thead td.right {
+  text-align: right;
 }
 .table table thead tr {
   border-bottom: 1px solid #f1f2f5;
 }
-.table table tbody tr:first-child td {
-  padding-top: 10px;
+.table table tbody tr:nth-child(even) {
+  background-color: #fbfbfd;
+}
+.table table tbody tr.nobg {
+  background-color: transparent;
 }
 .table table tbody td {
-  padding: 8px 0;
+  padding: 15px 8px;
 }
-.table table tbody td .green, .table table tbody td .red, .table table tbody td .grey, .table table tbody td .orange, .table table tbody td .blue {
+.table table tbody td > .green, .table table tbody td > .red, .table table tbody td > .grey, .table table tbody td > .orange, .table table tbody td > .blue {
   display: inline-flex;
+  justify-content: center;
+  align-items: center;
   font-weight: 600;
   font-size: 12px;
   padding: 4px 12px;
@@ -1135,24 +1648,24 @@ main .manage-order-table .delete-item:hover {
   background-color: #e8ebec;
   color: #8e9499;
 }
-.table table tbody td .green.small, .table table tbody td .red.small, .table table tbody td .grey.small, .table table tbody td .orange.small, .table table tbody td .blue.small {
+.table table tbody td > .green.small, .table table tbody td > .red.small, .table table tbody td > .grey.small, .table table tbody td > .orange.small, .table table tbody td > .blue.small {
   font-size: 12px;
   padding: 2px 8px;
   border-radius: 5px;
 }
-.table table tbody td .green {
+.table table tbody td > .green {
   background-color: #b8f7d5;
   color: #34aa6b;
 }
-.table table tbody td .blue {
+.table table tbody td > .blue {
   background-color: #d8e9ff;
   color: #5f92da;
 }
-.table table tbody td .red {
+.table table tbody td > .red {
   background-color: #f7caca;
   color: #b64343;
 }
-.table table tbody td .orange {
+.table table tbody td > .orange {
   background-color: #f8eac2;
   color: #dea200;
 }
@@ -1164,6 +1677,18 @@ main .manage-order-table .delete-item:hover {
 }
 .table table tbody td .images img {
   margin-right: 1px;
+}
+.table table tbody td .dot {
+  display: flex;
+  width: 10px;
+  height: 10px;
+  max-width: 10px;
+  max-height: 10px;
+  border-radius: 50%;
+  background-color: #51a775;
+}
+.table table tbody td .dot.no {
+  background-color: #c75252;
 }
 .table table tbody td.no-results {
   text-align: center;
@@ -1191,9 +1716,30 @@ main .manage-order-table .delete-item:hover {
 .table table tbody td.actions .table-dropdown:hover > svg, .table table tbody td.actions .table-dropdown:active > svg {
   fill: #97a0ba;
 }
+.table table tbody td:first-child {
+  padding-left: 30px;
+}
+.table table tbody td:last-child {
+  padding-right: 30px;
+}
+.table table tbody td.right {
+  text-align: right;
+}
+.table table tbody td.title-caption {
+  font-weight: 500;
+  font-size: 14px;
+  color: #555f6f;
+}
+.table table tbody td.title-caption span {
+  display: block;
+  margin-top: 2px;
+  font-weight: 500;
+  font-size: 12px;
+  color: #909395;
+}
 .table table tbody .img {
-  width: 40px;
-  padding: 5px 10px 5px 0;
+  width: 30px;
+  padding: 5px 5px 5px 0;
 }
 .table table tbody .img .profile-img {
   position: relative;
@@ -1229,7 +1775,11 @@ main .manage-order-table .delete-item:hover {
 }
 .table table tbody .alt {
   font-size: 14px;
-  color: #959595;
+  color: #909395;
+}
+.table table tbody .strong {
+  font-weight: 500;
+  color: #778088;
 }
 
 .product-media-tab, .product-options-tab, .product-downloads-tab {
@@ -1311,7 +1861,7 @@ main .manage-order-table .delete-item:hover {
   fill: #e1e4e6;
 }
 .product-media-tab .product-media .media-position a.media-delete:hover svg, .product-media-tab .product-media .media-position a.option-delete:hover svg, .product-media-tab .product-media .media-position a.download-delete:hover svg, .product-media-tab .product-media .option-position a.media-delete:hover svg, .product-media-tab .product-media .option-position a.option-delete:hover svg, .product-media-tab .product-media .option-position a.download-delete:hover svg, .product-media-tab .product-media .download-position a.media-delete:hover svg, .product-media-tab .product-media .download-position a.option-delete:hover svg, .product-media-tab .product-media .download-position a.download-delete:hover svg, .product-media-tab .product-option .media-position a.media-delete:hover svg, .product-media-tab .product-option .media-position a.option-delete:hover svg, .product-media-tab .product-option .media-position a.download-delete:hover svg, .product-media-tab .product-option .option-position a.media-delete:hover svg, .product-media-tab .product-option .option-position a.option-delete:hover svg, .product-media-tab .product-option .option-position a.download-delete:hover svg, .product-media-tab .product-option .download-position a.media-delete:hover svg, .product-media-tab .product-option .download-position a.option-delete:hover svg, .product-media-tab .product-option .download-position a.download-delete:hover svg, .product-media-tab .product-download .media-position a.media-delete:hover svg, .product-media-tab .product-download .media-position a.option-delete:hover svg, .product-media-tab .product-download .media-position a.download-delete:hover svg, .product-media-tab .product-download .option-position a.media-delete:hover svg, .product-media-tab .product-download .option-position a.option-delete:hover svg, .product-media-tab .product-download .option-position a.download-delete:hover svg, .product-media-tab .product-download .download-position a.media-delete:hover svg, .product-media-tab .product-download .download-position a.option-delete:hover svg, .product-media-tab .product-download .download-position a.download-delete:hover svg, .product-options-tab .product-media .media-position a.media-delete:hover svg, .product-options-tab .product-media .media-position a.option-delete:hover svg, .product-options-tab .product-media .media-position a.download-delete:hover svg, .product-options-tab .product-media .option-position a.media-delete:hover svg, .product-options-tab .product-media .option-position a.option-delete:hover svg, .product-options-tab .product-media .option-position a.download-delete:hover svg, .product-options-tab .product-media .download-position a.media-delete:hover svg, .product-options-tab .product-media .download-position a.option-delete:hover svg, .product-options-tab .product-media .download-position a.download-delete:hover svg, .product-options-tab .product-option .media-position a.media-delete:hover svg, .product-options-tab .product-option .media-position a.option-delete:hover svg, .product-options-tab .product-option .media-position a.download-delete:hover svg, .product-options-tab .product-option .option-position a.media-delete:hover svg, .product-options-tab .product-option .option-position a.option-delete:hover svg, .product-options-tab .product-option .option-position a.download-delete:hover svg, .product-options-tab .product-option .download-position a.media-delete:hover svg, .product-options-tab .product-option .download-position a.option-delete:hover svg, .product-options-tab .product-option .download-position a.download-delete:hover svg, .product-options-tab .product-download .media-position a.media-delete:hover svg, .product-options-tab .product-download .media-position a.option-delete:hover svg, .product-options-tab .product-download .media-position a.download-delete:hover svg, .product-options-tab .product-download .option-position a.media-delete:hover svg, .product-options-tab .product-download .option-position a.option-delete:hover svg, .product-options-tab .product-download .option-position a.download-delete:hover svg, .product-options-tab .product-download .download-position a.media-delete:hover svg, .product-options-tab .product-download .download-position a.option-delete:hover svg, .product-options-tab .product-download .download-position a.download-delete:hover svg, .product-downloads-tab .product-media .media-position a.media-delete:hover svg, .product-downloads-tab .product-media .media-position a.option-delete:hover svg, .product-downloads-tab .product-media .media-position a.download-delete:hover svg, .product-downloads-tab .product-media .option-position a.media-delete:hover svg, .product-downloads-tab .product-media .option-position a.option-delete:hover svg, .product-downloads-tab .product-media .option-position a.download-delete:hover svg, .product-downloads-tab .product-media .download-position a.media-delete:hover svg, .product-downloads-tab .product-media .download-position a.option-delete:hover svg, .product-downloads-tab .product-media .download-position a.download-delete:hover svg, .product-downloads-tab .product-option .media-position a.media-delete:hover svg, .product-downloads-tab .product-option .media-position a.option-delete:hover svg, .product-downloads-tab .product-option .media-position a.download-delete:hover svg, .product-downloads-tab .product-option .option-position a.media-delete:hover svg, .product-downloads-tab .product-option .option-position a.option-delete:hover svg, .product-downloads-tab .product-option .option-position a.download-delete:hover svg, .product-downloads-tab .product-option .download-position a.media-delete:hover svg, .product-downloads-tab .product-option .download-position a.option-delete:hover svg, .product-downloads-tab .product-option .download-position a.download-delete:hover svg, .product-downloads-tab .product-download .media-position a.media-delete:hover svg, .product-downloads-tab .product-download .media-position a.option-delete:hover svg, .product-downloads-tab .product-download .media-position a.download-delete:hover svg, .product-downloads-tab .product-download .option-position a.media-delete:hover svg, .product-downloads-tab .product-download .option-position a.option-delete:hover svg, .product-downloads-tab .product-download .option-position a.download-delete:hover svg, .product-downloads-tab .product-download .download-position a.media-delete:hover svg, .product-downloads-tab .product-download .download-position a.option-delete:hover svg, .product-downloads-tab .product-download .download-position a.download-delete:hover svg {
-  fill: #be4949;
+  fill: #c45353;
 }
 .product-media-tab .product-media .media-position a.option-edit, .product-media-tab .product-media .option-position a.option-edit, .product-media-tab .product-media .download-position a.option-edit, .product-media-tab .product-option .media-position a.option-edit, .product-media-tab .product-option .option-position a.option-edit, .product-media-tab .product-option .download-position a.option-edit, .product-media-tab .product-download .media-position a.option-edit, .product-media-tab .product-download .option-position a.option-edit, .product-media-tab .product-download .download-position a.option-edit, .product-options-tab .product-media .media-position a.option-edit, .product-options-tab .product-media .option-position a.option-edit, .product-options-tab .product-media .download-position a.option-edit, .product-options-tab .product-option .media-position a.option-edit, .product-options-tab .product-option .option-position a.option-edit, .product-options-tab .product-option .download-position a.option-edit, .product-options-tab .product-download .media-position a.option-edit, .product-options-tab .product-download .option-position a.option-edit, .product-options-tab .product-download .download-position a.option-edit, .product-downloads-tab .product-media .media-position a.option-edit, .product-downloads-tab .product-media .option-position a.option-edit, .product-downloads-tab .product-media .download-position a.option-edit, .product-downloads-tab .product-option .media-position a.option-edit, .product-downloads-tab .product-option .option-position a.option-edit, .product-downloads-tab .product-option .download-position a.option-edit, .product-downloads-tab .product-download .media-position a.option-edit, .product-downloads-tab .product-download .option-position a.option-edit, .product-downloads-tab .product-download .download-position a.option-edit {
   font-size: 14px;
@@ -1334,6 +1884,8 @@ main .manage-order-table .delete-item:hover {
   width: 150px;
   background-color: #fff;
   box-shadow: 0px 0px 5px 1px rgba(45, 54, 68, 0.15);
+  border-radius: 5px;
+  overflow: hidden;
 }
 .table-dropdown-items a {
   display: flex;
@@ -1374,14 +1926,15 @@ main .manage-order-table .delete-item:hover {
   display: flex;
 }
 
-.link1, .link2 {
+.link1, .link2, .link3 {
   text-decoration: none;
-  border-bottom: 1px dotted #afb6c0;
-  color: #2d81e2;
+  border-bottom: 1px dotted #bbcad6;
+  padding-bottom: 1px;
+  color: #0c95f1;
   margin: 0 5px 0 0;
 }
-.link1:hover, .link2:hover {
-  color: #075dbe;
+.link1:hover, .link2:hover, .link3:hover {
+  color: #0a77c0;
 }
 
 .link2 {
@@ -1390,6 +1943,15 @@ main .manage-order-table .delete-item:hover {
 }
 .link2:hover {
   color: #600000;
+}
+
+.link3 {
+  color: #2d90e2;
+  font-weight: 500;
+  border-bottom: none;
+}
+.link3:hover {
+  color: #075dbe;
 }
 
 .title1 {
@@ -1428,19 +1990,19 @@ main .manage-order-table .delete-item:hover {
   background: #46a966;
 }
 .btn.red {
-  background: #be4949;
+  background: #c45353;
 }
 .btn.red:hover {
-  background: #b74141;
+  background: #c04848;
 }
 .btn.alt {
   color: #75797e;
-  border: 1px solid #d4dbde;
+  border: 1px solid #d5e0e4;
   box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.03);
-  background: #f1f3f4;
+  background: #f4f7f8;
 }
 .btn.alt:hover {
-  background: #eef1f2;
+  background: #f1f5f6;
 }
 .btn.disabled {
   background: #b1b3b4;
@@ -1454,11 +2016,120 @@ main .manage-order-table .delete-item:hover {
 }
 .btn .icon-left {
   margin-right: 7px;
-  fill: #fff;
+  fill: rgba(255, 255, 255, 0.5);
 }
 .btn .icon-right {
   margin-left: 7px;
-  fill: #fff;
+  fill: rgba(255, 255, 255, 0.5);
+}
+
+.bar-chart {
+  overflow-x: auto;
+  padding: 0 20px;
+}
+.bar-chart .chart-wrapper {
+  display: flex;
+  align-items: flex-end;
+  margin: 20px;
+  min-width: 400px;
+}
+.bar-chart .chart-stats {
+  display: flex;
+  flex-flow: wrap;
+}
+.bar-chart .chart-stats .data {
+  width: 33%;
+  padding-bottom: 15px;
+}
+.bar-chart .chart-stats .data h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #9298a0;
+  padding: 5px 0;
+}
+.bar-chart .chart-stats .data p {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+  color: #555f6f;
+}
+.bar-chart .chart-scale {
+  position: relative;
+  height: 200px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+.bar-chart .chart-scale div {
+  position: absolute;
+  left: -5px;
+  transform: translateX(-100%);
+  padding: 2px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 500;
+  color: #9298a0;
+}
+.bar-chart .chart-container {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  width: 100%;
+  height: 200px;
+  border-bottom: 1px solid #e7e8eb;
+  box-sizing: border-box;
+  position: relative;
+}
+.bar-chart .chart-line {
+  position: absolute;
+  width: 100%;
+  height: 0;
+  border-bottom: 1px solid #e7e8eb;
+  left: 0;
+  transform: translateY(-50%);
+}
+.bar-chart .chart-bar {
+  width: 40px;
+  background-color: #4a8dcf;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+  margin: 0 5px;
+  transition: background-color 0.3s;
+}
+.bar-chart .chart-bar:hover {
+  background-color: #4381c0;
+}
+.bar-chart .chart-bar span {
+  position: absolute;
+  bottom: 100%;
+  transform: translateY(-5px);
+  font-size: 12px;
+  font-weight: 500;
+  background-color: rgba(45, 54, 68, 0.8);
+  color: #fff;
+  padding: 4px 7px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+.bar-chart .chart-bar:hover span {
+  opacity: 0.9;
+}
+.bar-chart .chart-labels {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 5px 0 5px 8px;
+}
+.bar-chart .chart-labels div {
+  font-size: 14px;
+  font-weight: 500;
+  color: #9298a0;
 }
 
 .dialog {
@@ -1667,8 +2338,8 @@ main .manage-order-table .delete-item:hover {
 .options-modal .body .table tbody td input {
   font-size: 14px;
 }
-.options-modal .body .table tbody td {
-  padding-right: 10px;
+.options-modal .body .table tbody td, .options-modal .body .table thead td {
+  padding: 10px 10px 10px 0;
 }
 .options-modal .body .table tbody td .modifier {
   width: 45px;
@@ -1676,31 +2347,27 @@ main .manage-order-table .delete-item:hover {
 .options-modal .body .table tbody td .modifier ~ input {
   padding-left: 5px;
 }
+.options-modal .body .table tbody tr:nth-child(even) {
+  background-color: transparent;
+}
 .options-modal .body .add-option-value-btn {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  font-weight: normal;
-  color: #7a7a7c;
+  font-weight: 500;
+  color: #2579da;
   font-size: 14px;
   padding: 15px 0;
 }
-.options-modal .body .add-option-value-btn svg {
-  fill: #7a7a7c;
-  margin-right: 3px;
-}
 .options-modal .body .add-option-value-btn:hover {
-  color: #616263;
-}
-.options-modal .body .add-option-value-btn:hover svg {
-  fill: #616263;
+  color: #1e61ae;
 }
 .options-modal .body .remove-option-value {
   cursor: pointer;
   fill: #5e6a8d;
 }
 .options-modal .body .remove-option-value:hover {
-  fill: #be4949;
+  fill: #c45353;
 }
 
 .downloads-modal .body {
@@ -1743,6 +2410,49 @@ main .manage-order-table .delete-item:hover {
   border-bottom: 1px solid #e4e6ed;
 }
 
+.view-customer-modal .customer-details {
+  padding: 10px 25px 20px;
+}
+.view-customer-modal .customer-details h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5361;
+  padding: 20px 0 5px 0;
+}
+.view-customer-modal .customer-details img {
+  border-radius: 4px;
+  margin-top: 5px;
+}
+.view-customer-modal .customer-details .group {
+  display: flex;
+  flex-flow: wrap;
+  gap: 15px;
+}
+.view-customer-modal .customer-details .group > div {
+  flex: 1;
+}
+.view-customer-modal .account-details {
+  border-radius: 5px;
+  margin: 25px 0 10px 0;
+  padding: 15px;
+  background-color: #f7f9fa;
+}
+.view-customer-modal .account-details h2 {
+  font-weight: 500;
+  padding-bottom: 10px;
+}
+.view-customer-modal .account-details h3 {
+  font-size: 12px;
+  padding: 10px 0 2px 0;
+}
+.view-customer-modal .account-details span {
+  font-size: 14px;
+}
+
+.tox-tinymce-aux {
+  z-index: 9999999 !important;
+}
+
 .loader,
 .loader::after {
   border-radius: 50%;
@@ -1775,38 +2485,6 @@ main .manage-order-table .delete-item:hover {
 
 .mar-1 {
   margin: 5px;
-}
-
-.pad-2 {
-  padding: 10px;
-}
-
-.mar-2 {
-  margin: 10px;
-}
-
-.pad-3 {
-  padding: 15px;
-}
-
-.mar-3 {
-  margin: 15px;
-}
-
-.pad-4 {
-  padding: 20px;
-}
-
-.mar-4 {
-  margin: 20px;
-}
-
-.pad-5 {
-  padding: 25px;
-}
-
-.mar-5 {
-  margin: 25px;
 }
 
 .pad-bot-1 {
@@ -1861,6 +2539,14 @@ main .manage-order-table .delete-item:hover {
   margin-bottom: 5px;
 }
 
+.pad-2 {
+  padding: 10px;
+}
+
+.mar-2 {
+  margin: 10px;
+}
+
 .pad-bot-2 {
   padding-bottom: 10px;
 }
@@ -1911,6 +2597,14 @@ main .manage-order-table .delete-item:hover {
 .mar-y-2 {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.pad-3 {
+  padding: 15px;
+}
+
+.mar-3 {
+  margin: 15px;
 }
 
 .pad-bot-3 {
@@ -1965,6 +2659,14 @@ main .manage-order-table .delete-item:hover {
   margin-bottom: 15px;
 }
 
+.pad-4 {
+  padding: 20px;
+}
+
+.mar-4 {
+  margin: 20px;
+}
+
 .pad-bot-4 {
   padding-bottom: 20px;
 }
@@ -2015,6 +2717,14 @@ main .manage-order-table .delete-item:hover {
 .mar-y-4 {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.pad-5 {
+  padding: 25px;
+}
+
+.mar-5 {
+  margin: 25px;
 }
 
 .pad-bot-5 {
@@ -2070,6 +2780,54 @@ main .manage-order-table .delete-item:hover {
 }
 
 @media screen and (max-width: 1000px) {
+  .media-library-modal {
+    padding: 10px;
+  }
+  .media-library-modal .media {
+    flex-flow: column;
+  }
+  .media-library-modal .media .list {
+    width: 100%;
+    height: 220px;
+  }
+  .media-library-modal .media .list > a {
+    width: 29%;
+  }
+  .media-library-modal .media .list .list-header input {
+    max-width: 150px;
+    width: auto;
+  }
+  .media-library-modal .media .details {
+    width: 100%;
+    height: 110px;
+  }
+  .options-modal {
+    padding: 10px;
+  }
+  .options-modal .body {
+    max-height: 260px;
+  }
+  .options-modal .body .option-header {
+    width: 100%;
+  }
+  .options-modal .body .table thead td {
+    font-size: 12px;
+  }
+  .options-modal .body .table tbody td input {
+    font-size: 12px;
+  }
+  .options-modal .body .table tbody td {
+    padding-right: 5px;
+  }
+  .options-modal .body .table tbody td .modifier {
+    width: 45px;
+  }
+  .options-modal .body .table tbody td .modifier ~ input {
+    padding-left: 0;
+  }
+  .downloads-modal {
+    padding: 10px;
+  }
   header {
     padding-left: 0;
   }
@@ -2110,7 +2868,7 @@ main .manage-order-table .delete-item:hover {
     padding: 5px;
   }
   main .content-block .block-header {
-    padding-top: 10px;
+    padding: 10px 20px;
   }
   main .dashboard {
     flex-flow: column;
@@ -2347,54 +3105,6 @@ main .manage-order-table .delete-item:hover {
   .responsive-mar-y-5 {
     margin-left: 25px;
     margin-right: 25px;
-  }
-  .media-library-modal {
-    padding: 10px;
-  }
-  .media-library-modal .media {
-    flex-flow: column;
-  }
-  .media-library-modal .media .list {
-    width: 100%;
-    height: 220px;
-  }
-  .media-library-modal .media .list > a {
-    width: 29%;
-  }
-  .media-library-modal .media .list .list-header input {
-    max-width: 150px;
-    width: auto;
-  }
-  .media-library-modal .media .details {
-    width: 100%;
-    height: 110px;
-  }
-  .options-modal {
-    padding: 10px;
-  }
-  .options-modal .body {
-    max-height: 260px;
-  }
-  .options-modal .body .option-header {
-    width: 100%;
-  }
-  .options-modal .body .table thead td {
-    font-size: 12px;
-  }
-  .options-modal .body .table tbody td input {
-    font-size: 12px;
-  }
-  .options-modal .body .table tbody td {
-    padding-right: 5px;
-  }
-  .options-modal .body .table tbody td .modifier {
-    width: 45px;
-  }
-  .options-modal .body .table tbody td .modifier ~ input {
-    padding-left: 0;
-  }
-  .downloads-modal {
-    padding: 10px;
   }
   .content-block-wrapper {
     flex-flow: column;

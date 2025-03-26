@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Retrieve the GET request parameters (if specified)
 $pagination_page = isset($_GET['pagination_page']) ? $_GET['pagination_page'] : 1;
 $search = isset($_GET['search_query']) ? $_GET['search_query'] : '';
@@ -7,13 +7,14 @@ $search = isset($_GET['search_query']) ? $_GET['search_query'] : '';
 $status = isset($_GET['status']) ? $_GET['status'] : '';
 $availability = isset($_GET['availability']) ? $_GET['availability'] : '';
 $type = isset($_GET['type']) ? $_GET['type'] : '';
+$category = isset($_GET['category']) ? $_GET['category'] : '';
 // Order by column
 $order = isset($_GET['order']) && $_GET['order'] == 'DESC' ? 'DESC' : 'ASC';
 // Add/remove columns to the whitelist array
 $order_by_whitelist = ['id','title','price','quantity','created','product_status','sku','subscription'];
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_whitelist) ? $_GET['order_by'] : 'id';
 // Number of results per pagination pagination_page
-$results_per_pagination_page = 20;
+$results_per_pagination_page = 15;
 // products array
 $products = [];
 // Declare query param variables
@@ -43,23 +44,30 @@ if ($type == 'subscription') {
 if ($type == 'normal') {
     $where .= ($where ? 'AND ' : 'WHERE ') . 'p.subscription = 0 ';
 }
+if ($category) {
+    $where .= ($where ? 'AND ' : 'WHERE ') . 'p.id IN (SELECT pc.product_id FROM product_category pc WHERE pc.category_id = :category) ';
+}
+// Get all categories
+$categories = $pdo->query('SELECT * FROM product_categories ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC);
 // Retrieve the total number of products
 $stmt = $pdo->prepare('SELECT COUNT(*) AS total FROM products p ' . $where);
 if ($search) $stmt->bindParam('search', $param3, PDO::PARAM_STR);
+if ($category) $stmt->bindParam('category', $category, PDO::PARAM_INT);
 $stmt->execute();
 $total_products = $stmt->fetchColumn();
 // Prepare products query
-$stmt = $pdo->prepare('SELECT p.*, GROUP_CONCAT(m2.full_path) AS imgs FROM products p LEFT JOIN (SELECT pm.id, pm.product_id, m.full_path FROM products_media pm JOIN media m ON m.id = pm.media_id GROUP BY pm.id, pm.product_id, m.full_path) m2 ON m2.product_id = p.id ' . $where . ' GROUP BY p.id, p.title, p.description, p.price, p.rrp, p.quantity, p.created, p.weight, p.url_slug, p.product_status, p.sku, p.subscription, p.subscription_period, p.subscription_period_type ORDER BY ' . $order_by . ' ' . $order . ' LIMIT :start_results,:num_results');
+$stmt = $pdo->prepare('SELECT p.*, GROUP_CONCAT(m2.full_path) AS imgs FROM products p LEFT JOIN (SELECT pm.id, pm.product_id, m.full_path FROM product_media_map pm JOIN product_media m ON m.id = pm.media_id GROUP BY pm.id, pm.product_id, m.full_path) m2 ON m2.product_id = p.id ' . $where . ' GROUP BY p.id, p.title, p.description, p.price, p.rrp, p.quantity, p.created, p.weight, p.url_slug, p.product_status, p.sku, p.subscription, p.subscription_period, p.subscription_period_type ORDER BY ' . $order_by . ' ' . $order . ' LIMIT :start_results,:num_results');
 $stmt->bindParam('start_results', $param1, PDO::PARAM_INT);
 $stmt->bindParam('num_results', $param2, PDO::PARAM_INT);
 if ($search) $stmt->bindParam('search', $param3, PDO::PARAM_STR);
+if ($category) $stmt->bindParam('category', $category, PDO::PARAM_INT);
 $stmt->execute();
 // Retrieve query results
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Delete product
 if (isset($_GET['delete'])) {
     // Delete the product
-    $stmt = $pdo->prepare('DELETE p, pm, po, pc FROM products p LEFT JOIN products_media pm ON pm.product_id = p.id LEFT JOIN products_options po ON po.product_id = p.id LEFT JOIN products_categories pc ON pc.product_id = p.id WHERE p.id = ?');
+    $stmt = $pdo->prepare('DELETE p, pm, po, pc FROM products p LEFT JOIN product_media_map pm ON pm.product_id = p.id LEFT JOIN product_options po ON po.product_id = p.id LEFT JOIN product_category pc ON pc.product_id = p.id WHERE p.id = ?');
     $stmt->execute([ $_GET['delete'] ]);
     // Clear session cart
     if (isset($_SESSION['cart'])) {
@@ -95,7 +103,7 @@ $url = 'index.php?page=products&search_query=' . $search . '&status=' . $status 
         </div>
         <div class="txt">
             <h2>Products</h2>
-            <p>View, edit, and create products.</p>
+            <p>View, edit, and create products</p>
         </div>
     </div>
 </div>
@@ -113,7 +121,7 @@ $url = 'index.php?page=products&search_query=' . $search . '&status=' . $status 
         <svg class="icon-left" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
         Create Product
     </a>
-    <form action="" method="get">
+    <form method="get">
         <input type="hidden" name="page" value="products">
         <div class="filters">
             <a href="#">
@@ -138,6 +146,13 @@ $url = 'index.php?page=products&search_query=' . $search . '&status=' . $status 
                     <option value="">All</option>
                     <option value="subscription"<?=$type=='subscription'?' selected':''?>>Subscription</option>
                     <option value="normal"<?=$type=='normal'?' selected':''?>>Normal</option>
+                </select>
+                <label for="category">Category</label>
+                <select name="category" id="category">
+                    <option value="">All</option>
+                    <?php foreach ($categories as $c): ?>
+                    <option value="<?=$c['id']?>"<?=$c['id']==$category?' selected':''?>><?=$c['title']?></option>
+                    <?php endforeach; ?>
                 </select>
                 <button type="submit">Apply</button>
             </div>
@@ -170,6 +185,17 @@ $url = 'index.php?page=products&search_query=' . $search . '&status=' . $status 
         Type : <?=htmlspecialchars($type, ENT_QUOTES)?>
     </div>
     <?php endif; ?>
+    <?php if ($category != ''): ?>
+    <div class="filter">
+        <a href="<?=remove_url_param($url, 'type')?>"><svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free --><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg></a>
+        Category : 
+        <?php foreach ($categories as $c): ?>
+        <?php if ($c['id'] == $category): ?>
+        <?=htmlspecialchars($c['title'], ENT_QUOTES)?>
+        <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
     <?php if ($search != ''): ?>
     <div class="filter">
         <a href="<?=remove_url_param($url, 'search_query')?>"><svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free --><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg></a>
@@ -178,7 +204,7 @@ $url = 'index.php?page=products&search_query=' . $search . '&status=' . $status 
     <?php endif; ?>   
 </div>
 
-<div class="content-block">
+<div class="content-block no-pad">
     <div class="table">
         <table>
             <thead>
@@ -192,7 +218,7 @@ $url = 'index.php?page=products&search_query=' . $search . '&status=' . $status 
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=subscription'?>">Type<?=$order_by=='subscription' ? $table_icons[strtolower($order)] : ''?></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=product_status'?>">Status<?=$order_by=='product_status' ? $table_icons[strtolower($order)] : ''?></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=created'?>">Date<?=$order_by=='created' ? $table_icons[strtolower($order)] : ''?></td>
-                    <td class="align-center">Action</td>
+                    <td class="align-center">Actions</td>
                 </tr>
             </thead>
             <tbody>
@@ -203,15 +229,15 @@ $url = 'index.php?page=products&search_query=' . $search . '&status=' . $status 
                 <?php endif; ?>
                 <?php foreach ($products as $product): ?>
                 <tr>
-                    <td class="responsive-hidden"><?=$product['id']?></td>
+                    <td class="responsive-hidden alt"><?=$product['id']?></td>
                     <td><?=$product['title']?></td>
                     <td class="responsive-hidden alt"><?=$product['sku']?></td>
                     <?php if ($product['rrp'] == 0.00): ?>
-                    <td><?=currency_code?><?=number_format($product['price'], 2)?></td>
+                    <td class="strong"><?=currency_code?><?=num_format($product['price'], 2)?></td>
                     <?php else: ?>
-                    <td><span class="rrp"><?=currency_code?><?=number_format($product['price'], 2)?></span> <s><?=currency_code . number_format($product['rrp'], 2)?></s></td>
+                    <td class="strong"><span class="rrp"><?=currency_code?><?=num_format($product['price'], 2)?></span> <s><?=currency_code . num_format($product['rrp'], 2)?></s></td>
                     <?php endif; ?>
-                    <td><?=$product['quantity']==-1?'<span class="alt">--</span>':number_format($product['quantity'])?></td>
+                    <td><?=$product['quantity']==-1?'<span class="alt">--</span>':num_format($product['quantity'])?></td>
                     <td class="responsive-hidden">
                         <div class="images">
                         <?php if (!empty($product['imgs'])): ?>

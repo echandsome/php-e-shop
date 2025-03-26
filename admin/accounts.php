@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Retrieve the GET request parameters (if specified)
 $pagination_page = isset($_GET['pagination_page']) ? $_GET['pagination_page'] : 1;
 $search = isset($_GET['search_query']) ? $_GET['search_query'] : '';
@@ -8,10 +8,10 @@ $role = isset($_GET['role']) ? $_GET['role'] : '';
 // Order by column
 $order = isset($_GET['order']) && $_GET['order'] == 'DESC' ? 'DESC' : 'ASC';
 // Add/remove columns to the whitelist array
-$order_by_whitelist = ['id','first_name','email','role','registered'];
+$order_by_whitelist = ['id','first_name','email','role','registered','orders'];
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_whitelist) ? $_GET['order_by'] : 'id';
 // Number of results per pagination pagination_page
-$results_per_pagination_page = 20;
+$results_per_pagination_page = 15;
 // Accounts array
 $accounts = [];
 // Declare query param variables
@@ -76,7 +76,7 @@ $url = 'index.php?page=accounts&search_query=' . $search . '&role=' . $role;
         </div>
         <div class="txt">
             <h2>Accounts</h2>
-            <p>View, edit, and create accounts.</p>
+            <p>View, edit, and create accounts</p>
         </div>
     </div>
 </div>
@@ -94,7 +94,7 @@ $url = 'index.php?page=accounts&search_query=' . $search . '&role=' . $role;
         <svg class="icon-left" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
         Create Account
     </a>
-    <form action="" method="get">
+    <form method="get">
         <input type="hidden" name="page" value="accounts">
         <div class="filters">
             <a href="#">
@@ -135,7 +135,7 @@ $url = 'index.php?page=accounts&search_query=' . $search . '&role=' . $role;
     <?php endif; ?>   
 </div>
 
-<div class="content-block">
+<div class="content-block no-pad">
     <div class="table">
         <table>
             <thead>
@@ -144,9 +144,9 @@ $url = 'index.php?page=accounts&search_query=' . $search . '&role=' . $role;
                     <td colspan="2"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=first_name'?>">Name<?=$order_by=='first_name' ? $table_icons[strtolower($order)] : ''?></a></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=email'?>">Email<?=$order_by=='email' ? $table_icons[strtolower($order)] : ''?></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=role'?>">Role<?=$order_by=='role' ? $table_icons[strtolower($order)] : ''?></td>
-                    <td class="responsive-hidden">Orders Placed</td>
+                    <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=orders'?>"># Orders<?=$order_by=='orders' ? $table_icons[strtolower($order)] : ''?></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=registered'?>">Registered Date<?=$order_by=='registered' ? $table_icons[strtolower($order)] : ''?></a></td>
-                    <td class="align-center">Action</td>
+                    <td class="align-center">Actions</td>
                 </tr>
             </thead>
             <tbody>
@@ -157,21 +157,27 @@ $url = 'index.php?page=accounts&search_query=' . $search . '&role=' . $role;
                 <?php endif; ?>
                 <?php foreach ($accounts as $account): ?>
                 <tr>
-                    <td><?=$account['id']?></td>
+                    <td class="alt"><?=$account['id']?></td>
                     <td class="img">
                         <div class="profile-img">
                             <span style="background-color:<?=color_from_string($account['first_name'])?>"><?=strtoupper(substr($account['first_name'], 0, 1))?></span>
                         </div>
                     </td>
-                    <td><?=htmlspecialchars($account['first_name'] . ' ' . $account['last_name'], ENT_QUOTES)?></td>
-                    <td class="responsive-hidden"><?=htmlspecialchars($account['email'], ENT_QUOTES)?></td>
-                    <td class="responsive-hidden"><?=$account['role']?></td>
-                    <td class="responsive-hidden"><a href="index.php?page=orders&account_id=<?=$account['id']?>" class="link1"><?=number_format($account['orders'])?></a></td>
+                    <td><a href="index.php?page=account_view&account_id=<?=$account['id']?>" class="link1"><?=htmlspecialchars($account['first_name'] . ' ' . $account['last_name'], ENT_QUOTES)?></a></td>
+                    <td class="responsive-hidden alt"><?=htmlspecialchars($account['email'], ENT_QUOTES)?></td>
+                    <td class="responsive-hidden"><span class="<?=str_replace(['Admin', 'Member'], ['red', 'blue'], $account['role'])?> small"><?=$account['role']?></span></td>
+                    <td class="responsive-hidden"><a href="index.php?page=orders&account_id=<?=$account['id']?>" class="link1"><?=num_format($account['orders'])?></a></td>
                     <td class="responsive-hidden alt"><?=date('Y-m-d H:ia', strtotime($account['registered']))?></td>
                     <td class="actions">
                         <div class="table-dropdown">
                             <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z"/></svg>
                             <div class="table-dropdown-items">
+                                <a href="index.php?page=account_view&account_id=<?=$account['id']?>">
+                                    <span class="icon">
+                                        <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/></svg>
+                                    </span>
+                                    View
+                                </a>
                                 <a href="index.php?page=account&id=<?=$account['id']?>">
                                     <span class="icon">
                                         <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/></svg>

@@ -53,6 +53,8 @@ if (isset($_GET['method'], $_SESSION['sub'])) {
         // Include the stripe lib
         require_once 'lib/stripe/init.php';
         $stripe = new \Stripe\StripeClient(stripe_secret_key);
+        // Assign the webhook secret if not already set
+        stripe_update_webhook($stripe);
         // Create the new subscription using the Stripe API
         $line_items = [
             [

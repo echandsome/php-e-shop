@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Default input shipping values
 $shipping = [
     'title' => '',
@@ -46,15 +46,17 @@ if (isset($_GET['id'])) {
 ?>
 <?=template_admin_header($page . ' Shipping Method', 'shipping', 'manage')?>
 
-<form action="" method="post">
+<form method="post">
 
-    <div class="content-title responsive-flex-wrap responsive-pad-bot-3">
-        <h2 class="responsive-width-100"><?=$page?> Shipping Method</h2>
-        <a href="index.php?page=shipping" class="btn alt mar-right-2">Cancel</a>
-        <?php if ($page == 'Edit'): ?>
-        <input type="submit" name="delete" value="Delete" class="btn red mar-right-2" onclick="return confirm('Are you sure you want to delete this shipping method?')">
-        <?php endif; ?>
-        <input type="submit" name="submit" value="Save" class="btn">
+    <div class="content-title">
+        <h2><?=$page?> Shipping Method</h2>
+        <div class="btns">
+            <a href="index.php?page=shipping" class="btn alt mar-right-1">Cancel</a>
+            <?php if ($page == 'Edit'): ?>
+            <input type="submit" name="delete" value="Delete" class="btn red mar-right-1" onclick="return confirm('Are you sure you want to delete this shipping method?')">
+            <?php endif; ?>
+            <input type="submit" name="submit" value="Save" class="btn">
+        </div>
     </div>
 
     <div class="content-block">

@@ -754,6 +754,19 @@ main {
 					width: 100%;
 				}
 			}
+			.error {
+				display: flex;
+				align-items: center;
+				margin: 0 23px 23px;
+				padding: 8px;
+				font-size: 12px;
+				background-color: #f8d7da;
+				border-radius: 4px;
+				svg {
+					fill: #cf1818;
+					margin: 0 8px 0 2px;
+				}
+			}
 		}
 	}
 	.myaccount {
@@ -904,10 +917,39 @@ main {
 			}
 		}
 	}
+	.forgot-password {
+		max-width: 400px;
+		.btn {
+			margin-top: 25px;
+		}
+	}
 	p.error {
 		color: #cf1818;
 		font-weight: 500;
 		font-size: 14px;
+		.form-link {
+			font-weight: inherit;
+			font-size: inherit;
+			text-decoration: none;
+			color: #74160b;
+			&:hover {
+				color: darken(#74160b, 10);
+			}
+		}
+	}
+	p.success {
+		color: #0da74d;
+		font-weight: 500;
+		font-size: 14px;
+		.form-link {
+			font-weight: inherit;
+			font-size: inherit;
+			text-decoration: none;
+			color: #0b6430;
+			&:hover {
+				color: darken(#0b6430, 10);
+			}
+		}
 	}
 }
 .img-modal {
@@ -1039,6 +1081,12 @@ main {
 		display: block;
 		padding: 14px 0 0 0;
 	}
+	.form-label-3 {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 14px 0 10px 0;
+	}
 	.form-input {
 		padding: 8px 10px;
 		border: 1px solid $form-input-border-color;
@@ -1060,6 +1108,15 @@ main {
 			display: inline-flex;
 			align-items: center;
 			padding: 10px 15px 0 0;
+		}
+	}
+	.form-link {
+		color: #2a77eb;
+		font-weight: 500;
+		text-decoration: none;
+		font-size: 14px;
+		&:hover {
+			color: darken(#2a77eb, 12);
 		}
 	}
 }

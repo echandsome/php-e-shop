@@ -1,4 +1,5 @@
 <?php
+
 // Your MySQL database hostname.
 define('db_host','localhost');
 // Your MySQL database username.
@@ -9,7 +10,7 @@ define('db_pass','');
 define('db_name','shoppingcart_advanced');
 // The title of your website.
 define('site_name','Shopping Cart');
-// Currency code (default is USD). You can view the list here: https://codeshack.io/html-currency-symbols-reference/
+// Currency code (default is USD). 
 define('currency_code','&dollar;');
 // The default featured image that will appear on the homepage.
 define('featured_image','uploads/featured-image.jpg');
@@ -21,6 +22,19 @@ define('account_required',false);
 define('weight_unit','lbs');
 // If enabled, the website will use the URL rewrite feature. You need to configure your web server to use the .htaccess file.
 define('rewrite_url',false);
+// The template editor to use for editing product descriptions, email templates, etc.
+// List:tinymce=TinyMCE,textarea=Textarea
+define('template_editor','tinymce');
+// The secret key is used to generate unique reset codes for the forgot password feature.
+define('secret_key','YOUR_SECRET_KEY');
+// Determine the base URL
+$protocol = ((isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)) || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) ? 'https' : 'http';
+$host = rtrim($_SERVER['HTTP_HOST'], '/');
+$port = (in_array($_SERVER['SERVER_PORT'], [80, 443]) || strpos($_SERVER['HTTP_HOST'], ':') !== false) ? '' : ':' . $_SERVER['SERVER_PORT'];
+$path = '/' . ltrim(substr(str_replace('\\', '/', realpath(__DIR__)), strlen(rtrim($_SERVER['DOCUMENT_ROOT'], '/'))), '/');
+define("base_url", rtrim("$protocol://$host$port$path", '/') . '/');
+// If somehow the above URL fails to resolve the correct URL, you can simply comment out the below line and manually specifiy the URL to the system.
+// define("base_url", 'http://yourdomain.com/shoppingcart/');
 
 /* Mail */
 // If enabled, the website will send an email to the customer when a new order is placed.

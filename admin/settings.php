@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Configuration file
 $file = '../config.php';
 // Open the configuration file for reading
@@ -7,8 +7,8 @@ $contents = file_get_contents($file);
 // Format key function
 function format_key($key) {
     $key = str_replace(
-        ['_', 'url', 'db ', ' pass', ' user', ' id', ' uri', 'smtp', 'paypal', 'ipn'], 
-        [' ', 'URL', 'Database ', ' Password', ' Username', ' ID', ' URI', 'SMTP', 'PayPal', 'IPN'], 
+        ['_', 'url', 'db ', ' pass', ' user', ' id', ' uri', 'smtp', 'paypal', 'ipn', 'pdf', 'ajax'], 
+        [' ', 'URL', 'Database ', ' Password', ' Username', ' ID', ' URI', 'SMTP', 'PayPal', 'IPN', 'PDF', 'AJAX'], 
         strtolower($key)
     );
     return ucwords($key);
@@ -16,7 +16,7 @@ function format_key($key) {
 // Format HTML output function
 function format_var_html($key, $value, $comment, $list = []) {
     // Add keys to exclude from the form
-    $exclude = ['db_user', 'db_pass', 'db_name', 'db_host'];
+    $exclude = ['db_user', 'db_pass', 'db_name', 'db_host', 'db_charset'];
     if (in_array($key, $exclude)) {
         return '';
     }
@@ -44,6 +44,11 @@ function format_var_html($key, $value, $comment, $list = []) {
         $html .= '</select>';
     } else if ($type == 'textarea') {
         $html .= '<textarea name="' . $key . '" id="' . $key . '" placeholder="' . format_key($key) . '">' . str_replace('\n', PHP_EOL, $value) . '</textarea>';
+    } else if ($type == 'checkbox') {
+        $html .= '<label class="switch">
+                      <input type="' . $type . '" name="' . $key . '" id="' . $key . '" value="' . $value . '" placeholder="' . format_key($key) . '"' . $checked . '>
+                      <span class="slider round"></span>
+                  </label>';
     } else {
         $html .= '<input type="' . $type . '" name="' . $key . '" id="' . $key . '" value="' . $value . '" placeholder="' . format_key($key) . '"' . $checked . '>';
     }
@@ -73,7 +78,7 @@ function format_form($contents) {
         }
         preg_match('/define\(\'(.*?)\', ?(.*?)\)/', $rows[$i], $match);
         if ($match) {
-            $list = substr($rows[$i-1], 0, 8) === '// List:' ? explode(',', ltrim($rows[$i-1], '// List:')) : [];
+            $list = substr($rows[$i-1], 0, 8) === '// List:' ? explode(',', substr($rows[$i-1], 8)) : [];
             echo format_var_html($match[1], $match[2], $list ? $rows[$i-2] : $rows[$i-1], $list);
         }
     }  
@@ -111,11 +116,13 @@ if (isset($_GET['error_msg'])) {
 ?>
 <?=template_admin_header('Settings', 'settings')?>
 
-<form action="" method="post">
+<form method="post">
 
-    <div class="content-title responsive-flex-wrap responsive-pad-bot-3">
-        <h2 class="responsive-width-100">Settings</h2>
-        <input type="submit" name="submit" value="Save" class="btn">
+    <div class="content-title">
+        <h2>Settings</h2>
+        <div class="btns">
+            <input type="submit" name="submit" value="Save" class="btn">
+        </div>
     </div>
 
     <?php if (isset($success_msg)): ?>

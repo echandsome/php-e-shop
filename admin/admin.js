@@ -57,29 +57,87 @@ if (document.querySelector('.filters a')) {
         }
     });
 }
-document.querySelectorAll('.table-dropdown').forEach(dropdownElement => {
-    dropdownElement.onclick = event => {
-        event.preventDefault();
-        let dropdownItems = dropdownElement.querySelector('.table-dropdown-items');
-        let contextMenu = document.querySelector('.table-dropdown-items-context-menu');
-        if (!contextMenu) {
-            contextMenu = document.createElement('div');
-            contextMenu.classList.add('table-dropdown-items', 'table-dropdown-items-context-menu');
-            document.addEventListener('click', event => {
-                if (contextMenu.classList.contains('show') && !event.target.closest('.table-dropdown-items-context-menu') && !event.target.closest('.table-dropdown')) {
-                    contextMenu.classList.remove('show');
-                }
-            });
-        }
-        contextMenu.classList.add('show');
-        contextMenu.innerHTML = dropdownItems.innerHTML;
-        contextMenu.style.position = 'absolute';
-        let width = window.getComputedStyle(dropdownItems).width ? parseInt(window.getComputedStyle(dropdownItems).width) : 0;
-        contextMenu.style.left = (event.pageX-width) + 'px';
-        contextMenu.style.top = event.pageY + 'px';
-        document.body.appendChild(contextMenu);
-    };
+const initTableDropdown = () => {
+    document.querySelectorAll('.table-dropdown').forEach(dropdownElement => {
+        dropdownElement.onclick = event => {
+            event.preventDefault();
+            let dropdownItems = dropdownElement.querySelector('.table-dropdown-items');
+            let contextMenu = document.querySelector('.table-dropdown-items-context-menu');
+            if (!contextMenu) {
+                contextMenu = document.createElement('div');
+                contextMenu.classList.add('table-dropdown-items', 'table-dropdown-items-context-menu');
+                document.addEventListener('click', event => {
+                    if (contextMenu.classList.contains('show') && !event.target.closest('.table-dropdown-items-context-menu') && !event.target.closest('.table-dropdown')) {
+                        contextMenu.classList.remove('show');
+                    }
+                });
+            }
+            contextMenu.classList.add('show');
+            contextMenu.innerHTML = dropdownItems.innerHTML;
+            contextMenu.style.position = 'absolute';
+            let width = window.getComputedStyle(dropdownItems).width ? parseInt(window.getComputedStyle(dropdownItems).width) : 0;
+            contextMenu.style.left = (event.pageX-width) + 'px';
+            contextMenu.style.top = event.pageY + 'px';
+            document.body.appendChild(contextMenu);
+        };
+    });
+};
+initTableDropdown();
+document.body.addEventListener('click', event => {
+    if (!event.target.closest('.multiselect')) {
+        document.querySelectorAll('.multiselect .list').forEach(element => element.style.display = 'none');
+    } 
 });
+const initMultiselect = () => {
+    document.querySelectorAll('.multiselect').forEach(element => {
+        let updateList = () => {
+            element.querySelectorAll('.item').forEach(item => {
+                element.querySelectorAll('.list span').forEach(newItem => {
+                    if (item.dataset.value == newItem.dataset.value) {
+                        newItem.style.display = 'none';
+                    }
+                });
+                item.querySelector('.remove').onclick = () => {
+                    element.querySelector('.list span[data-value="' + item.dataset.value + '"]').style.display = 'flex';
+                    item.querySelector('.remove').parentElement.remove();
+                };
+            });
+            if (element.querySelectorAll('.item').length > 0) {
+                element.querySelector('.search').placeholder = '';
+            }
+        };
+        element.onclick = () => element.querySelector('.search').focus();
+        element.querySelector('.search').onfocus = () => element.querySelector('.list').style.display = 'flex';
+        element.querySelector('.search').onclick = () => element.querySelector('.list').style.display = 'flex';
+        element.querySelector('.search').onkeyup = () => {
+            element.querySelector('.list').style.display = 'flex';
+            element.querySelectorAll('.list span').forEach(item => {
+                item.style.display = item.innerText.toLowerCase().includes(element.querySelector('.search').value.toLowerCase()) ? 'flex' : 'none';
+            });
+            updateList();
+        };
+        element.querySelectorAll('.list span').forEach(item => item.onclick = () => {
+            item.style.display = 'none';
+            let html = `
+                <span class="item" data-value="${item.dataset.value}">
+                    <i class="remove">&times;</i>${item.innerText}
+                    <input type="hidden" name="${element.dataset.name}" value="${item.dataset.value}">    
+                </span>
+            `;
+            if (element.querySelector('.item')) {
+                let ele = element.querySelectorAll('.item');
+                ele = ele[ele.length-1];
+                ele.insertAdjacentHTML('afterend', html);                          
+            } else {
+                element.insertAdjacentHTML('afterbegin', html);
+            }
+            element.querySelector('.search').value = '';
+            updateList();
+        });
+        updateList();
+    });
+};
+initMultiselect();
 document.querySelectorAll('.msg').forEach(element => {
     element.querySelector('.close').onclick = () => {
         element.remove();
@@ -91,58 +149,6 @@ if (location.search.includes('success_msg') || location.search.includes('error_m
     history.replaceState && history.replaceState(null, '', location.pathname + location.search.replace(/[\?&]success_msg=[^&]+/, '').replace(/^&/, '?') + location.hash);
     history.replaceState && history.replaceState(null, '', location.pathname + location.search.replace(/[\?&]error_msg=[^&]+/, '').replace(/^&/, '?') + location.hash);
 }
-document.body.addEventListener('click', event => {
-    if (!event.target.closest('.multiselect')) {
-        document.querySelectorAll('.multiselect .list').forEach(element => element.style.display = 'none');
-    } 
-});
-document.querySelectorAll('.multiselect').forEach(element => {
-    let updateList = () => {
-        element.querySelectorAll('.item').forEach(item => {
-            element.querySelectorAll('.list span').forEach(newItem => {
-                if (item.dataset.value == newItem.dataset.value) {
-                    newItem.style.display = 'none';
-                }
-            });
-            item.querySelector('.remove').onclick = () => {
-                element.querySelector('.list span[data-value="' + item.dataset.value + '"]').style.display = 'flex';
-                item.querySelector('.remove').parentElement.remove();
-            };
-        });
-        if (element.querySelectorAll('.item').length > 0) {
-            element.querySelector('.search').placeholder = '';
-        }
-    };
-    element.onclick = () => element.querySelector('.search').focus();
-    element.querySelector('.search').onfocus = () => element.querySelector('.list').style.display = 'flex';
-    element.querySelector('.search').onclick = () => element.querySelector('.list').style.display = 'flex';
-    element.querySelector('.search').onkeyup = () => {
-        element.querySelector('.list').style.display = 'flex';
-        element.querySelectorAll('.list span').forEach(item => {
-            item.style.display = item.innerText.toLowerCase().includes(element.querySelector('.search').value.toLowerCase()) ? 'flex' : 'none';
-        });
-        updateList();
-    };
-    element.querySelectorAll('.list span').forEach(item => item.onclick = () => {
-        item.style.display = 'none';
-        let html = `
-            <span class="item" data-value="${item.dataset.value}">
-                <i class="remove">&times;</i>${item.innerText}
-                <input type="hidden" name="${element.dataset.name}" value="${item.dataset.value}">    
-            </span>
-        `;
-        if (element.querySelector('.item')) {
-            let ele = element.querySelectorAll('.item');
-            ele = ele[ele.length-1];
-            ele.insertAdjacentHTML('afterend', html);                          
-        } else {
-            element.insertAdjacentHTML('afterbegin', html);
-        }
-        element.querySelector('.search').value = '';
-        updateList();
-    });
-    updateList();
-});
 const modal = options => {
     let element;
     if (document.querySelector(options.element)) {
@@ -283,10 +289,7 @@ const openMediaLibrary = options => modal({
                     let mediaDetailsForm = document.querySelector('.media-library-modal .media-details-form');
                     document.querySelector('.media-library-modal .save-media').onclick = event => {
                         event.preventDefault();
-                        fetch(mediaDetailsForm.action, {
-                            method: 'POST',
-                            body: new FormData(mediaDetailsForm)
-                        }).then(response => response.json()).then(newData => {
+                        fetch(mediaDetailsForm.action, { method: 'POST', body: new FormData(mediaDetailsForm), cache: 'no-store' }).then(response => response.json()).then(newData => {
                             this.media[i].title = newData[i].title;
                             this.media[i].caption = newData[i].caption;
                             this.media[i].full_path = newData[i].full_path;
@@ -301,7 +304,7 @@ const openMediaLibrary = options => modal({
                     document.querySelector('.media-library-modal .delete-media').onclick = event => {
                         event.preventDefault();
                         if (confirm('Are you sure you want to delete this media?')) {
-                            fetch(mediaDetailsForm.action + '&delete=true').then(response => response.json()).then(newData => {
+                            fetch(mediaDetailsForm.action + '&delete=true', { cache: 'no-store' }).then(response => response.json()).then(newData => {
                                 for (let j = 0; j < this.media.length; j++) {
                                     for (let k = 0; k < newData.length; k++) {
                                         if (this.media[j].id == newData[k].id && this.media[j].selected) {
@@ -346,10 +349,7 @@ const openMediaLibrary = options => modal({
                     form.append('file_' + i, event.target.files[i]);
                 }
                 form.append('total_files', event.target.files.length);
-                fetch('index.php?page=api&action=media', {
-                    method: 'POST',
-                    body: form
-                }).then(response => response.json()).then(data => {
+                fetch('index.php?page=api&action=media', { method: 'POST', body: form, cache: 'no-store' }).then(response => response.json()).then(data => {
                     for (let j = 0; j < this.media.length; j++) {
                         for (let k = 0; k < data.length; k++) {
                             if (this.media[j].id == data[k].id && this.media[j].selected) {
@@ -420,7 +420,7 @@ const openOptionsModal = options => modal({
     optionTemplate: function(type) {
         return `
         <div class="option-content" data-type="${type}">
-            <div class="table">
+            <div class="table mar-top-5">
                 <table>
                     <thead>
                         <tr>
@@ -436,7 +436,7 @@ const openOptionsModal = options => modal({
                     </tbody>
                 </table> 
             </div>
-            ${type == 'text' || type == 'datetime' ? '' : '<a href="#" class="add-option-value-btn"><svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>Add Option Value</a>'}
+            ${type == 'text' || type == 'datetime' ? '' : '<a href="#" class="add-option-value-btn">+ Add Option Value</a>'}
         </div>           
         `;
     },
@@ -851,6 +851,44 @@ const initProduct = () => {
             }
         });        
     };
+    document.getElementById('unlimited').onchange = e => {
+        document.getElementById('quantity').value = e.target.checked ? -1 : 0;
+    };
+    document.getElementById('quantity').oninput = e => {
+        document.getElementById('unlimited').checked = e.target.value == -1;
+    };
+    let updateSubscriptionInfo = () => {
+        let subSelect = document.getElementById('subscription');
+        let infoP = document.querySelector('.subscription-info p');
+        if (subSelect.value === "1") {
+            let period = parseInt(document.getElementById('subscription_period').value, 10);
+            let type   = document.getElementById('subscription_period_type').value;
+            let message = "The subscription will reoccur ";
+            let singularMap = { 'day': 'daily', 'week': 'weekly', 'month': 'monthly', 'year': 'yearly' };
+            let pluralMap = { 'day': 'days', 'week': 'weeks', 'month': 'months', 'year': 'years' };
+            if (isNaN(period) || period <= 0) {
+                message += "with an unspecified period";
+            } else if (period === 1) {
+                message += singularMap[type];
+            } else {
+                message += "every " + period + " " + pluralMap[type];
+            }
+            infoP.textContent = message;
+        } else {
+            infoP.textContent = "";
+        }
+        document.querySelector('.subscription-info').style.display = subSelect.value == 0 ? 'none' : 'flex';
+    };
+    ['subscription', 'subscription_period', 'subscription_period_type'].forEach(id => {
+        let elem = document.getElementById(id);
+        if (elem) {
+            elem.onchange = updateSubscriptionInfo;
+            if (id === 'subscription_period') {
+                elem.oninput = updateSubscriptionInfo;
+            }
+        }
+    });
+    updateSubscriptionInfo();
 };
 const initMedia = () => {
     let mediaHandler = () => {
@@ -887,22 +925,19 @@ const initMedia = () => {
                 onClose: function(event) {
                     let mediaDetailsForm = this.element.querySelector('.media-details-form');
                     if (event && event.button && event.button.classList.contains('save')) {
-                        fetch(mediaDetailsForm.action, {
-                            method: 'POST',
-                            body: new FormData(mediaDetailsForm)
-                        }).then(response => response.json()).then(data => {
+                        fetch(mediaDetailsForm.action, { method: 'POST', body: new FormData(mediaDetailsForm), cache: 'no-store' }).then(response => response.json()).then(data => {
                             data.forEach(media => {
                                 if (media.id == element.dataset.id) {
                                     element.dataset.title = media.title;
                                     element.dataset.caption = media.caption;
-                                    element.dataset.fullPath = media.fullPath;
-                                    element.dataset.dateUploaded = media.dateUploaded;
+                                    element.dataset.fullPath = media.full_path;
+                                    element.dataset.dateUploaded = media.date_uploaded;
                                 }
                             });
                         });                    
                     }
                     if (event && event.button && event.button.classList.contains('delete')) {
-                        fetch(mediaDetailsForm.action + '&delete=true').then(response => response.json()).then(() => element.remove());                    
+                        fetch(mediaDetailsForm.action + '&delete=true', { cache: 'no-store' }).then(response => response.json()).then(() => element.remove());                    
                     }
                 }
             });        
@@ -923,10 +958,7 @@ const initMedia = () => {
                 form.append('file_' + i, event.target.files[i]);
             }
             form.append('total_files', total_files);
-            fetch('index.php?page=api&action=media', {
-                method: 'POST',
-                body: form
-            }).then(response => response.json()).then(data => {
+            fetch('index.php?page=api&action=media', { method: 'POST', body: form, cache: 'no-store' }).then(response => response.json()).then(data => {
                 if (data) {
                     data.forEach((media, index) => {
                         if (index > total_files-1) return;
@@ -944,33 +976,136 @@ const initMedia = () => {
         input.click();
     }; 
 };
-const initManageOrder = (products) => {
+const initManageOrder = products => {
+    let orderEvents = () => {
+        document.querySelectorAll('.delete-item').forEach(element => element.onclick = event => {
+            event.preventDefault();
+            element.closest('tr').remove();
+            updateAmount();
+        });
+        document.querySelectorAll('.item-product').forEach(element => element.onchange = () => {
+            let price = parseFloat(element.querySelector('option:checked').dataset.price);
+            if (price && !isNaN(price)) {
+                element.closest('tr').querySelector('.item-price').value = price;
+                updateAmount();
+            }
+        });
+        document.querySelectorAll('.item-price, .item-quantity, #shipping_amount, #tax_amount').forEach(element => element.onchange = updateAmount);
+    };
+    let updateAmount = () => {
+        let amount = 0;
+        let shipping_amount = parseFloat(document.querySelector('#shipping_amount').value);
+        let tax_amount = parseFloat(document.querySelector('#tax_amount').value);
+        document.querySelectorAll('.item-price').forEach(element => {
+            let price = parseFloat(element.value);
+            let quantity = parseInt(element.closest('tr').querySelector('.item-quantity').value);
+            quantity = quantity && !isNaN(quantity) ? quantity : 1;
+            amount += price && !isNaN(price) ? price * quantity : 0;
+        });
+        amount += shipping_amount && !isNaN(shipping_amount) ? shipping_amount : 0;
+        amount += tax_amount && !isNaN(tax_amount) ? tax_amount : 0;
+        document.querySelector('#amount').value = amount.toFixed(2);
+    };
     document.querySelector('.add-item').onclick = event => {
         event.preventDefault();
         document.querySelector('.manage-order-table tbody').insertAdjacentHTML('beforeend', `
         <tr>
             <td>
                 <input type="hidden" name="item_id[]" value="0">
-                <select name="item_product[]">
-                    ${products.map(product => '<option value="' + product.id + '">' + product.id + ' - ' + product.title + '</option>')}
+                <select name="item_product[]" class="item-product">
+                    ${products.map(product => '<option data-price="' + product.price + '" value="' + product.id + '">' + product.id + ' - ' + product.title + '</option>')}
                 </select>
             </td>
-            <td><input name="item_price[]" type="number" placeholder="Price" step=".01"></td>
-            <td><input name="item_quantity[]" type="number" placeholder="Quantity"></td>
+            <td><input name="item_price[]" type="number" placeholder="Price" value="${products.length ? products[0].price : ''}" step=".01" class="item-price"></td>
+            <td><input name="item_quantity[]" type="number" placeholder="Quantity" value="1" class="item-quantity"></td>
             <td><input name="item_options[]" type="text" placeholder="Options"></td>
             <td><svg class="delete-item" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg></td>
         </tr>
         `);
-        document.querySelectorAll('.delete-item').forEach(element => element.onclick = event => {
-            event.preventDefault();
-            element.closest('tr').remove();
-        });
+        orderEvents();
+        updateAmount();
         if (document.querySelector('.no-order-items-msg')) {
             document.querySelector('.no-order-items-msg').remove();
         }
     };
-    document.querySelectorAll('.delete-item').forEach(element => element.onclick = event => {
-        event.preventDefault();
-        element.closest('tr').remove();
-    });
+    orderEvents();
 };
+if (document.querySelector('.view-customer-details')) {
+    document.querySelectorAll('.view-customer-details').forEach(element => element.onclick = event => {
+        event.preventDefault();
+        fetch('index.php?page=api&action=get_customer_details&id=' + element.dataset.transactionId, { cache: 'no-cache' }).then(response => response.json()).then(data => {
+            if (data.status == 'error') {
+                alert(data.message);
+                return;
+            }
+            modal({
+                state: 'open',
+                modalTemplate: function() {
+                    return `
+                    <div class="dialog view-customer-modal">
+                        <div class="content">
+                            <h3 class="heading">View Customer Details<span class="dialog-close">&times;</span></h3>
+                            <div class="body">
+                                <div class="customer-details">
+                                    <div class="group">
+                                        <div>
+                                            <h3>First Name</h3>
+                                            <span>${data.transaction.first_name}</span>
+                                        </div>
+                                        <div>
+                                            <h3>Last Name</h3>
+                                            <span>${data.transaction.last_name}</span>
+                                        </div>
+                                    </div>
+                                    <div class="group">
+                                        <div>
+                                            <h3>Payer Email</h3>
+                                            <span>${data.transaction.payer_email}</span>
+                                        </div>
+                                        <div>
+                                            <h3>Address</h3>
+                                            <span>${data.transaction.address_street}</span>
+                                            <span>${data.transaction.address_city}</span>
+                                            <span>${data.transaction.address_state}</span>
+                                            <span>${data.transaction.address_zip}</span>
+                                            <span>${data.transaction.address_country}</span>
+                                        </div>
+                                    </div>
+                                    ${data.account ? `
+                                    <div class="account-details">
+                                        <h2>Account Details</h2>
+                                        <div class="group">
+                                            <div>
+                                                <h3>Email</h3>
+                                                <span>${data.account.email}</span>
+                                            </div>
+                                            <div>
+                                                <h3>Role</h3>
+                                                <span>${data.account.role}</span>
+                                            </div>
+                                        </div>
+                                        <div class="group">
+                                            <div>
+                                                <h3>Registered</h3>
+                                                <span>${data.account.registered}</span>
+                                            </div>
+                                            <div>
+                                                <h3># Orders</h3>
+                                                <span><a href="index.php?page=orders&account_id=${data.transaction.account_id}" class="link1">${data.account.total_orders}</a></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            <div class="footer pad-5">
+                                <a href="#" class="btn dialog-close">Close</a>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+            });   
+        });   
+    });  
+}

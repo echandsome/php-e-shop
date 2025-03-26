@@ -2,11 +2,11 @@
 // Prevent direct access to file
 defined('shoppingcart') or exit;
 // Get all the categories from the database
-$stmt = $pdo->query('SELECT * FROM categories');
+$stmt = $pdo->query('SELECT * FROM product_categories');
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Execute query to retrieve product options and group by the title
-$stmt = $pdo->query('SELECT option_name, option_value FROM products_options WHERE option_type = "select" OR option_type = "radio" OR option_type = "checkbox" GROUP BY option_name, option_value ORDER BY option_name, option_value ASC');
+$stmt = $pdo->query('SELECT option_name, option_value FROM product_options WHERE option_type = "select" OR option_type = "radio" OR option_type = "checkbox" GROUP BY option_name, option_value ORDER BY option_name, option_value ASC');
 $stmt->execute();
 $product_options = $stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 // Get the current category from the GET request, if none exists set the default selected category to: all
@@ -14,14 +14,14 @@ $category_list = isset($_GET['category']) && $_GET['category'] ? $_GET['category
 $category_list = is_array($category_list) ? $category_list : [$category_list];
 $category_sql = '';
 if ($category_list) {
-    $category_sql = 'JOIN products_categories pc ON FIND_IN_SET(pc.category_id, :category_list) AND pc.product_id = p.id JOIN categories c ON c.id = pc.category_id';
+    $category_sql = 'JOIN product_category pc ON FIND_IN_SET(pc.category_id, :category_list) AND pc.product_id = p.id JOIN product_categories c ON c.id = pc.category_id';
 }
 // Get the options from the GET request, if none exists set the default selected options to: all
 $options_list = isset($_GET['option']) && $_GET['option'] ? $_GET['option'] : [];
 $options_list = is_array($options_list) ? $options_list : [$options_list];
 $options_sql = '';
 if ($options_list) {
-    $options_sql = 'JOIN products_options po ON po.product_id = p.id AND FIND_IN_SET(CONCAT(po.option_name, "-", po.option_value), :option_list)';
+    $options_sql = 'JOIN product_options po ON po.product_id = p.id AND FIND_IN_SET(CONCAT(po.option_name, "-", po.option_value), :option_list)';
 }
 // Availability options
 $availability_list = isset($_GET['availability']) && $_GET['availability'] ? $_GET['availability'] : [];
@@ -75,9 +75,9 @@ if ($sort == 'a-z') {
     $order_by = 'ORDER BY p.price ASC';
 } elseif ($sort == 'popular') {
     // sort7 = Most Popular
-    $order_by = 'ORDER BY (SELECT COUNT(*) FROM transactions_items ti WHERE ti.item_id = p.id) DESC';
+    $order_by = 'ORDER BY (SELECT COUNT(*) FROM transaction_items ti WHERE ti.item_id = p.id) DESC';
 }
-$stmt = $pdo->prepare('SELECT p.*, (SELECT m.full_path FROM products_media pm JOIN media m ON m.id = pm.media_id WHERE pm.product_id = p.id ORDER BY pm.position ASC LIMIT 1) AS img FROM products p ' . $category_sql . ' ' . $options_sql . ' WHERE p.product_status = 1 ' . $price_sql . ' ' . $availability_sql . ' GROUP BY p.id, p.title, p.description, p.price, p.rrp, p.quantity, p.created, p.weight, p.url_slug, p.product_status, p.sku, p.subscription, p.subscription_period, p.subscription_period_type ' . $order_by . ' LIMIT :page,:num_products');
+$stmt = $pdo->prepare('SELECT p.*, (SELECT m.full_path FROM product_media_map pm JOIN product_media m ON m.id = pm.media_id WHERE pm.product_id = p.id ORDER BY pm.position ASC LIMIT 1) AS img FROM products p ' . $category_sql . ' ' . $options_sql . ' WHERE p.product_status = 1 ' . $price_sql . ' ' . $availability_sql . ' GROUP BY p.id, p.title, p.description, p.price, p.rrp, p.quantity, p.created, p.weight, p.url_slug, p.product_status, p.sku, p.subscription, p.subscription_period, p.subscription_period_type ' . $order_by . ' LIMIT :page,:num_products');
 // bindValue will allow us to use integer in the SQL statement, we need to use for LIMIT
 if ($category_list) {
     $stmt->bindValue(':category_list', implode(',', $category_list), PDO::PARAM_STR);
@@ -216,9 +216,9 @@ $total_products = $stmt->fetchColumn();
                     <?php endif; ?>
                     <span class="name"><?=$product['title']?></span>
                     <span class="price">
-                        <?=currency_code?><?=number_format($product['price'],2)?>
+                        <?=currency_code?><?=num_format($product['price'],2)?>
                         <?php if ($product['rrp'] > 0): ?>
-                        <span class="rrp"><?=currency_code?><?=number_format($product['rrp'],2)?></span>
+                        <span class="rrp"><?=currency_code?><?=num_format($product['rrp'],2)?></span>
                         <?php endif; ?>
                     </span>
                 </a>
@@ -240,7 +240,6 @@ $total_products = $stmt->fetchColumn();
                 ?>
                 <a href="?<?=$query?>" class="btn">Next</a>
                 <?php endif; ?>
-
             </div>
 
         </div>

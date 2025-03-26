@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Retrieve the GET request parameters (if specified)
 $pagination_page = isset($_GET['pagination_page']) ? $_GET['pagination_page'] : 1;
 $search = isset($_GET['search_query']) ? $_GET['search_query'] : '';
@@ -9,7 +9,7 @@ $order = isset($_GET['order']) && $_GET['order'] == 'DESC' ? 'DESC' : 'ASC';
 $order_by_whitelist = ['id','title','caption','date_uploaded'];
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_whitelist) ? $_GET['order_by'] : 'id';
 // Number of results per pagination page
-$results_per_page = 20;
+$results_per_page = 15;
 // Declare query param variables
 $param1 = ($pagination_page - 1) * $results_per_page;
 $param2 = $results_per_page;
@@ -18,12 +18,12 @@ $param3 = '%' . $search . '%';
 $where = '';
 $where .= $search ? 'WHERE (title LIKE :search OR caption LIKE :search OR full_path LIKE :search) ' : '';
 // Retrieve the total number of media
-$stmt = $pdo->prepare('SELECT COUNT(*) AS total FROM media ' . $where);
+$stmt = $pdo->prepare('SELECT COUNT(*) AS total FROM product_media ' . $where);
 if ($search) $stmt->bindParam('search', $param3, PDO::PARAM_STR);
 $stmt->execute();
 $media_total = $stmt->fetchColumn();
-// SQL query to get all media from the "media" table
-$stmt = $pdo->prepare('SELECT * FROM media ' . $where . ' ORDER BY ' . $order_by . ' ' . $order . ' LIMIT :start_results,:num_results');
+// SQL query to get all media from the "product_media" table
+$stmt = $pdo->prepare('SELECT * FROM product_media ' . $where . ' ORDER BY ' . $order_by . ' ' . $order . ' LIMIT :start_results,:num_results');
 // Bind params
 $stmt->bindParam('start_results', $param1, PDO::PARAM_INT);
 $stmt->bindParam('num_results', $param2, PDO::PARAM_INT);
@@ -43,7 +43,7 @@ $url = 'index.php?page=media&search=' . $search;
         </div>
         <div class="txt">
             <h2>Media</h2>
-            <p>View, manage, and search media.</p>
+            <p>View, manage, and search media</p>
         </div>
     </div>
 </div>
@@ -61,7 +61,7 @@ $url = 'index.php?page=media&search=' . $search;
         <svg class="icon-left" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
         Upload
     </a>
-    <form action="" method="get">
+    <form method="get">
         <input type="hidden" name="page" value="media">
         <div class="filters">
             <a href="#">
@@ -122,4 +122,4 @@ $url = 'index.php?page=media&search=' . $search;
     <?php endif; ?>
 </div>
 
-<?=template_admin_footer('initMedia()')?>
+<?=template_admin_footer('<script>initMedia()</script>')?>

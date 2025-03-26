@@ -1,12 +1,12 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Remove the time limit and file size limit
 set_time_limit(0);
 ini_set('post_max_size', '0');
 ini_set('upload_max_filesize', '0');
 // If form submitted
 if (isset($_POST['file_type'], $_POST['table'])) {
-    $table = in_array($_POST['table'], ['products', 'products_options', 'products_categories', 'products_media', 'products_downloads']) ? $_POST['table'] : 'products';
+    $table = in_array($_POST['table'], ['products', 'product_options', 'product_category', 'product_media', 'product_downloads']) ? $_POST['table'] : 'products';
     // Get all products
     $result = $pdo->query('SELECT * FROM ' . $table . ' ORDER BY id ASC');
     $products = [];
@@ -89,12 +89,14 @@ if (isset($_POST['file_type'], $_POST['table'])) {
 ?>
 <?=template_admin_header('Export Products', 'products', 'export')?>
 
-<form action="" method="post">
+<form method="post">
 
-    <div class="content-title responsive-flex-wrap responsive-pad-bot-3">
-        <h2 class="responsive-width-100">Export Products</h2>
-        <a href="index.php?page=products" class="btn alt mar-right-2">Cancel</a>
-        <input type="submit" name="submit" value="Export" class="btn">
+    <div class="content-title">
+        <h2>Export Products</h2>
+        <div class="btns">
+            <a href="index.php?page=products" class="btn alt mar-right-1">Cancel</a>
+            <input type="submit" name="submit" value="Export" class="btn">
+        </div>
     </div>
 
     <div class="content-block">
@@ -104,10 +106,10 @@ if (isset($_POST['file_type'], $_POST['table'])) {
             <label for="table"><span class="required">*</span> Table</label>
             <select id="table" name="table" required>
                 <option value="products">Products</option>
-                <option value="products_options">Products Options</option>
-                <option value="products_categories">Products Categories</option>
-                <option value="products_media">Products Media</option>
-                <option value="products_downloads">Products Downloads</option>
+                <option value="product_options">Product Options</option>
+                <option value="product_category">Product Categories</option>
+                <option value="product_media">Product Media</option>
+                <option value="product_downloads">Product Downloads</option>
             </select>
 
             <label for="file_type"><span class="required">*</span> File Type</label>

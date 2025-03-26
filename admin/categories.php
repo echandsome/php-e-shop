@@ -1,12 +1,12 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // SQL query to get all categories from the "categories" table
-$stmt = $pdo->prepare('SELECT c.*, COUNT(pc.id) AS num_products FROM categories c LEFT JOIN products_categories pc ON pc.category_id = c.id GROUP BY c.id, c.title, c.parent_id ORDER BY c.title ASC');
+$stmt = $pdo->prepare('SELECT c.*, COUNT(pc.id) AS num_products FROM product_categories c LEFT JOIN product_category pc ON pc.category_id = c.id GROUP BY c.id, c.title, c.parent_id ORDER BY c.title ASC');
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Delete category
 if (isset($_GET['delete'])) {
-    $stmt = $pdo->prepare('DELETE c, pc FROM categories c LEFT JOIN products_categories pc ON pc.category_id = c.id WHERE c.id = ?');
+    $stmt = $pdo->prepare('DELETE c, pc FROM product_categories c LEFT JOIN product_category pc ON pc.category_id = c.id WHERE c.id = ?');
     $stmt->execute([ $_GET['delete'] ]);
     header('Location: index.php?page=categories&success_msg=3');
     exit;
@@ -42,6 +42,18 @@ function admin_populate_categories($categories, $parent_id = 0, $n = 0) {
                                 </span>
                                 Edit
                             </a>
+                            <a href="index.php?page=category&parent_id=' . $category['id'] . '">
+                                <span class="icon">
+                                    <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/></svg>
+                                </span>
+                                Add Child
+                            </a>
+                            <a href="index.php?page=products&category=' . $category['id'] . '">
+                                <span class="icon">
+                                    <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/></svg>
+                                </span>
+                                View Products
+                            </a>
                             <a class="red" href="index.php?page=categories&delete=' . $category['id'] . '" onclick="return confirm(\'Are you sure you want to delete this category?\')">
                                 <span class="icon">
                                     <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
@@ -64,11 +76,11 @@ function admin_populate_categories($categories, $parent_id = 0, $n = 0) {
 <div class="content-title">
     <div class="title">
         <div class="icon">
-            <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M64 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm48-208a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"/></svg>
+            <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M7 7H9V9H7V7M7 11H9V13H7V11M7 15H9V17H7V15M17 17H11V15H17V17M17 13H11V11H17V13M17 9H11V7H17V9Z" /></svg>
         </div>
         <div class="txt">
             <h2>Categories</h2>
-            <p>View, create, and edit categories.</p>
+            <p>View, create, and edit categories</p>
         </div>
     </div>
 </div>
@@ -88,14 +100,14 @@ function admin_populate_categories($categories, $parent_id = 0, $n = 0) {
     </a>
 </div>
 
-<div class="content-block">
+<div class="content-block no-pad">
     <div class="table">
         <table>
             <thead>
                 <tr>
                     <td>Title</td>
                     <td>Products</td>
-                    <td>Action</td>
+                    <td>Actions</td>
                 </tr>
             </thead>
             <tbody>

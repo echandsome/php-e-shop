@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Remove the time limit and file size limit
 set_time_limit(0);
 ini_set('post_max_size', '0');
@@ -88,12 +88,14 @@ if (isset($_POST['file_type'])) {
 ?>
 <?=template_admin_header('Export Accounts', 'accounts', 'export')?>
 
-<form action="" method="post">
+<form method="post">
 
-    <div class="content-title responsive-flex-wrap responsive-pad-bot-3">
-        <h2 class="responsive-width-100">Export Accounts</h2>
-        <a href="index.php?page=accounts" class="btn alt mar-right-2">Cancel</a>
-        <input type="submit" name="submit" value="Export" class="btn">
+    <div class="content-title">
+        <h2>Export Accounts</h2>
+        <div class="btns">
+            <a href="index.php?page=accounts" class="btn alt mar-right-1">Cancel</a>
+            <input type="submit" name="submit" value="Export" class="btn">
+        </div>
     </div>
 
     <div class="content-block">

@@ -17,12 +17,12 @@ if (isset($_GET['id'])) {
         exit('Product does not exist!');
     }
     // Select the product images (if any) from the products_images table
-    $stmt = $pdo->prepare('SELECT m.*, pm.position FROM products_media pm JOIN media m ON m.id = pm.media_id WHERE pm.product_id = ? ORDER BY pm.position ASC');
+    $stmt = $pdo->prepare('SELECT m.*, pm.position FROM product_media_map pm JOIN product_media m ON m.id = pm.media_id WHERE pm.product_id = ? ORDER BY pm.position ASC');
     $stmt->execute([ $product['id'] ]);
     // Fetch the product images from the database and return the result as an Array
     $product_media = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // Select the product options (if any) from the products_options table
-    $stmt = $pdo->prepare('SELECT CONCAT(option_name, "::", option_type, "::", required) AS k, option_value, quantity, price, price_modifier, weight, weight_modifier, option_type, required FROM products_options WHERE product_id = ? ORDER BY position ASC, id');
+    // Select the product options (if any) from the product_options table
+    $stmt = $pdo->prepare('SELECT CONCAT(option_name, "::", option_type, "::", required) AS k, option_value, quantity, price, price_modifier, weight, weight_modifier, option_type, required FROM product_options WHERE product_id = ? ORDER BY position ASC, id');
     $stmt->execute([ $product['id'] ]);
     // Fetch the product options from the database and return the result as an Array
     $product_options = $stmt->fetchAll(PDO::FETCH_GROUP);
@@ -100,7 +100,7 @@ if (isset($_GET['id'])) {
                         // Replace underscores with spaces and remove option- prefix
                         $options .= str_replace(['_', 'option-'], [' ', ''], $k) . '-' . $vv . ',';
                         // Get the option from the database
-                        $stmt = $pdo->prepare('SELECT * FROM products_options WHERE option_name = ? AND option_value = ? AND product_id = ?');
+                        $stmt = $pdo->prepare('SELECT * FROM product_options WHERE option_name = ? AND option_value = ? AND product_id = ?');
                         $stmt->execute([ str_replace(['_', 'option-'], [' ', ''], $k), $vv, $product['id'] ]);
                         $option = $stmt->fetch(PDO::FETCH_ASSOC);
                         // Get cart option quantity
@@ -118,7 +118,7 @@ if (isset($_GET['id'])) {
                     // Replace underscores with spaces and remove option- prefix
                     $options .= str_replace(['_', 'option-'], [' ', ''], $k) . '-' . $v . ',';
                     // Get the option from the database
-                    $stmt = $pdo->prepare('SELECT * FROM products_options WHERE option_name = ? AND option_value = ? AND product_id = ?');
+                    $stmt = $pdo->prepare('SELECT * FROM product_options WHERE option_name = ? AND option_value = ? AND product_id = ?');
                     $stmt->execute([ str_replace(['_', 'option-'], [' ', ''], $k), $v, $product['id'] ]);
                     $option = $stmt->fetch(PDO::FETCH_ASSOC);
                     // Get cart option quantity
@@ -126,7 +126,7 @@ if (isset($_GET['id'])) {
                     // Check if the option exists and the quantity is available
                     if (!$option) {
                         // Option is text or datetime element
-                        $stmt = $pdo->prepare('SELECT * FROM products_options WHERE option_name = ? AND product_id = ?');
+                        $stmt = $pdo->prepare('SELECT * FROM product_options WHERE option_name = ? AND product_id = ?');
                         $stmt->execute([ str_replace(['_', 'option-'], [' ', ''], $k), $product['id'] ]);
                         $option = $stmt->fetch(PDO::FETCH_ASSOC);                              
                     }
@@ -238,16 +238,16 @@ if (isset($_GET['id'])) {
         <h1 class="name"><?=$product['title']?></h1>
 
         <div class="prices">
-            <span class="price" data-price="<?=$product['price']?>"><?=currency_code?><?=number_format($product['price'],2)?></span>
+            <span class="price" data-price="<?=$product['price']?>"><?=currency_code?><?=num_format($product['price'],2)?></span>
             <?php if ($product['rrp'] > 0): ?>
-            <span class="rrp"><?=currency_code?><?=number_format($product['rrp'],2)?></span>
+            <span class="rrp"><?=currency_code?><?=num_format($product['rrp'],2)?></span>
             <?php endif; ?>
             <?php if ($product['subscription']): ?>
             <span class="sub-period-type mar-left-2 mar-top-1">/ <?=ucwords($product['subscription_period_type'])?></span>
             <?php endif; ?>
         </div>
 
-        <form class="product-form form" action="" method="post">
+        <form class="product-form form" action="<?=url('index.php?page=product&id=' . ($product['url_slug'] ? $product['url_slug']  : $product['id']))?>" method="post">
             <?php foreach ($product_options as $id => $option): ?>
             <?php $id = explode('::', $id); ?>
             <?php if ($id[1] == 'select'): ?>

@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Retrieve the GET request parameters (if specified)
 $pagination_page = isset($_GET['pagination_page']) ? $_GET['pagination_page'] : 1;
 $search = isset($_GET['search_query']) ? $_GET['search_query'] : '';
@@ -12,7 +12,7 @@ $order = isset($_GET['order']) && $_GET['order'] == 'DESC' ? 'DESC' : 'ASC';
 $order_by_whitelist = ['id','title','shipping_type','countries','price_from','price_to','weight_from','weight_to','price'];
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_whitelist) ? $_GET['order_by'] : 'id';
 // Number of results per pagination pagination_page
-$results_per_pagination_page = 20;
+$results_per_pagination_page = 15;
 // shipping array
 $shipping = [];
 // Declare query param variables
@@ -80,7 +80,7 @@ $url = 'index.php?page=shipping&search_query=' . $search . '&type=' . $type . '&
         </div>
         <div class="txt">
             <h2>Shipping</h2>
-            <p>View, edit, and create shipping methods.</p>
+            <p>View, edit, and create shipping methods</p>
         </div>
     </div>
 </div>
@@ -98,7 +98,7 @@ $url = 'index.php?page=shipping&search_query=' . $search . '&type=' . $type . '&
         <svg class="icon-left" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
         Create Shipping
     </a>
-    <form action="" method="get">
+    <form method="get">
         <input type="hidden" name="page" value="shipping">
         <div class="filters">
             <a href="#">
@@ -152,19 +152,19 @@ $url = 'index.php?page=shipping&search_query=' . $search . '&type=' . $type . '&
     <?php endif; ?>   
 </div>
 
-<div class="content-block">
+<div class="content-block no-pad">
     <div class="table">
         <table>
             <thead>
                 <tr>
-                    <td><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=id'?>">#<?=$order_by=='id' ? $table_icons[strtolower($order)] : ''?></a></td>
+                    <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=id'?>">#<?=$order_by=='id' ? $table_icons[strtolower($order)] : ''?></a></td>
                     <td><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=title'?>">Title<?=$order_by=='title' ? $table_icons[strtolower($order)] : ''?></a></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=shipping_type'?>">Type<?=$order_by=='shipping_type' ? $table_icons[strtolower($order)] : ''?></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=countries'?>">Countries<?=$order_by=='countries' ? $table_icons[strtolower($order)] : ''?></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=price_from'?>">Price Range<?=$order_by=='price_from' ? $table_icons[strtolower($order)] : ''?></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=weight_from'?>">Weight Range<?=$order_by=='weight_from' ? $table_icons[strtolower($order)] : ''?></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=price'?>">Total Shipping Price<?=$order_by=='price' ? $table_icons[strtolower($order)] : ''?></td>
-                    <td class="align-center">Action</td>
+                    <td class="align-center">Actions</td>
                 </tr>
             </thead>
             <tbody>
@@ -175,7 +175,7 @@ $url = 'index.php?page=shipping&search_query=' . $search . '&type=' . $type . '&
                 <?php endif; ?>
                 <?php foreach ($shipping as $s): ?>
                 <tr>
-                    <td><?=$s['id']?></td>
+                    <td class="responsive-hidden alt"><?=$s['id']?></td>
                     <td><?=$s['title']?></td>
                     <td class="responsive-hidden"><span class="<?=$s['shipping_type']=='Entire Order'?'green':'orange'?>"><?=$s['shipping_type']?></span></td>
                     <td class="responsive-hidden" style="max-width:300px">
@@ -190,9 +190,9 @@ $url = 'index.php?page=shipping&search_query=' . $search . '&type=' . $type . '&
                     }
                     ?>
                     </td>
-                    <td class="responsive-hidden alt"><?=currency_code?><?=number_format($s['price_from'], 2)?> - <?=currency_code?><?=number_format($s['price_to'], 2)?></td>
-                    <td class="responsive-hidden alt"><?=number_format($s['weight_from'], 2)?> <?=weight_unit?> - <?=number_format($s['weight_to'], 2)?> <?=weight_unit?></td>
-                    <td><?=currency_code?><?=number_format($s['price'], 2)?></td>
+                    <td class="responsive-hidden alt"><?=currency_code?><?=num_format($s['price_from'], 2)?> - <?=currency_code?><?=num_format($s['price_to'], 2)?></td>
+                    <td class="responsive-hidden alt"><?=num_format($s['weight_from'], 2)?> <?=weight_unit?> - <?=num_format($s['weight_to'], 2)?> <?=weight_unit?></td>
+                    <td class="strong"><?=currency_code?><?=num_format($s['price'], 2)?></td>
                     <td class="actions">
                         <div class="table-dropdown">
                             <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z"/></svg>

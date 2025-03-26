@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Retrieve the GET request parameters (if specified)
 $pagination_page = isset($_GET['pagination_page']) ? $_GET['pagination_page'] : 1;
 $search = isset($_GET['search_query']) ? $_GET['search_query'] : '';
@@ -8,10 +8,10 @@ $country = isset($_GET['country']) ? $_GET['country'] : '';
 // Order by column
 $order = isset($_GET['order']) && $_GET['order'] == 'DESC' ? 'DESC' : 'ASC';
 // Add/remove columns to the whitelist array
-$order_by_whitelist = ['id','country','rate'];
+$order_by_whitelist = ['id','country','rate','rate_type','rules'];
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_whitelist) ? $_GET['order_by'] : 'id';
 // Number of results per pagination pagination_page
-$results_per_pagination_page = 20;
+$results_per_pagination_page = 15;
 // taxes array
 $taxes = [];
 // Declare query param variables
@@ -73,7 +73,7 @@ $url = 'index.php?page=taxes&search_query=' . $search . '&country=' . $country;
         </div>
         <div class="txt">
             <h2>Taxes</h2>
-            <p>View, edit, and create taxes.</p>
+            <p>View, edit, and create taxes</p>
         </div>
     </div>
 </div>
@@ -91,7 +91,7 @@ $url = 'index.php?page=taxes&search_query=' . $search . '&country=' . $country;
         <svg class="icon-left" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
         Create Tax
     </a>
-    <form action="" method="get">
+    <form method="get">
         <input type="hidden" name="page" value="taxes">
         <div class="filters">
             <a href="#">
@@ -133,7 +133,7 @@ $url = 'index.php?page=taxes&search_query=' . $search . '&country=' . $country;
     <?php endif; ?>   
 </div>
 
-<div class="content-block">
+<div class="content-block no-pad">
     <div class="table">
         <table>
             <thead>
@@ -141,7 +141,9 @@ $url = 'index.php?page=taxes&search_query=' . $search . '&country=' . $country;
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=id'?>">#<?=$order_by=='id' ? $table_icons[strtolower($order)] : ''?></a></td>
                     <td><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=country'?>">Country<?=$order_by=='country' ? $table_icons[strtolower($order)] : ''?></a></td>
                     <td><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=rate'?>">Rate<?=$order_by=='rate' ? $table_icons[strtolower($order)] : ''?></a></td>
-                    <td class="align-center">Action</td>
+                    <td><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=rate_type'?>">Rate Type<?=$order_by=='rate_type' ? $table_icons[strtolower($order)] : ''?></a></td>
+                    <td><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=rules'?>">Rules<?=$order_by=='rules' ? $table_icons[strtolower($order)] : ''?></a></td>
+                    <td class="align-center">Actions</td>
                 </tr>
             </thead>
             <tbody>
@@ -152,9 +154,11 @@ $url = 'index.php?page=taxes&search_query=' . $search . '&country=' . $country;
                 <?php endif; ?>
                 <?php foreach ($taxes as $tax): ?>
                 <tr>
-                    <td class="responsive-hidden"><?=$tax['id']?></td>
+                    <td class="responsive-hidden alt"><?=$tax['id']?></td>
                     <td><?=$tax['country']?></td>
-                    <td><?=$tax['rate']?>%</td>
+                    <td class="strong"><?=$tax['rate']?></td>
+                    <td><span class="grey"><?=$tax['rate_type']?></span></td>
+                    <td><?=$tax['rules'] ? '<span class="green small">' . count(json_decode($tax['rules'], true)) . ' Rules</span>' : '<span class="grey small">No rules</span>'?></td>
                     <td class="actions">
                         <div class="table-dropdown">
                             <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z"/></svg>

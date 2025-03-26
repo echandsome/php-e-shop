@@ -10,7 +10,7 @@ require_once('../lib/stripe/init.php');
 if (!isset($_SERVER['HTTP_STRIPE_SIGNATURE'])) {
     exit('No signature specified!');
 }
-$payload = @file_get_contents('php://input');
+$payload = file_get_contents('php://input');
 $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
 $event = null;
 try {
@@ -24,16 +24,15 @@ try {
 }
 // Retrieve all items
 function get_line_items_data($id, $sessions, $starting_after = null) {
-    $data = [];
-    if ($starting_after != null) {
-        $line_items = $sessions->allLineItems($id, ['limit' => 99, 'starting_after' => $starting_after]);
-    } else {
-        $line_items = $sessions->allLineItems($id, ['limit' => 99]);
+    $params = ['limit' => 99];
+    if ($starting_after !== null) {
+        $params['starting_after'] = $starting_after;
     }
+    $line_items = $sessions->allLineItems($id, $params);
     $data = $line_items->data;
     if ($line_items->has_more) {
-        $item = end($data);
-        $data = $data + get_line_items_data($id, $sessions, $item->id);
+        $last_item = end($data);
+        $data = array_merge($data, get_line_items_data($id, $sessions, $last_item->id));
     }
     return $data;
 }
@@ -47,6 +46,7 @@ if ($event->type == 'checkout.session.completed') {
     $subtotal = 0.00;
     $shipping_total = 0.00;
     $shipping_method = '';
+    $tax_amount = 0.00;
     $line_items = get_line_items_data($intent->id, $stripe->checkout->sessions);
     $discount_code = isset($intent->metadata->discount_code) ? $intent->metadata->discount_code : '';
     $txn_id = '';
@@ -101,6 +101,11 @@ if ($event->type == 'checkout.session.completed') {
             $shipping_method = isset($product->metadata->shipping_method) ? $product->metadata->shipping_method : '';
             continue;
         }
+        // Update tax amount
+        if ($product->metadata->item_id == 'tax') {
+            $tax_amount = floatval($line_item->price->unit_amount) / 100;
+            continue;
+        }
         // Update product quantity in the products table
         $stmt = $pdo->prepare('UPDATE products SET quantity = GREATEST(quantity - ?, 0) WHERE quantity > 0 AND id = ?');
         $stmt->execute([ $line_item->quantity, $product->metadata->item_id ]);
@@ -110,12 +115,12 @@ if ($event->type == 'checkout.session.completed') {
             foreach ($options as $opt) {
                 $option_name = explode('-', $opt)[0];
                 $option_value = explode('-', $opt)[1];
-                $stmt = $pdo->prepare('UPDATE products_options SET quantity = GREATEST(quantity - ?, 0) WHERE quantity > 0 AND option_name = ? AND (option_value = ? OR option_value = "") AND product_id = ?');
+                $stmt = $pdo->prepare('UPDATE product_options SET quantity = GREATEST(quantity - ?, 0) WHERE quantity > 0 AND option_name = ? AND (option_value = ? OR option_value = "") AND product_id = ?');
                 $stmt->execute([ $line_item->quantity, $option_name, $option_value, $product->metadata->item_id ]);         
             }
         }
-        // Insert product into the "transactions_items" table
-        $stmt = $pdo->prepare('INSERT INTO transactions_items (txn_id, item_id, item_price, item_quantity, item_options) VALUES (?,?,?,?,?)');
+        // Insert product into the "transaction_items" table
+        $stmt = $pdo->prepare('INSERT INTO transaction_items (txn_id, item_id, item_price, item_quantity, item_options) VALUES (?,?,?,?,?)');
         $stmt->execute([ $txn_id, $product->metadata->item_id, floatval($line_item->price->unit_amount) / 100, $line_item->quantity, $item_options ]);
         // Add product to array
         $products_in_cart[] = [
@@ -132,10 +137,10 @@ if ($event->type == 'checkout.session.completed') {
         $subtotal += (floatval($line_item->price->unit_amount) / 100) * intval($line_item->quantity);
     }
     // Total variable
-    $total = $subtotal + $shipping_total;
+    $total = $subtotal + $shipping_total + $tax_amount;
     // Insert the transaction into our transactions table
-    $stmt = $pdo->prepare('INSERT INTO transactions (txn_id, payment_amount, payment_status, created, payer_email, first_name, last_name, address_street, address_city, address_state, address_zip, address_country, account_id, payment_method, shipping_method, shipping_amount, discount_code) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE payment_status = VALUES(payment_status)');
-    $stmt->execute([ $txn_id, $total, $payment_status, date('Y-m-d H:i:s'), $email, $first_name, $last_name, $address_street, $address_city, $address_state, $address_zip, $address_country, $account_id, 'stripe', $shipping_method, $shipping_total, $discount_code ]);
+    $stmt = $pdo->prepare('INSERT INTO transactions (txn_id, payment_amount, payment_status, created, payer_email, first_name, last_name, address_street, address_city, address_state, address_zip, address_country, account_id, payment_method, shipping_method, shipping_amount, discount_code, tax_amount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE payment_status = VALUES(payment_status)');
+    $stmt->execute([ $txn_id, $total, $payment_status, date('Y-m-d H:i:s'), $email, $first_name, $last_name, $address_street, $address_city, $address_state, $address_zip, $address_country, $account_id, 'stripe', $shipping_method, $shipping_total, $discount_code, $tax_amount ]);
     // Get the last inserted ID
     $order_id = $pdo->lastInsertId();
     // Send order details to the customer's email address
@@ -156,5 +161,14 @@ if ($event->type == 'invoice.payment_failed') {
     // Update the subscription status in the database
     $stmt = $pdo->prepare('UPDATE transactions SET payment_status = ? WHERE txn_id = ?');
     $stmt->execute([ 'Unsubscribed', $intent->subscription ]);
+}
+// Handle refunds
+if ($event->type == 'charge.refunded') {
+    $charge = $event->data->object;
+    $pdo = pdo_connect_mysql();
+    // The payment_intent is used as the txn_id for normal (non-subscription) payments
+    $txn_id = $charge->payment_intent;
+    $stmt = $pdo->prepare('UPDATE transactions SET payment_status = ? WHERE txn_id = ?');
+    $stmt->execute(['Refunded', $txn_id]);
 }
 ?>

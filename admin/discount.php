@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Default input discount values
 $discount = [
     'category_ids' => '',
@@ -14,7 +14,7 @@ $discount = [
 ];
 $types = ['Percentage', 'Fixed'];
 // Get all the categories from the database
-$stmt = $pdo->query('SELECT id, title FROM categories');
+$stmt = $pdo->query('SELECT id, title FROM product_categories');
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Get all the products from the database
@@ -47,7 +47,7 @@ if (isset($_GET['id'])) {
     $stmt->execute([ $_GET['id'] ]);
     $discount = $stmt->fetch(PDO::FETCH_ASSOC);
     // Get the discount categories
-    $stmt = $pdo->prepare('SELECT c.title, c.id FROM discounts d JOIN categories c ON FIND_IN_SET(c.id, d.category_ids) WHERE d.id = ?');
+    $stmt = $pdo->prepare('SELECT c.title, c.id FROM discounts d JOIN product_categories c ON FIND_IN_SET(c.id, d.category_ids) WHERE d.id = ?');
     $stmt->execute([ $_GET['id'] ]);
     $discount['categories'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
     // Get the discount products
@@ -73,15 +73,17 @@ if (isset($_GET['id'])) {
 ?>
 <?=template_admin_header($page . ' Discount', 'discounts', 'manage')?>
 
-<form action="" method="post">
+<form method="post">
 
-    <div class="content-title responsive-flex-wrap responsive-pad-bot-3">
-        <h2 class="responsive-width-100"><?=$page?> Discount</h2>
-        <a href="index.php?page=discounts" class="btn alt mar-right-2">Cancel</a>
-        <?php if ($page == 'Edit'): ?>
-        <input type="submit" name="delete" value="Delete" class="btn red mar-right-2" onclick="return confirm('Are you sure you want to delete this discount?')">
-        <?php endif; ?>
-        <input type="submit" name="submit" value="Save" class="btn">
+    <div class="content-title">
+        <h2><?=$page?> Discount</h2>
+        <div class="btns">
+            <a href="index.php?page=discounts" class="btn alt mar-right-1">Cancel</a>
+            <?php if ($page == 'Edit'): ?>
+            <input type="submit" name="delete" value="Delete" class="btn red mar-right-1" onclick="return confirm('Are you sure you want to delete this discount?')">
+            <?php endif; ?>
+            <input type="submit" name="submit" value="Save" class="btn">
+        </div>
     </div>
 
     <div class="content-block">
@@ -133,11 +135,16 @@ if (isset($_GET['id'])) {
             <label for="discount_value"><span class="required">*</span> Value</label>
             <input id="discount_value" type="number" name="discount_value" placeholder="Value" min="0" step=".01" value="<?=$discount['discount_value']?>" required>
 
-            <label for="start_date"><span class="required">*</span> Start Date</label>
-            <input id="start_date" type="datetime-local" name="start_date" placeholder="Start Date" value="<?=date('Y-m-d\TH:i', strtotime($discount['start_date']))?>" required>
-
-            <label for="end_date"><span class="required">*</span> End Date</label>
-            <input id="end_date" type="datetime-local" name="end_date" placeholder="End Date" value="<?=date('Y-m-d\TH:i', strtotime($discount['end_date']))?>" required>
+            <div class="group">
+                <div class="item">
+                    <label for="start_date"><span class="required">*</span> Start Date</label>
+                    <input id="start_date" type="datetime-local" name="start_date" placeholder="Start Date" value="<?=date('Y-m-d\TH:i', strtotime($discount['start_date']))?>" required>
+                </div>
+                <div class="item">
+                    <label for="end_date"><span class="required">*</span> End Date</label>
+                    <input id="end_date" type="datetime-local" name="end_date" placeholder="End Date" value="<?=date('Y-m-d\TH:i', strtotime($discount['end_date']))?>" required>
+                </div>
+            </div>
 
         </div>
 

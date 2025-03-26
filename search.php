@@ -6,7 +6,7 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
     // Escape the user query, prevent XSS attacks
     $search_query = htmlspecialchars($_GET['query'], ENT_QUOTES);
     // Select products ordered by the date added
-    $stmt = $pdo->prepare('SELECT p.*, (SELECT m.full_path FROM products_media pm JOIN media m ON m.id = pm.media_id WHERE pm.product_id = p.id ORDER BY pm.position ASC LIMIT 1) AS img FROM products p WHERE p.product_status = 1 AND p.title LIKE ? ORDER BY p.created DESC');
+    $stmt = $pdo->prepare('SELECT p.*, (SELECT m.full_path FROM product_media_map pm JOIN product_media m ON m.id = pm.media_id WHERE pm.product_id = p.id ORDER BY pm.position ASC LIMIT 1) AS img FROM products p WHERE p.product_status = 1 AND p.title LIKE ? ORDER BY p.created DESC');
     // bindValue will allow us to use integer in the SQL statement, we need to use for LIMIT
     $stmt->execute(['%' . $search_query . '%']);
     // Fetch the products from the database and return the result as an Array
@@ -42,9 +42,9 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
             <?php endif; ?>
             <span class="name"><?=$product['title']?></span>
             <span class="price">
-                <?=currency_code?><?=number_format($product['price'],2)?>
+                <?=currency_code?><?=num_format($product['price'],2)?>
                 <?php if ($product['rrp'] > 0): ?>
-                <span class="rrp"><?=currency_code?><?=number_format($product['rrp'],2)?></span>
+                <span class="rrp"><?=currency_code?><?=num_format($product['rrp'],2)?></span>
                 <?php endif; ?>
             </span>
         </a>

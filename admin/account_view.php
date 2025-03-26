@@ -7,6 +7,14 @@ $search = isset($_GET['search_query']) ? $_GET['search_query'] : '';
 $status = isset($_GET['status']) ? $_GET['status'] : '';
 $method = isset($_GET['method']) ? $_GET['method'] : '';
 $account_id = isset($_GET['account_id']) ? $_GET['account_id'] : '';
+// If no account ID specified
+if (!$account_id) {
+    exit('Account ID not specified!');
+}
+// Retrieve account
+$stmt = $pdo->prepare('SELECT * FROM accounts WHERE id = ?');
+$stmt->execute([ $account_id ]);
+$account = $stmt->fetch(PDO::FETCH_ASSOC);
 // Order by column
 $order = isset($_GET['order']) && $_GET['order'] == 'DESC' ? 'DESC' : 'ASC';
 // Add/remove columns to the whitelist array
@@ -32,12 +40,8 @@ if ($status) {
 if ($method) {
     $where .= ($where ? 'AND ' : 'WHERE ') . 't.payment_method = :method ';
 }
-// Account ID filter
-if ($account_id) {
-    $where .= ($where ? 'AND ' : 'WHERE ') . 't.account_id = :account_id ';
-}
 // Retrieve the total number of orders
-$stmt = $pdo->prepare('SELECT COUNT(DISTINCT t.id) AS total FROM transactions t LEFT JOIN transaction_items ti ON ti.txn_id = t.txn_id ' . $where);
+$stmt = $pdo->prepare('SELECT COUNT(DISTINCT t.id) AS total FROM transactions t JOIN accounts a ON a.id = t.account_id AND a.id = :account_id LEFT JOIN transaction_items ti ON ti.txn_id = t.txn_id ' . $where);
 if ($search) $stmt->bindParam('search', $param3, PDO::PARAM_STR);
 if ($status) $stmt->bindParam('status', $status, PDO::PARAM_STR);
 if ($method) $stmt->bindParam('method', $method, PDO::PARAM_STR);
@@ -45,7 +49,7 @@ if ($account_id) $stmt->bindParam('account_id', $account_id, PDO::PARAM_INT);
 $stmt->execute();
 $total_orders = $stmt->fetchColumn();
 // Prepare orders query
-$stmt = $pdo->prepare('SELECT t.*, COUNT(ti.id) AS total_products FROM transactions t LEFT JOIN transaction_items ti ON ti.txn_id = t.txn_id ' . $where . ' GROUP BY t.id, t.txn_id, t.payment_amount, t.payment_status, t.created, t.payer_email, t.first_name, t.last_name, t.address_street, t.address_city, t.address_state, t.address_zip, t.address_country, t.account_id, t.payment_method, t.discount_code, t.shipping_method, t.shipping_amount, t.tax_amount ORDER BY ' . $order_by . ' ' . $order . ' LIMIT :start_results,:num_results');
+$stmt = $pdo->prepare('SELECT t.*, COUNT(ti.id) AS total_products FROM transactions t JOIN accounts a ON a.id = t.account_id AND a.id = :account_id LEFT JOIN transaction_items ti ON ti.txn_id = t.txn_id ' . $where . ' GROUP BY t.id, t.txn_id, t.payment_amount, t.payment_status, t.created, t.payer_email, t.first_name, t.last_name, t.address_street, t.address_city, t.address_state, t.address_zip, t.address_country, t.account_id, t.payment_method, t.discount_code, t.shipping_method, t.shipping_amount, t.tax_amount ORDER BY ' . $order_by . ' ' . $order . ' LIMIT :start_results,:num_results');
 $stmt->bindParam('start_results', $param1, PDO::PARAM_INT);
 $stmt->bindParam('num_results', $param2, PDO::PARAM_INT);
 if ($search) $stmt->bindParam('search', $param3, PDO::PARAM_STR);
@@ -55,58 +59,83 @@ if ($account_id) $stmt->bindParam('account_id', $account_id, PDO::PARAM_INT);
 $stmt->execute();
 // Retrieve query results
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// Delete order
-if (isset($_GET['delete'])) {
-    // Delete the order
-    $stmt = $pdo->prepare('DELETE t, ti FROM transactions t LEFT JOIN transaction_items ti ON ti.txn_id = t.txn_id WHERE t.id = ?');
-    $stmt->execute([ $_GET['delete'] ]);
-    header('Location: index.php?page=orders&success_msg=3');
-    exit;
-}
-// Handle success messages
-if (isset($_GET['success_msg'])) {
-    if ($_GET['success_msg'] == 1) {
-        $success_msg = 'Order created successfully!';
-    }
-    if ($_GET['success_msg'] == 2) {
-        $success_msg = 'Order updated successfully!';
-    }
-    if ($_GET['success_msg'] == 3) {
-        $success_msg = 'Order deleted successfully!';
-    }
-}
 // Create URL
-$url = 'index.php?page=orders&search_query=' . $search . '&status=' . $status . '&method=' . $method . '&account_id=' . $account_id;
+$url = 'index.php?page=account_view&search_query=' . $search . '&status=' . $status . '&method=' . $method . '&account_id=' . $account_id;
 ?>
-<?=template_admin_header('Orders', 'orders', 'view')?>
+<?=template_admin_header('Account #' . $account['id'], 'accounts', 'view')?>
 
 <div class="content-title">
     <div class="title">
         <div class="icon">
-            <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
+            <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/></svg>
         </div>
         <div class="txt">
-            <h2>Orders</h2>
-            <p>View, edit, and create orders</p>
+            <h2>Account #<?=$account['id']?></h2>
+            <p>View account details, orders, and more</p>
         </div>
     </div>
 </div>
 
-<?php if (isset($success_msg)): ?>
-<div class="msg success">
-    <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-    <p><?=$success_msg?></p>
-    <svg class="close" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+<div class="content-block-wrapper">
+
+    <div class="content-block order-details">
+        <div class="block-header">
+            <div class="content-left">
+                <div class="icon">
+                    <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" /></svg>
+                </div>
+                Account Details
+            </div>
+        </div>
+        <div class="group pad-2">
+            <div class="item responsive-width-100">
+                <div class="order-detail alt">
+                    <h3>Email</h3>
+                    <p><?=htmlspecialchars($account['email'], ENT_QUOTES)?></p>
+                </div>
+                <div class="order-detail alt">
+                    <h3>Name</h3>
+                    <p><?=htmlspecialchars($account['first_name'], ENT_QUOTES)?> <?=htmlspecialchars($account['last_name'], ENT_QUOTES)?></p>
+                </div>
+                <div class="order-detail alt">
+                    <h3>Role</h3>
+                    <p><?=htmlspecialchars($account['role'], ENT_QUOTES)?></p>
+                </div>
+            </div>
+            <div class="item responsive-width-100">
+                <div class="order-detail alt">
+                    <h3>Address</h3>
+                    <p><?=nl2br(htmlspecialchars(implode(PHP_EOL, array_filter([$account['address_street'], $account['address_city'], $account['address_state'], $account['address_zip'], $account['address_country']])), ENT_QUOTES))?></p>
+                </div>
+            </div>
+            <div class="item responsive-width-100">
+                <div class="order-detail alt">
+                    <h3>Registered</h3>
+                    <p><?=htmlspecialchars($account['registered'], ENT_QUOTES)?></p>
+                </div>
+                <div class="order-detail alt">
+                    <h3># Orders</h3>
+                    <p><?=num_format($total_orders)?></p>
+                </div>            
+            </div>
+        </div>
+    </div>
+
 </div>
-<?php endif; ?>
 
 <div class="content-header responsive-flex-column pad-top-5">
-    <a href="index.php?page=order_manage" class="btn">
-        <svg class="icon-left" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-        Create Order
-    </a>
+    <div class="btns">
+        <a href="index.php?page=account&id=<?=$account['id']?>" class="btn mar-right-2">
+            <svg class="icon-left" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
+            Edit Account
+        </a>
+        <a href="index.php?page=order_manage&account_id=<?=$account['id']?>" class="btn">
+            <svg class="icon-left" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+            Create Order
+        </a>
+    </div>
     <form method="get">
-        <input type="hidden" name="page" value="orders">
+        <input type="hidden" name="page" value="account_view">
         <?php if ($account_id != ''): ?>
         <input type="hidden" name="account_id" value="<?=$account_id?>">
         <?php endif; ?>
@@ -162,12 +191,6 @@ $url = 'index.php?page=orders&search_query=' . $search . '&status=' . $status . 
         Method : <?=htmlspecialchars($method, ENT_QUOTES)?>
     </div>
     <?php endif; ?>
-    <?php if ($account_id != ''): ?>
-    <div class="filter">
-        <a href="<?=remove_url_param($url, 'account_id')?>"><svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free --><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg></a>
-        Account ID : <?=htmlspecialchars($account_id, ENT_QUOTES)?>
-    </div>
-    <?php endif; ?>
     <?php if ($search != ''): ?>
     <div class="filter">
         <a href="<?=remove_url_param($url, 'search_query')?>"><svg width="12" height="12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free --><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg></a>
@@ -195,12 +218,12 @@ $url = 'index.php?page=orders&search_query=' . $search . '&status=' . $status . 
             <tbody>
                 <?php if (!$orders): ?>
                 <tr>
-                    <td colspan="20" class="no-results">There are no orders.</td>
+                    <td colspan="20" class="no-results">This account hasn't made any orders.</td>
                 </tr>
                 <?php endif; ?>
                 <?php foreach ($orders as $o): ?>
                 <tr>
-                    <td class="alt"><?=$o['id']?></td>
+                    <td><?=$o['id']?></td>
                     <td class="img">
                         <div class="profile-img">
                             <span style="background-color:<?=color_from_string($o['first_name'])?>"><?=strtoupper(substr($o['first_name'], 0, 1))?></span>

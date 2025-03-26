@@ -110,9 +110,9 @@ if (isset($_SESSION['account_loggedin'])) {
         ti.item_quantity AS quantity,
         ti.item_id,
         ti.item_options,
-        (SELECT m.full_path FROM products_media pm JOIN media m ON m.id = pm.media_id WHERE pm.product_id = p.id ORDER BY pm.position ASC LIMIT 1) AS img 
+        (SELECT m.full_path FROM product_media_map pm JOIN product_media m ON m.id = pm.media_id WHERE pm.product_id = p.id ORDER BY pm.position ASC LIMIT 1) AS img 
         FROM transactions t
-        JOIN transactions_items ti ON ti.txn_id = t.txn_id
+        JOIN transaction_items ti ON ti.txn_id = t.txn_id
         JOIN accounts a ON a.id = t.account_id
         JOIN products p ON p.id = ti.item_id
         WHERE t.account_id = ?
@@ -123,7 +123,7 @@ if (isset($_SESSION['account_loggedin'])) {
     $transactions_ids = array_column($transactions_items, 'product_id');
     $downloads = [];
     if ($transactions_ids) {
-        $stmt = $pdo->prepare('SELECT product_id, file_path, id FROM products_downloads WHERE product_id IN (' . trim(str_repeat('?,',count($transactions_ids)),',') . ') ORDER BY position ASC');
+        $stmt = $pdo->prepare('SELECT product_id, file_path, id FROM product_downloads WHERE product_id IN (' . trim(str_repeat('?,',count($transactions_ids)),',') . ') ORDER BY position ASC');
         $stmt->execute($transactions_ids);
         $downloads = $stmt->fetchAll(PDO::FETCH_GROUP);
     }
@@ -166,7 +166,7 @@ if (isset($_SESSION['account_loggedin'])) {
     // If the user is viewing their wishlist
     if ($tab == 'wishlist') {
         // Select the users wishlist items
-        $stmt = $pdo->prepare('SELECT p.id, p.title, p.price, p.rrp, p.url_slug, (SELECT m.full_path FROM products_media pm JOIN media m ON m.id = pm.media_id WHERE pm.product_id = p.id ORDER BY pm.position ASC LIMIT 1) AS img FROM wishlist w JOIN products p ON p.id = w.product_id WHERE w.account_id = ?');
+        $stmt = $pdo->prepare('SELECT p.id, p.title, p.price, p.rrp, p.url_slug, (SELECT m.full_path FROM product_media_map pm JOIN product_media m ON m.id = pm.media_id WHERE pm.product_id = p.id ORDER BY pm.position ASC LIMIT 1) AS img FROM wishlist w JOIN products p ON p.id = w.product_id WHERE w.account_id = ?');
         $stmt->execute([ $_SESSION['account_id'] ]);
         $wishlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -184,12 +184,12 @@ if (isset($_SESSION['account_loggedin'])) {
 
             <h1 class="page-title">Login</h1>
 
-            <form action="" method="post" class="form">
+            <form action="<?=url('index.php?page=myaccount')?>" method="post" class="form">
 
                 <label for="email" class="form-label">Email</label>
                 <input type="email" name="email" id="email" placeholder="john@example.com" class="form-input expand" required>
 
-                <label for="password" class="form-label">Password</label>
+                <label for="password" class="form-label-3">Password<a href="<?=url('index.php?page=forgotpassword')?>" class="form-link">Forgot password?</a></label>
                 <input type="password" name="password" id="password" placeholder="Password" class="form-input expand" required>
 
                 <button name="login" type="submit" class="btn">Login</button>
@@ -206,7 +206,7 @@ if (isset($_SESSION['account_loggedin'])) {
 
             <h1 class="page-title">Register</h1>
 
-            <form action="" method="post" autocomplete="off" class="form">
+            <form action="<?=url('index.php?page=myaccount')?>" method="post" autocomplete="off" class="form">
 
                 <label for="remail" class="form-label">Email</label>
                 <input type="email" name="email" id="remail" placeholder="john@example.com" required class="form-input expand">
@@ -251,7 +251,7 @@ if (isset($_SESSION['account_loggedin'])) {
 
         <h2>My Orders</h2>
 
-        <form action="" method="get" class="form pad-top-2">
+        <form action="<?=url('index.php?page=myaccount')?>" method="get" class="form pad-top-2">
             <?php if (!rewrite_url): ?>
             <input type="hidden" name="page" value="myaccount">
             <input type="hidden" name="tab" value="orders">
@@ -296,8 +296,8 @@ if (isset($_SESSION['account_loggedin'])) {
                     <div><span>Status</span><?=$transaction['payment_status']?></div>
                 </div>
                 <div>
-                    <div class="rhide"><span>Shipping</span><?=currency_code?><?=number_format($transaction['shipping_amount'],2)?></div>
-                    <div><span>Total</span><?=currency_code?><?=number_format($transaction['payment_amount'],2)?></div>
+                    <div class="rhide"><span>Shipping</span><?=currency_code?><?=num_format($transaction['shipping_amount'],2)?></div>
+                    <div><span>Total</span><?=currency_code?><?=num_format($transaction['payment_amount'],2)?></div>
                 </div>
             </div>
             <div class="order-items">
@@ -317,7 +317,7 @@ if (isset($_SESSION['account_loggedin'])) {
                                 <span class="options"><?=str_replace(',', '<br>', htmlspecialchars($transaction_item['item_options'], ENT_QUOTES))?></span>
                                 <?php endif; ?>
                             </td>
-                            <td class="price"><?=currency_code?><?=number_format($transaction_item['price'] * $transaction_item['quantity'],2)?></td>
+                            <td class="price"><?=currency_code?><?=num_format($transaction_item['price'] * $transaction_item['quantity'],2)?></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -394,9 +394,9 @@ if (isset($_SESSION['account_loggedin'])) {
                     <?php endif; ?>
                     <span class="name"><?=$product['title']?></span>
                     <span class="price">
-                        <?=currency_code?><?=number_format($product['price'],2)?>
+                        <?=currency_code?><?=num_format($product['price'],2)?>
                         <?php if ($product['rrp'] > 0): ?>
-                        <span class="rrp"><?=currency_code?><?=number_format($product['rrp'],2)?></span>
+                        <span class="rrp"><?=currency_code?><?=num_format($product['rrp'],2)?></span>
                         <?php endif; ?>
                     </span>
                 </a>
@@ -410,7 +410,7 @@ if (isset($_SESSION['account_loggedin'])) {
 
         <h2>Settings</h2>
 
-        <form action="" method="post" class="form">
+        <form action="<?=url('index.php?page=myaccount&tab=settings')?>" method="post" class="form">
 
             <label for="email" class="form-label">Email</label>
             <input id="email" type="email" name="email" placeholder="Email" value="<?=htmlspecialchars($account['email'], ENT_QUOTES)?>" class="form-input expand" required>

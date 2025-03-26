@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Get the current date
 $current_date = strtotime((new DateTime())->format('Y-m-d H:i:s'));
 // Retrieve the GET request parameters (if specified)
@@ -14,7 +14,7 @@ $order = isset($_GET['order']) && $_GET['order'] == 'DESC' ? 'DESC' : 'ASC';
 $order_by_whitelist = ['id','category_names','product_names','discount_code','discount_type','discount_value','start_date','end_date'];
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_whitelist) ? $_GET['order_by'] : 'id';
 // Number of results per pagination pagination_page
-$results_per_pagination_page = 20;
+$results_per_pagination_page = 15;
 // discounts array
 $discounts = [];
 // Declare query param variables
@@ -47,7 +47,7 @@ if ($active) $stmt->bindParam('current_date', $active_date, PDO::PARAM_STR);
 $stmt->execute();
 $total_discounts = $stmt->fetchColumn();
 // Prepare discounts query
-$stmt = $pdo->prepare('SELECT d.*, GROUP_CONCAT(DISTINCT p.title) product_names, GROUP_CONCAT(DISTINCT c.title) category_names FROM discounts d LEFT JOIN products p ON FIND_IN_SET(p.id, d.product_ids) LEFT JOIN categories c ON FIND_IN_SET(c.id, d.category_ids) ' . $where . ' GROUP BY d.id, d.category_ids, d.product_ids, d.discount_code, d.discount_type, d.discount_type, d.discount_value, d.start_date, d.end_date ORDER BY ' . $order_by . ' ' . $order . '  LIMIT :start_results,:num_results');
+$stmt = $pdo->prepare('SELECT d.*, GROUP_CONCAT(DISTINCT p.title) product_names, GROUP_CONCAT(DISTINCT c.title) category_names FROM discounts d LEFT JOIN products p ON FIND_IN_SET(p.id, d.product_ids) LEFT JOIN product_categories c ON FIND_IN_SET(c.id, d.category_ids) ' . $where . ' GROUP BY d.id, d.category_ids, d.product_ids, d.discount_code, d.discount_type, d.discount_type, d.discount_value, d.start_date, d.end_date ORDER BY ' . $order_by . ' ' . $order . '  LIMIT :start_results,:num_results');
 $stmt->bindParam('start_results', $param1, PDO::PARAM_INT);
 $stmt->bindParam('num_results', $param2, PDO::PARAM_INT);
 if ($search) $stmt->bindParam('search', $param3, PDO::PARAM_STR);
@@ -92,7 +92,7 @@ $url = 'index.php?page=discounts&search_query=' . $search . '&type=' . $type . '
         </div>
         <div class="txt">
             <h2>Discounts</h2>
-            <p>View, edit, and create discounts.</p>
+            <p>View, edit, and create discounts</p>
         </div>
     </div>
 </div>
@@ -110,7 +110,7 @@ $url = 'index.php?page=discounts&search_query=' . $search . '&type=' . $type . '
         <svg class="icon-left" width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
         Create Discount
     </a>
-    <form action="" method="get">
+    <form method="get">
         <input type="hidden" name="page" value="discounts">
         <div class="filters">
             <a href="#">
@@ -163,7 +163,7 @@ $url = 'index.php?page=discounts&search_query=' . $search . '&type=' . $type . '
     <?php endif; ?>   
 </div>
 
-<div class="content-block">
+<div class="content-block no-pad">
     <div class="table">
         <table>
             <thead>
@@ -177,7 +177,7 @@ $url = 'index.php?page=discounts&search_query=' . $search . '&type=' . $type . '
                     <td><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=discount_value'?>">Value<?=$order_by=='discount_value' ? $table_icons[strtolower($order)] : ''?></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=start_date'?>">Start Date<?=$order_by=='start_date' ? $table_icons[strtolower($order)] : ''?></td>
                     <td class="responsive-hidden"><a href="<?=$url . '&order=' . ($order=='ASC'?'DESC':'ASC') . '&order_by=end_date'?>">End Date<?=$order_by=='end_date' ? $table_icons[strtolower($order)] : ''?></td>
-                    <td class="align-center">Action</td>
+                    <td class="align-center">Actions</td>
                 </tr>
             </thead>
             <tbody>
@@ -188,7 +188,7 @@ $url = 'index.php?page=discounts&search_query=' . $search . '&type=' . $type . '
                 <?php endif; ?>
                 <?php foreach ($discounts as $discount): ?>
                 <tr>
-                    <td class="responsive-hidden"><?=$discount['id']?></td>
+                    <td class="responsive-hidden alt"><?=$discount['id']?></td>
                     <td><?=$discount['discount_code']?></td>
                     <td>
                         <?php if ($current_date >= strtotime($discount['start_date']) && $current_date <= strtotime($discount['end_date'])): ?>
@@ -221,8 +221,8 @@ $url = 'index.php?page=discounts&search_query=' . $search . '&type=' . $type . '
                     }
                     ?>
                     </td>
-                    <td><?=$discount['discount_type']?></td>
-                    <td><?=$discount['discount_value']?></td>
+                    <td><span class="blue"><?=$discount['discount_type']?></span></td>
+                    <td class="strong"><?=$discount['discount_value']?></td>
                     <td class="responsive-hidden alt"><?=date('Y-m-d h:ia', strtotime($discount['start_date']))?></td>
                     <td class="responsive-hidden alt"><?=date('Y-m-d h:ia', strtotime($discount['end_date']))?></td>
                     <td class="actions">

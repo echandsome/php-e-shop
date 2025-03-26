@@ -729,6 +729,19 @@ main .checkout .cart-details .buttons {
 main .checkout .cart-details .buttons .btn {
   width: 100%;
 }
+main .checkout .cart-details .error {
+  display: flex;
+  align-items: center;
+  margin: 0 23px 23px;
+  padding: 8px;
+  font-size: 12px;
+  background-color: #f8d7da;
+  border-radius: 4px;
+}
+main .checkout .cart-details .error svg {
+  fill: #cf1818;
+  margin: 0 8px 0 2px;
+}
 main .myaccount {
   display: flex;
   flex-flow: wrap;
@@ -869,10 +882,39 @@ main .myaccount .login-register .register {
 main .myaccount .login-register .btn {
   margin-top: 25px;
 }
+main .forgot-password {
+  max-width: 400px;
+}
+main .forgot-password .btn {
+  margin-top: 25px;
+}
 main p.error {
   color: #cf1818;
   font-weight: 500;
   font-size: 14px;
+}
+main p.error .form-link {
+  font-weight: inherit;
+  font-size: inherit;
+  text-decoration: none;
+  color: #74160b;
+}
+main p.error .form-link:hover {
+  color: #450d07;
+}
+main p.success {
+  color: #0da74d;
+  font-weight: 500;
+  font-size: 14px;
+}
+main p.success .form-link {
+  font-weight: inherit;
+  font-size: inherit;
+  text-decoration: none;
+  color: #0b6430;
+}
+main p.success .form-link:hover {
+  color: #06361a;
 }
 
 .img-modal {
@@ -1006,6 +1048,12 @@ main p.error {
   display: block;
   padding: 14px 0 0 0;
 }
+.form .form-label-3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0 10px 0;
+}
 .form .form-input {
   padding: 8px 10px;
   border: 1px solid #dddfe2;
@@ -1028,6 +1076,15 @@ main p.error {
   display: inline-flex;
   align-items: center;
   padding: 10px 15px 0 0;
+}
+.form .form-link {
+  color: #2a77eb;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 14px;
+}
+.form .form-link:hover {
+  color: #135ac5;
 }
 
 footer {

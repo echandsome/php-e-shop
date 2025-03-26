@@ -1,12 +1,12 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Remove the time limit and file size limit
 set_time_limit(0);
 ini_set('post_max_size', '0');
 ini_set('upload_max_filesize', '0');
 // If form submitted
 if (isset($_POST['file_type'], $_POST['table'])) {
-    $table = in_array($_POST['table'], ['transactions', 'transactions_items']) ? $_POST['table'] : 'transactions';
+    $table = in_array($_POST['table'], ['transactions', 'transaction_items']) ? $_POST['table'] : 'transactions';
     // Get all orders
     $result = $pdo->query('SELECT * FROM ' . $table . ' ORDER BY id ASC');
     $orders = [];
@@ -89,12 +89,14 @@ if (isset($_POST['file_type'], $_POST['table'])) {
 ?>
 <?=template_admin_header('Export Orders', 'orders', 'export')?>
 
-<form action="" method="post">
+<form method="post">
 
-    <div class="content-title responsive-flex-wrap responsive-pad-bot-3">
-        <h2 class="responsive-width-100">Export Orders</h2>
-        <a href="index.php?page=orders" class="btn alt mar-right-2">Cancel</a>
-        <input type="submit" name="submit" value="Export" class="btn">
+    <div class="content-title">
+        <h2>Export Orders</h2>
+        <div class="btns">
+            <a href="index.php?page=orders" class="btn alt mar-right-1">Cancel</a>
+            <input type="submit" name="submit" value="Export" class="btn">
+        </div>
     </div>
 
     <div class="content-block">
@@ -104,7 +106,7 @@ if (isset($_POST['file_type'], $_POST['table'])) {
             <label for="table"><span class="required">*</span> Table</label>
             <select id="table" name="table" required>
                 <option value="transactions">Transactions</option>
-                <option value="transactions_items">Transactions Items</option>
+                <option value="transaction_items">Transaction Items</option>
             </select>
 
             <label for="file_type"><span class="required">*</span> File Type</label>

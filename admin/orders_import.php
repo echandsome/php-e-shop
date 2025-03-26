@@ -1,12 +1,12 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Remove the time limit and file size limit
 set_time_limit(0);
 ini_set('post_max_size', '0');
 ini_set('upload_max_filesize', '0');
 // If form submitted
 if (isset($_FILES['file'], $_POST['table']) && !empty($_FILES['file']['tmp_name'])) {
-    $table = in_array($_POST['table'], ['transactions', 'transactions_items']) ? $_POST['table'] : 'transactions';
+    $table = in_array($_POST['table'], ['transactions', 'transaction_items']) ? $_POST['table'] : 'transactions';
     // check type
     $type = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
     $data = [];
@@ -53,12 +53,14 @@ if (isset($_FILES['file'], $_POST['table']) && !empty($_FILES['file']['tmp_name'
 ?>
 <?=template_admin_header('Import Orders', 'orders', 'import')?>
 
-<form action="" method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
 
-    <div class="content-title responsive-flex-wrap responsive-pad-bot-3">
-        <h2 class="responsive-width-100">Import Orders</h2>
-        <a href="index.php?page=orders" class="btn alt mar-right-2">Cancel</a>
-        <input type="submit" name="submit" value="Import" class="btn">
+    <div class="content-title">
+        <h2>Import Orders</h2>
+        <div class="btns">
+            <a href="index.php?page=orders" class="btn alt mar-right-1">Cancel</a>
+            <input type="submit" name="submit" value="Import" class="btn">
+        </div>
     </div>
 
     <div class="content-block">
@@ -68,7 +70,7 @@ if (isset($_FILES['file'], $_POST['table']) && !empty($_FILES['file']['tmp_name'
             <label for="table"><span class="required">*</span> Table</label>
             <select id="table" name="table" required>
                 <option value="transactions">Transactions</option>
-                <option value="transactions_items">Transactions Items</option>
+                <option value="transaction_items">Transaction Items</option>
             </select>
 
             <label for="file"><span class="required">*</span> File</label>

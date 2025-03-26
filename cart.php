@@ -33,7 +33,7 @@ if ((isset($_POST['update']) || isset($_POST['checkout'])) && isset($_SESSION['c
                     foreach ($options as $opt) {
                         $option_name = explode('-', $opt)[0];
                         $option_value = explode('-', $opt)[1];
-                        $stmt = $pdo->prepare('SELECT * FROM products_options WHERE option_name = ? AND (option_value = ? OR option_value = "") AND product_id = ?');   
+                        $stmt = $pdo->prepare('SELECT * FROM product_options WHERE option_name = ? AND (option_value = ? OR option_value = "") AND product_id = ?');   
                         $stmt->execute([ $option_name, $option_value, $_SESSION['cart'][$id]['id'] ]);
                         $option = $stmt->fetch(PDO::FETCH_ASSOC);   
                         // Get cart option quantity
@@ -80,7 +80,7 @@ if ($products_in_cart) {
     // Products in cart array to question mark string array, we need the SQL statement to include: IN (?,?,?,...etc)
     $array_to_question_marks = implode(',', array_fill(0, count($products_in_cart), '?'));
     // Prepare SQL statement
-    $stmt = $pdo->prepare('SELECT p.*, (SELECT m.full_path FROM products_media pm JOIN media m ON m.id = pm.media_id WHERE pm.product_id = p.id ORDER BY pm.position ASC LIMIT 1) AS img FROM products p WHERE p.id IN (' . $array_to_question_marks . ')');
+    $stmt = $pdo->prepare('SELECT p.*, (SELECT m.full_path FROM product_media_map pm JOIN product_media m ON m.id = pm.media_id WHERE pm.product_id = p.id ORDER BY pm.position ASC LIMIT 1) AS img FROM products p WHERE p.id IN (' . $array_to_question_marks . ')');
     // Leverage the array_column function to retrieve only the id's of the products
     $stmt->execute(array_column($products_in_cart, 'id'));
     // Fetch the products from the database and return the result as an Array
@@ -103,7 +103,7 @@ if ($products_in_cart) {
 
     <h1 class="page-title">Shopping Cart</h1>
 
-    <form action="" method="post" class="form">
+    <form action="<?=url('index.php?page=cart')?>" method="post" class="form">
         <table>
             <thead>
                 <tr>
@@ -138,11 +138,11 @@ if ($products_in_cart) {
                         <?=str_replace(',', '<br>', htmlspecialchars($product['options'], ENT_QUOTES))?>
                         <input type="hidden" name="options" value="<?=htmlspecialchars($product['options'], ENT_QUOTES)?>">
                     </td>
-                    <td class="price rhide"><?=currency_code?><?=number_format($product['options_price'],2)?></td>
+                    <td class="price rhide"><?=currency_code?><?=num_format($product['options_price'],2)?></td>
                     <td class="quantity">
                         <input type="number" class="ajax-update form-input" name="quantity-<?=$num?>" value="<?=$product['quantity']?>" min="1" <?php if ($product['meta']['quantity'] != -1): ?>max="<?=$product['meta']['quantity']?>"<?php endif; ?> placeholder="Quantity" required>
                     </td>
-                    <td class="price product-total"><?=currency_code?><?=number_format($product['options_price'] * $product['quantity'],2)?></td>
+                    <td class="price product-total"><?=currency_code?><?=num_format($product['options_price'] * $product['quantity'],2)?></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>
@@ -151,7 +151,7 @@ if ($products_in_cart) {
 
         <div class="total">
             <span class="text">Subtotal</span>
-            <span class="price"><?=currency_code?><?=number_format($subtotal,2)?></span>
+            <span class="price"><?=currency_code?><?=num_format($subtotal,2)?></span>
             <span class="note">(shipping and tax calculated at checkout)</span>
         </div>
 

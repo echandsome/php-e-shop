@@ -1,5 +1,5 @@
 <?php
-defined('admin') or exit;
+defined('shoppingcart_admin') or exit;
 // Default account product values
 $account = [
     'email' => '',
@@ -94,15 +94,17 @@ if (isset($_GET['id'])) {
 ?>
 <?=template_admin_header($page . ' Account', 'accounts', 'manage')?>
 
-<form action="" method="post">
+<form method="post">
 
-    <div class="content-title responsive-flex-wrap responsive-pad-bot-3">
-        <h2 class="responsive-width-100"><?=$page?> Account</h2>
-        <a href="index.php?page=accounts" class="btn alt mar-right-2">Cancel</a>
-        <?php if ($page == 'Edit'): ?>
-        <input type="submit" name="delete" value="Delete" class="btn red mar-right-2" onclick="return confirm('Are you sure you want to delete this account?')">
-        <?php endif; ?>
-        <input type="submit" name="submit" value="Save" class="btn">
+    <div class="content-title">
+        <h2><?=$page?> Account</h2>
+        <div class="btns">
+            <a href="index.php?page=accounts" class="btn alt mar-right-1">Cancel</a>
+            <?php if ($page == 'Edit'): ?>
+            <input type="submit" name="delete" value="Delete" class="btn red mar-right-1" onclick="return confirm('Are you sure you want to delete this account?')">
+            <?php endif; ?>
+            <input type="submit" name="submit" value="Save" class="btn">
+        </div>
     </div>
 
     <?php if (isset($error_msg)): ?>
@@ -130,11 +132,16 @@ if (isset($_GET['id'])) {
             <label for="password"><?=$page == 'Edit' ? 'New ' : '<span class="required">*</span> '?>Password</label>
             <input type="password" id="password" name="password" placeholder="<?=$page == 'Edit' ? 'New ' : ''?>Password" autocomplete="new-password" value=""<?=$page == 'Edit' ? '' : ' required'?>>
 
-            <label for="first_name">First Name</label>
-            <input id="first_name" type="text" name="first_name" placeholder="Joe" value="<?=htmlspecialchars($account['first_name'], ENT_QUOTES)?>">
-
-            <label for="last_name">Last Name</label>
-            <input id="last_name" type="text" name="last_name" placeholder="Bloggs" value="<?=htmlspecialchars($account['last_name'], ENT_QUOTES)?>">
+            <div class="group">
+                <div class="item">
+                    <label for="first_name">First Name</label>
+                    <input id="first_name" type="text" name="first_name" placeholder="Joe" value="<?=htmlspecialchars($account['first_name'], ENT_QUOTES)?>">
+                </div>
+                <div class="item">
+                    <label for="last_name">Last Name</label>
+                    <input id="last_name" type="text" name="last_name" placeholder="Bloggs" value="<?=htmlspecialchars($account['last_name'], ENT_QUOTES)?>">
+                </div>
+            </div>
 
             <label for="role">Role</label>
             <select id="role" name="role" style="margin-bottom: 30px;">
@@ -160,11 +167,16 @@ if (isset($_GET['id'])) {
             <label for="address_city">Address City</label>
             <input id="address_city" type="text" name="address_city" placeholder="New York" value="<?=htmlspecialchars($account['address_city'], ENT_QUOTES)?>">
 
-            <label for="address_state">Address State</label>
-            <input id="address_state" type="text" name="address_state" placeholder="NY" value="<?=htmlspecialchars($account['address_state'], ENT_QUOTES)?>">
-
-            <label for="address_zip">Address Zip</label>
-            <input id="address_zip" type="text" name="address_zip" placeholder="10001" value="<?=htmlspecialchars($account['address_zip'], ENT_QUOTES)?>">
+            <div class="group">
+                <div class="item">
+                    <label for="address_state">Address State</label>
+                    <input id="address_state" type="text" name="address_state" placeholder="NY" value="<?=htmlspecialchars($account['address_state'], ENT_QUOTES)?>">
+                </div>
+                <div class="item">
+                    <label for="address_zip">Address Zip</label>
+                    <input id="address_zip" type="text" name="address_zip" placeholder="10001" value="<?=htmlspecialchars($account['address_zip'], ENT_QUOTES)?>">
+                </div>
+            </div>
 
             <label for="address_country">Country</label>
             <select id="address_country" name="address_country" required>
